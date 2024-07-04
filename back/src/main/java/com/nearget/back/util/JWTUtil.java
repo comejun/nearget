@@ -5,6 +5,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
+import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import java.io.UnsupportedEncodingException;
 import java.time.ZonedDateTime;
@@ -15,9 +16,10 @@ import java.util.Map;
 @Slf4j
 public class JWTUtil {
 
-    // yml파일에 설정한 jwt.secret값 가져오기
-    @Value("${jwt.secret}")
-    private static String key;
+    // 인코딩된 키
+    private static final String key =
+            "c2phbnNqYW5ybmxja3Nncmhna3JsdGxmZ2Rtc3ZtZmh3cHJ4bWRqc3dwUm14c2tmdXNr";
+
     // 토큰 생성 메서드 : 사용자나 토큰 정보 + 유효기간 받아 토큰 생성
     public static String generateToken(Map<String, Object> valueMap, int min) {
 // 암호화된 비밀키

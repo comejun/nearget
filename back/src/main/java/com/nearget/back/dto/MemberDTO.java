@@ -49,8 +49,6 @@ public class MemberDTO extends User {
         map.put("profileImg", profileImg);
         map.put("disabled", disabled);
         map.put("roleNames", roleNames);
-        map.put("createdDate", createdDate);
-        map.put("disabledDate", disabledDate);
         map.put("isNew", isNew);
         return map;
     }
