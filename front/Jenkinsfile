@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                sh 'npm install'
+                sh 'CI=false npm run build'
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t {nearget} .'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'docker stop {nearget} || true'
+                sh 'docker rm {nearget} || true'
+                sh 'docker run -d -p 80:80 -p 443:443 --name {nearget} {nearget}'
+            }
+        }
+    }
+}

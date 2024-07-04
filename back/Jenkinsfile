@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                sh './gradlew build'
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t {nearget} .'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'docker stop {nearget} || true'
+                sh 'docker rm {nearget} || true'
+                sh 'docker run -d -p 8080:8080 --name {nearget} {nearget}'
+            }
+        }
+    }
+}
