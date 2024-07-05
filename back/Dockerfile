@@ -3,5 +3,5 @@ LABEL maintainer="test@test.com"
 VOLUME /tmp
 EXPOSE 8090
 ARG JAR_FILE=./build/libs/back.jar
-COPY ${JAR_FILE} {back}.jar
-ENTRYPOINT ["java","-jar","/{back}.jar"]
+COPY ${JAR_FILE} back.jar
+ENTRYPOINT ["java","-jar","/back.jar"]
