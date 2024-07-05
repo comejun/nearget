@@ -16,6 +16,7 @@ pipeline {
             steps {
                 dir('back') {
                     sh 'docker build -t {nearget} .'
+                }
             }
         }
         stage('BackendDeploy') {
