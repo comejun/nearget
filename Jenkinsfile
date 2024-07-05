@@ -22,9 +22,9 @@ pipeline {
         }
         stage('BackendDeploy') {
             steps {
-                sh 'docker stop nearget || true'
-                sh 'docker rm nearget || true'
-                sh 'docker run -d -p 8090:8090 --name nearget nearget'
+                sh 'docker stop nearget-back || true'
+                sh 'docker rm nearget-back || true'
+                sh 'docker run -d -p 8090:8090 --name nearget-back nearget-back'
             }
         }
          stage('FrontendBuild') {
