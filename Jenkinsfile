@@ -16,7 +16,7 @@ pipeline {
         stage('Docker BackendBuild') {
             steps {
                 dir('back') {
-                    sh 'docker build -t nearget .'
+                    sh 'docker build -t nearget-back .'
                 }
             }
         }
