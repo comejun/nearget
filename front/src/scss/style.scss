@@ -1,0 +1,43 @@
+/* SCSS */ 
+
+/* import */
+
+// Pages
+@import "./pages/mainPage.scss";
+@import "./pages/loginPage.scss";
+
+// Parts
+@import "../scss/partials/header.scss";
+@import "../scss/partials/Category.scss";
+// @import "./partials/button.scss";
+
+
+/* scss-start */
+div.bodyWrap{
+  margin:0 auto;
+  max-width: 500px;
+  width:100%;
+  height: 100%;
+  background-color: #F6EFE3;
+  min-height: 100vh;
+  position: relative;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-use-select: none;
+  user-select: none;
+}
+
+div.contentWrap{
+  width: 100%;
+  max-width: 500px;
+  height: 100%;
+  position: relative;
+}
+div.mg-t{
+  margin-top: 56px;
+}
+/*초기화세팅*/
+ul, li{
+  list-style: none;
+  display: inline;
+}
