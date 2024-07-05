@@ -20,7 +20,7 @@ const MainPage = () => {
         <div>MainPage
 
             {!loginState.email ? (
-                <Link to="/member/login">go to Login</Link>
+                <Link to="/member/login">로그인 하기</Link>
             ) : (
                 <div onClick={handleClickLogout} className="MenuWrap">
                     <Link>
