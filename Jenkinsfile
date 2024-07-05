@@ -31,22 +31,22 @@ pipeline {
                     steps {
                         dir('front') {
                             sh 'npm install'
-                            sh 'npm run build'
+                            sh 'CI=false npm run build'
                         }
                     }
                 }
                 stage('Docker FrontendBuild') {
                     steps {
                         dir('front') {
-                            sh 'docker build -t {nearget} .'
+                            sh 'docker build -t nearget-front .'
                         }
                     }
                 }
                 stage('FrontendDeploy') {
                     steps {
-                        sh 'docker stop {nearget} || true'
-                        sh 'docker rm {nearget} || true'
-                        sh 'docker run -d -p 80:80 -p 443:443 --name {nearget} {nearget}'
+                        sh 'docker stop nearget-front || true'
+                        sh 'docker rm nearget-front || true'
+                        sh 'docker run -d -p 80:80 -p 443:443 --name nearget-front nearget-front'
                     }
                 }
     }
