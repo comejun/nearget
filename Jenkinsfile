@@ -13,7 +13,7 @@ pipeline {
                 sh 'docker build -t {nearget} .'
             }
         }
-        stage('Deploy') {
+        stage('BackendDeploy') {
             steps {
                 sh 'docker stop {nearget} || true'
                 sh 'docker rm {nearget} || true'
@@ -33,7 +33,7 @@ pipeline {
                         sh 'docker build -t {nearget} .'
                     }
                 }
-                stage('Deploy') {
+                stage('FrontendDeploy') {
                     steps {
                         sh 'docker stop {nearget} || true'
                         sh 'docker rm {nearget} || true'
