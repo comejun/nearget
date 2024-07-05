@@ -1,9 +1,5 @@
 pipeline {
     agent any
-    tools {
-            gradle "gradle8.8"
-            nodejs "nodeJS"
-        }
     stages {
         stage('BackendBuild') {
             steps {
