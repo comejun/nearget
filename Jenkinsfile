@@ -3,11 +3,13 @@ pipeline {
     stages {
         stage('BackendBuild') {
             steps {
+                sh 'cd back'
                 sh './gradlew build'
             }
         }
         stage('Docker BackendBuild') {
             steps {
+                sh 'cd back'
                 sh 'docker build -t {nearget} .'
             }
         }
@@ -20,12 +22,14 @@ pipeline {
         }
          stage('FrontendBuild') {
                     steps {
+                        sh 'cd front'
                         sh 'npm install'
                         sh 'CI=false npm run build'
                     }
                 }
                 stage('Docker FrontendBuild') {
                     steps {
+                        sh 'cd front'
                         sh 'docker build -t {nearget} .'
                     }
                 }
