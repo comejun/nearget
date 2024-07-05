@@ -16,15 +16,15 @@ pipeline {
         stage('Docker BackendBuild') {
             steps {
                 dir('back') {
-                    sh 'docker build -t neargetBack .'
+                    sh 'docker build -t nearget .'
                 }
             }
         }
         stage('BackendDeploy') {
             steps {
-                sh 'docker stop neargetBack || true'
-                sh 'docker rm neargetBack || true'
-                sh 'docker run -d -p 8090:8090 --name neargetBack neargetBack'
+                sh 'docker stop nearget || true'
+                sh 'docker rm nearget || true'
+                sh 'docker run -d -p 8090:8090 --name nearget nearget'
             }
         }
          stage('FrontendBuild') {
