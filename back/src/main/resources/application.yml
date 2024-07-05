@@ -29,6 +29,7 @@ server:
   servlet:
     session:
       tracking-modes: cookie
+  port: 8090
 
 #file upload path
 nearget.upload.path: upload
