@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    tools {
+            gradle "gradle8.8"
+            nodejs "nodeJS"
+        }
+
     stages {
         stage('BackendBuild') {
             steps {
@@ -20,7 +25,7 @@ pipeline {
             steps {
                 sh 'docker stop {nearget} || true'
                 sh 'docker rm {nearget} || true'
-                sh 'docker run -d -p 8080:8080 --name {nearget} {nearget}'
+                sh 'docker run -d -p 8090:8090 --name {nearget} {nearget}'
             }
         }
          stage('FrontendBuild') {
