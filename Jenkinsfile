@@ -9,7 +9,7 @@ pipeline {
             steps {
                 dir('back') {
                     sh 'chmod +x gradlew'
-                    sh './gradlew build'
+                    sh './gradlew clean build sonarqube --warning-mode all'
                 }
             }
         }
