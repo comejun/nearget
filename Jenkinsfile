@@ -1,16 +1,21 @@
 pipeline {
     agent any
+    tools {
+            gradle "gradle8.8"
+            nodejs "nodeJS"
+        }
     stages {
         stage('BackendBuild') {
             steps {
-                sh 'cd back'
-                sh './gradlew build'
+                dir('back') {
+                    sh './gradlew build'
+                }
             }
         }
         stage('Docker BackendBuild') {
             steps {
-                sh 'cd back'
-                sh 'docker build -t {nearget} .'
+                dir('back') {
+                    sh 'docker build -t {nearget} .'
             }
         }
         stage('BackendDeploy') {
@@ -22,15 +27,17 @@ pipeline {
         }
          stage('FrontendBuild') {
                     steps {
-                        sh 'cd front'
-                        sh 'npm install'
-                        sh 'CI=false npm run build'
+                        dir('front') {
+                            sh 'npm install'
+                            sh 'npm run build'
+                        }
                     }
                 }
                 stage('Docker FrontendBuild') {
                     steps {
-                        sh 'cd front'
-                        sh 'docker build -t {nearget} .'
+                        dir('front') {
+                            sh 'docker build -t {nearget} .'
+                        }
                     }
                 }
                 stage('FrontendDeploy') {
