@@ -1,6 +1,14 @@
 /* SCSS */ 
 
 /* import */
+
+// Pages
+@import "./pages/mainPage.scss";
+@import "./pages/loginPage.scss";
+
+// Parts
+@import "../scss/partials/header.scss";
+@import "../scss/partials/Category.scss";
 // @import "./partials/button.scss";
 
 

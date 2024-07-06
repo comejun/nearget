@@ -1,0 +1,43 @@
+div.loginWrap{
+  text-align: center;
+}
+h1.loginLogo{
+  width: 100%;
+  margin-bottom: 24px;
+  img{
+    margin-top: 30vh;
+    width: 240px;
+  }
+}
+p.loginText{
+  font-size: 20px;
+  line-height: 24px;
+  color:#361D14;
+  font-weight: 500;
+}
+a.kakaoBtnWrap{
+  width: 100%;
+  display: block;
+}
+button.kakaoBtn{
+  width: calc(100% - 32px);
+  height:52px;
+  background-color: #FDDC3F;
+  border-radius: 16px;
+  margin-bottom: 12px;
+  img{
+    width:180px;
+  }
+}
+a.toMainPage{
+  width: 100%;
+  font-size: 12px;
+  text-decoration: underline;
+  color: #361D14;
+}
+div.bottomFix{
+  width: 100%;
+  max-width: 500px;
+  position: fixed;
+  bottom: 40px;
+}
