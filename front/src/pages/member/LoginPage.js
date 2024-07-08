@@ -10,7 +10,7 @@ const LoginPage = () => {
     <BasicLayout>
       <div className="loginWrap">
         <h1 className="loginLogo">
-          <img src="../assets/imgs/icon/Nearget_color.png" alt="kakaologo" />
+          <img src="../assets/imgs/icon/Nearget_logo.png" alt="kakaologo" />
         </h1>
         <p className="loginText">
           가까운 거리, 합리적인 선택 <br />

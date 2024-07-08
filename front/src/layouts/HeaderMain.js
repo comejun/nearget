@@ -9,7 +9,7 @@ export default function HeaderMain() {
         {/* 메인페이지 헤더 */}
         <div className="headerLogoContent">
           <Link to="/">
-            <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/Nearget_color.png"} alt="logo" height="18px" />
+            <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/Nearget_logo.png"} alt="logo" height="18px" />
           </Link>
         </div>
         <div className="headerSearchContent">
