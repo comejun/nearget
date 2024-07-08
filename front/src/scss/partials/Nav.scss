@@ -1,0 +1,42 @@
+div.bottomNavWrap{
+  width:100%;
+  position: fixed;
+  bottom: 0;
+  left:0;
+  z-index: 999;
+}
+div.bottomNavContent{
+width: 100%;
+max-width: 500px;
+margin: 0 auto;
+opacity: 1;
+background: rgba(255, 255, 255, 0.1);
+backdrop-filter: blur(4px);
+height:100px;
+display: flex;
+justify-content: center;
+box-sizing: border-box;
+}
+div.bottomNav{
+  width: calc(100% - 32px);
+  height: 62px;
+  border-radius: 16px;
+  border: 1px solid #D29B65;
+  background-color: #fff;
+  ul{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    li{
+      width: 20%;
+      text-align: center;
+      img{
+        margin-top: 11px;
+        height: 41px;
+      }
+      img.nav_Add_Btn{
+        margin-top: 10px;
+      }
+    }
+  }
+}
