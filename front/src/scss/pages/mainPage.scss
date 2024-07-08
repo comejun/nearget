@@ -8,21 +8,21 @@ div.MainH2Wrap{
 }
 
 
-
-
 /* contents */
+
 // MainTodayGet
-div.TodayGetWrap{
+div.TodayGetWrap, 
+div.PricebyPlaceWrap{
   width: 100%;
   max-width: 500px;
-  background-color: #dcdcdc;
-  height:300px;
+  height:295px;
   margin: 0 auto;
+  margin-bottom: 32px;
 }
-div.TodayGetContainer{
+div.TodayGetContainer,
+div.PricebyPlaceContainer{
   width: 100%;
-  background-color: #dcdcdc;
-  height:300px;
+  height:295px;
   overflow-x: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -45,7 +45,6 @@ div.TodayGetContainer{
       cursor: pointer;
       overflow: inherit;
       white-space: nowrap;
-      background-color: aqua;
     }
     li:last-child {
       margin-right: 16px;
@@ -53,9 +52,64 @@ div.TodayGetContainer{
   }
 }
 div.scrollContent{
-  img{
+  img.scrollContentSum{
     width: 310px;
+    height: auto;
+    height: 248px;
+    object-fit: cover;
+    position: relative;
     border-radius: 16px;
+  }
+  img.scrollContentLike{
+    position: absolute;
+    top:16px;
+    right: 16px;
+    width: 21px;
+    content: url(../../../public/assets/imgs/icon/ic_like_wh.png);
+    transition: 0.2s;
+    cursor: pointer;
+  }
+  img.scrollContentLike:hover{
+    content: url(../../../public/assets/imgs/icon/ic_like_ac.png);
+  }
+  
+  img.scrollContentSum::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) -3%, rgba(0, 0, 0, 0.2) 100%);
+  }
+}
+div.itemTitle{
+  width: 100%;
+  position: absolute;
+  top:193px;
+  left:16px;
+  color: #fff;
+  div{
+    width: calc(100% - 32px);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    h3{
+      font-size: 16px;
+    }
+    h4{
+      font-size: 14px;
+      color:#D29B65;
+    }
+    span{
+      font-size:14px;
+    }
+    img{
+      width:13px;
+      height:13px;
+      transform: translate(-4px, 2px);
+    }
   }
 }
 div.scrollTextLi{
@@ -72,45 +126,88 @@ div.scrollTextLi{
     cursor: pointer;
   }
 }
-
-
-
-
-
-// PricebyPlace
-div.PricebyPlaceWrap{
+// InfinityContent
+div.InfinityContentWrap{
   width: 100%;
-  background-color: #dcdcdc;
-  height:320px;
-  overflow-x: scroll;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  scroll-behavior: smooth;
+  max-width: 500px;
+  margin: 0 auto;
+}
+div.InfinityContent{
+  width: calc(100% - 32px);
+  margin: 0 auto;
   ul{
     display: flex;
-    flex-wrap: nowrap;
-    min-width: 310px;
-    padding: 0;
-    margin: 0;
-    margin-right: 16px;
+    flex-wrap: wrap;
+    justify-content: space-between;
     li{
-      min-width: 310px;
+      width: calc(50% - 8px);
+      margin-bottom: 16px;
       position: relative;
-      display: inline-block;
-      margin-left: 16px;
-      cursor: pointer;
-      overflow: inherit;
-      white-space: nowrap;
-      background-color: aqua;
+      img.InfinityContentSum{
+        width: 100%;
+        max-height: 124px;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+      img.InfinityContentSum::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) -3%, rgba(0, 0, 0, 0.2) 100%);
+      }
+      img.scrollContentLike{
+        position: absolute;
+        top:16px;
+        right: 16px;
+        width: 21px;
+        content: url(../../../public/assets/imgs/icon/ic_like_wh.png);
+        transition: 0.2s;
+        cursor: pointer;
+      }
+      img.scrollContentLike:hover{
+        content: url(../../../public/assets/imgs/icon/ic_like_ac.png);
+      }
+      h3{
+        width: calc(100% - 8px);
+        margin-left: 8px;
+        margin-top: 8px;
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden; 
+        text-overflow: ellipsis; 
     }
-    li:last-child {
-      margin-right: 16px;
     }
   }
 }
-div.PricebyPlaceContainer{
-
+div.infinityItemTitle{
+  width: 100%;
+  position: absolute;
+  top:102px;
+  left:16px;
+  color: #fff;
+  div{
+    width: calc(100% - 32px);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    h3{
+      font-size: 16px;
+    }
+    h4{
+      font-size: 14px;
+      color:#D29B65;
+    }
+    span{
+      font-size:14px;
+    }
+    img{
+      width:13px;
+      height:13px;
+      transform: translate(-4px, 2px);
+    }
+  }
 }
