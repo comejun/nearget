@@ -1,0 +1,32 @@
+div.bottomBtnWrap{
+    width:100%;
+    position: fixed;
+    bottom: 0;
+    left:0;
+    z-index: 999;
+}
+div.bottomBtnContent{
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  height:100px;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  button{
+    width: calc(100% - 32px);
+    height: 52px;
+    line-height: 52px;
+    background-color: #BB4537;
+    color:#fff;
+    font-size: 14px;
+    margin-top: 18px;
+    border-radius: 12px;
+  }
+  button:hover{
+    background-color: #A63C2F;
+  }
+}

@@ -18,6 +18,7 @@ const MainPage = () => {
   return (
     <BasicLayout>
       <HeaderMain />
+      <div className="header_margin"></div>
       <div></div>
     </BasicLayout>
   );
