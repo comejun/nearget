@@ -29,14 +29,23 @@ div.bottomNav{
     justify-content: space-between;
     li{
       width: 20%;
+      border-radius: 99px;
       text-align: center;
       cursor: pointer;
+      transition: 0.2s;
       img{
         margin-top: 11px;
         height: 41px;
+        opacity: 0.8;
       }
       img.nav_Add_Btn{
         margin-top: 10px;
+        opacity: 0.9;
+      }
+    }
+    li:hover{
+      img, img.nav_Add_Btn{
+        opacity: 1;
       }
     }
   }
