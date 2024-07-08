@@ -15,7 +15,7 @@ public class RestaurantDBSchedular {
     public void scheduleRestaurant() {
 
         // 오류 발생 전까지 saveAllRestaurant page 0부터 1씩 증가하며 실행
-        for (long i = 0; i < 100; i++) {
+        for (long i = 0; i < 52; i++) {
             restaurantService.saveAllRestaurant(i);
         }
 

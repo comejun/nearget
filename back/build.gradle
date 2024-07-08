@@ -48,6 +48,8 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
     // webclient
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    // 좌표 변환 라이브러리
+    implementation 'org.locationtech.proj4j:proj4j:1.2.2'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'

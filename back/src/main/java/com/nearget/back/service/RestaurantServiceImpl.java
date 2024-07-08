@@ -6,7 +6,7 @@ import com.nearget.back.domain.Restaurant;
 import com.nearget.back.repository.RestaurantsRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
+import org.locationtech.proj4j.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
@@ -35,50 +35,94 @@ public class RestaurantServiceImpl implements RestaurantService {
         List<Mono<List<Restaurant>>> restaurantMonos = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
+            int finalI = i;
             Mono<List<Restaurant>> restaurantMono = client.get()
                     .uri("/{start}/{end}", page * 10000 + i * 1000 + 1, page * 10000 + (i + 1) * 1000)
                     .retrieve()
                     .bodyToMono(String.class)
                     .map(body -> {
-                        log.info("body: {}", body);
                         Gson gson = new Gson();
                         LocalData localData = gson.fromJson(body, LocalData.class);
                         List<Restaurant> restaurants = new ArrayList<>();
-                        for (BusinessInfo businessInfo : localData.LOCALDATA_072404.row) {
-                            if (!businessInfo.TRDSTATEGBN.equals("03") && !businessInfo.UPTAENM.equals("기타")
-                                    || businessInfo.UPTAENM.equals("경양식") || businessInfo.UPTAENM.equals("까페") || businessInfo.UPTAENM.equals("분식")
-                                    || businessInfo.UPTAENM.equals("일식") || businessInfo.UPTAENM.equals("호프/통닭") || businessInfo.UPTAENM.equals("중국식")
-                                    || businessInfo.UPTAENM.equals("패스트푸트") || businessInfo.UPTAENM.equals("한식")
-                            ) {
 
-                                Category category = Category.KOREAN;
-                                if (businessInfo.UPTAENM.equals("경양식")) {
-                                    category = Category.WESTERN;
-                                } else if (businessInfo.UPTAENM.equals("까페")) {
-                                    category = Category.CAFE;
-                                } else if (businessInfo.UPTAENM.equals("분식")) {
-                                    category = Category.STREET;
-                                } else if (businessInfo.UPTAENM.equals("일식")) {
-                                    category = Category.JAPANESE;
-                                } else if (businessInfo.UPTAENM.equals("호프/통닭")) {
-                                    category = Category.PUB;
-                                } else if (businessInfo.UPTAENM.equals("중국식")) {
-                                    category = Category.CHINESE;
-                                } else if (businessInfo.UPTAENM.equals("패스트푸트")) {
-                                    category = Category.FASTFOOD;
-                                } else if (businessInfo.UPTAENM.equals("한식")) {
-                                    category = Category.KOREAN;
+                        if (localData != null && localData.LOCALDATA_072404 != null) {
+                            for (BusinessInfo businessInfo : localData.LOCALDATA_072404.row) {
+                                if (!businessInfo.TRDSTATEGBN.equals("03") && !businessInfo.UPTAENM.equals("기타")) {
+
+                                    if (businessInfo.UPTAENM.equals("경양식") || businessInfo.UPTAENM.equals("까페") || businessInfo.UPTAENM.equals("분식")
+                                            || businessInfo.UPTAENM.equals("일식") || businessInfo.UPTAENM.equals("호프/통닭") || businessInfo.UPTAENM.equals("중국식")
+                                            || businessInfo.UPTAENM.equals("패스트푸트") || businessInfo.UPTAENM.equals("한식")) {
+
+                                        Category category = Category.KOREAN;
+                                        if (businessInfo.UPTAENM.equals("경양식")) {
+                                            category = Category.WESTERN;
+                                        } else if (businessInfo.UPTAENM.equals("까페")) {
+                                            category = Category.CAFE;
+                                        } else if (businessInfo.UPTAENM.equals("분식")) {
+                                            category = Category.STREET;
+                                        } else if (businessInfo.UPTAENM.equals("일식")) {
+                                            category = Category.JAPANESE;
+                                        } else if (businessInfo.UPTAENM.equals("호프/통닭")) {
+                                            category = Category.PUB;
+                                        } else if (businessInfo.UPTAENM.equals("중국식")) {
+                                            category = Category.CHINESE;
+                                        } else if (businessInfo.UPTAENM.equals("패스트푸트")) {
+                                            category = Category.FASTFOOD;
+                                        } else if (businessInfo.UPTAENM.equals("한식")) {
+                                            category = Category.KOREAN;
+                                        }
+
+// CRS 객체 생성
+                                        CRSFactory crsFactory = new CRSFactory();
+
+                                        // WGS84 system 정의
+                                        String wgs84Name = "WGS84";
+                                        String wgs84Proj = "+proj=longlat +datum=WGS84 +no_defs";
+                                        CoordinateReferenceSystem wgs84System = crsFactory.createFromParameters(wgs84Name, wgs84Proj);
+
+                                        // EPSG:2097 system 정의
+                                        String epsgName = "EPSG:2097";
+                                        String epsgProj = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43";
+                                        CoordinateReferenceSystem epsgSystem = crsFactory.createFromParameters(epsgName, epsgProj);
+
+                                        // 변환할 좌표계 정보 생성
+                                        ProjCoordinate p = new ProjCoordinate();
+                                        p.x = parseDoubleOrDefault(businessInfo.X, 0); // 경도 (x)
+                                        p.y = parseDoubleOrDefault(businessInfo.Y, 0); // 위도 (y)
+
+                                        // 변환된 좌표를 담을 객체 생성
+                                        ProjCoordinate p2 = new ProjCoordinate();
+
+                                        CoordinateTransformFactory ctFactory = new CoordinateTransformFactory();
+                                        // 변환 시스템 지정. (원본 시스템, 변환 시스템)
+                                        CoordinateTransform coordinateTransform = ctFactory.createTransform(epsgSystem, wgs84System);
+                                        // 좌표 변환
+                                        ProjCoordinate projCoordinate = coordinateTransform.transform(p, p2);
+
+                                        // 변환된 좌표
+                                        double wgsLng = projCoordinate.x;
+                                        double wgsLat = projCoordinate.y;
+
+
+
+                                        Restaurant restaurant = Restaurant.builder()
+                                                .id(Long.parseLong(businessInfo.MGTNO.replaceAll("[^0-9]", "")))
+                                                .name(businessInfo.BPLCNM)
+                                                .address(businessInfo.SITEWHLADDR)
+                                                .category(category)
+                                                .lng(wgsLng)
+                                                .lat(wgsLat)
+                                                .build();
+                                        restaurants.add(restaurant);
+                                    }
+
+
                                 }
-
-                                Restaurant restaurant = Restaurant.builder()
-                                        .id(Long.parseLong(businessInfo.MGTNO.replaceAll("[^0-9]", "")))
-                                        .name(businessInfo.BPLCNM)
-                                        .address(businessInfo.SITEWHLADDR)
-                                        .category(category)
-                                        .build();
-                                restaurants.add(restaurant);
                             }
+                        } else {
+                            log.error("LOCALDATA_072404 is null or not initialized properly page: {}, i: {}", page, finalI);
                         }
+
                         return restaurants;
                     });
             restaurantMonos.add(restaurantMono);
@@ -123,6 +167,16 @@ public class RestaurantServiceImpl implements RestaurantService {
         String TRDSTATEGBN;
         String UPTAENM;
         String MGTNO;
+        String X;
+        String Y;
+    }
+
+    public static double parseDoubleOrDefault(String str, double defaultValue) {
+        try {
+            return Double.parseDouble(str);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
     }
 }
 
