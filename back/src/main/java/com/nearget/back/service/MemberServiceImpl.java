@@ -3,6 +3,7 @@ package com.nearget.back.service;
 import com.nearget.back.domain.Member;
 import com.nearget.back.domain.Role;
 import com.nearget.back.dto.MemberDTO;
+import com.nearget.back.dto.ModifyMemberDTO;
 import com.nearget.back.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,19 +33,32 @@ public class MemberServiceImpl implements MemberService {
     public MemberDTO getKakaoMember(String accessToken) {
         String email = getEmailFromKakaoAccessToken(accessToken);
         log.info("************ MemberService - getKakaoMember -email : {}", email);
-// DB에 회원이 있는지 조회
+        // DB에 회원이 있는지 조회
         Optional<Member> findMember = memberRepository.findById(email);
-// 기존회원 -> 로그인
+        // 기존회원 -> 로그인
         if (findMember.isPresent()) {
             MemberDTO memberDTO = entityToDTO(findMember.get());
             return memberDTO;
         }
-// 회원이 아닌경우 -> 회원 추가
-// 임시 비번으로 회원 DB에 추가, 해당 정보로 memberDTO 리턴
+        // 회원이 아닌경우 -> 회원 추가
+        // 임시 비번으로 회원 DB에 추가, 해당 정보로 memberDTO 리턴
         Member newMember = makeNewMember(email,accessToken); // 소셜회원으로 만들어 받기
         memberRepository.save(newMember); // DB에 저장
         MemberDTO memberDTO = entityToDTO(newMember); // DTO변환해 리턴
         return memberDTO;
+    }
+
+    // 회원 정보 수정
+    @Override
+    public void modifyMember(ModifyMemberDTO modifyMemberDTO) {
+        // DataMemberDTO -> Member Entity
+        Member member=  memberRepository.findById(modifyMemberDTO.getEmail()).orElseThrow(
+                ()-> new IllegalArgumentException("해당 회원이 없습니다.")
+        );
+        member.updateNickname(modifyMemberDTO.getNickname());
+        member.updateProfileImg(modifyMemberDTO.getProfileImg());
+        member.updateIsNew(false);
+        memberRepository.save(member);
     }
 
     // 소셜회원 Member 엔티티 만들어주는 메서드
