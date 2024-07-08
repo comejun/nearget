@@ -1,11 +1,9 @@
 import axios from "axios";
-import { API_SERVER_HOST } from "../staticData";
+import { API_SERVER_HOST, REST_API_KEY, REDIRECT_URI } from "../staticData";
 
-// ToDo 카카오에서 발급 받은 내 REST API 키
-const rest_api_key = `32bb26db068923f19fd3390bbf77862a`;
+const rest_api_key = REST_API_KEY
 // RedirectURI
-// const redirect_uri = `http://localhost:3000/member/kakao`;
-const redirect_uri = `http://comejun.ddns.net:80/member/kakao`;
+const redirect_uri = REDIRECT_URI;
 
 
 // 카카오 인가코드 요청 경로
