@@ -9,7 +9,7 @@
 @import "./pages/ProfilePage.scss"; //프로필
 
 // Parts
-@import "../scss/partials/Header.scss";   //헤더
+@import "partials/Header";   //헤더
 @import "../scss/partials/Category.scss"; //카테고리
 @import "../scss/partials/Nav.scss";      //하단네비
 @import "../scss/partials/Button.scss";   //버튼
