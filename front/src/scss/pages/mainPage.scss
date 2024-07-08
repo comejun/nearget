@@ -1,0 +1,97 @@
+div.MainH2Wrap{
+  width: calc(100% - 32px);
+  margin: 0 auto;
+  img{
+    height:22px;
+    margin-bottom: 24px;
+  }
+}
+
+
+
+
+/* contents */
+// MainTodayGet
+div.TodayGetWrap{
+  width: 100%;
+  max-width: 500px;
+  background-color: #dcdcdc;
+  height:300px;
+  margin: 0 auto;
+}
+div.TodayGetContainer{
+  width: 100%;
+  background-color: #dcdcdc;
+  height:300px;
+  overflow-x: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  scroll-behavior: smooth;
+  ul{
+    display: flex;
+    flex-wrap: nowrap;
+    min-width: 310px;
+    padding: 0;
+    margin: 0;
+    margin-right: 16px;
+    li{
+      min-width: 310px;
+      position: relative;
+      display: inline-block;
+      margin-left: 16px;
+      cursor: pointer;
+      overflow: inherit;
+      white-space: nowrap;
+      background-color: aqua;
+    }
+    li:last-child {
+      margin-right: 16px;
+    }
+  }
+}
+div.scrollContent{
+  img{
+    width: 310px;
+    border-radius: 16px;
+  }
+}
+// PricebyPlace
+div.PricebyPlaceWrap{
+  width: 100%;
+  background-color: #dcdcdc;
+  height:320px;
+  overflow-x: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  scroll-behavior: smooth;
+  ul{
+    display: flex;
+    flex-wrap: nowrap;
+    min-width: 310px;
+    padding: 0;
+    margin: 0;
+    margin-right: 16px;
+    li{
+      min-width: 310px;
+      position: relative;
+      display: inline-block;
+      margin-left: 16px;
+      cursor: pointer;
+      overflow: inherit;
+      white-space: nowrap;
+      background-color: aqua;
+    }
+    li:last-child {
+      margin-right: 16px;
+    }
+  }
+}
+div.PricebyPlaceContainer{
+
+}
