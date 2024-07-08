@@ -15,6 +15,14 @@ const placeRouter = () => {
       ),
     },
     {
+      path: "place",
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <Place />
+        </Suspense>
+      ),
+    },
+    {
       path: "add",
       element: (
         <Suspense fallback={<LoadingPage />}>

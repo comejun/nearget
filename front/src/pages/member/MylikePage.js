@@ -10,6 +10,7 @@ const MylikePage = () => {
   return (
     <BasicLayout>
       <HeaderBack imgSrc="/assets/imgs/icon/h1_Mylike.png" />
+      <div className="header_margin"></div>
     </BasicLayout>
   );
 };

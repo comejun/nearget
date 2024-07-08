@@ -10,6 +10,7 @@ const PlacePage = () => {
   return (
     <BasicLayout>
       <HeaderBack imgSrc="/assets/imgs/icon/h1_Place.png" />
+      <div className="header_margin"></div>
     </BasicLayout>
   );
 };
