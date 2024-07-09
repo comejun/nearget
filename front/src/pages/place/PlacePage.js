@@ -11,6 +11,9 @@ const PlacePage = () => {
     <BasicLayout>
       <HeaderBack imgSrc="/assets/imgs/icon/h1_Place.png" />
       <div className="header_margin"></div>
+      <div>
+        <img />
+      </div>
     </BasicLayout>
   );
 };

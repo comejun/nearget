@@ -6,17 +6,20 @@ header{
   left:0;
   z-index: 999;
 }
-div.headerWrap{
+div.headerWrap, div.MainheaderWrap{
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
   opacity: 1;
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(2px);
   height:48px;
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
+}
+div.MainheaderWrap{
+  height:92px;
 }
 div.header_margin_main{
   width:100%;
