@@ -5,7 +5,7 @@ import CategoryFilter from "./CategoryFilter";
 export default function HeaderMain() {
   return (
     <header>
-      <div className="headerWrap">
+      <div className="MainheaderWrap">
         {/* 메인페이지 헤더 */}
         <div className="headerLogoContent">
           <Link to="/">
