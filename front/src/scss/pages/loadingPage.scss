@@ -7,7 +7,11 @@ div.loadingPage{
   align-items: center;
   justify-content: center;
   text-align: center;
-  img{
+  img:nth-child(1){
+    transform: translateY(-60px);
+    width: 40%;
+  }
+  img:nth-child(2){
     transform: translateY(-60px);
     width: 50%;
   }
