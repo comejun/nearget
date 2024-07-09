@@ -1,0 +1,134 @@
+div.placeContentWrap{
+  width: calc(100% - 32px);
+  margin: 0 auto;
+  position: relative;
+  margin-bottom: 12px;
+  img{
+    width: 100%;
+    height: auto;
+    min-height: 260px;
+    max-height: 374px;
+    object-fit: cover;
+    position: relative;
+    border-radius: 16px;
+  }
+  img.scrollContentSum::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) -3%, rgba(0, 0, 0, 0.2) 100%);
+  }
+  h3{
+    position: absolute;    
+    color:#D29B65;
+    left:16px;
+    bottom:16px;
+  }
+}
+div.PlaceH2Wrap{
+  width: calc(100% - 40px);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  h2{
+    font-size: 20px;
+  }
+  img{
+    height:18px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  img:hover{
+    content: url(../../../public/assets/imgs/icon/ic_like_ac.png);
+  }
+}
+div.PlaceLikeWrap{
+  width: calc(100% - 40px);
+  margin: 0 auto;
+  display: flex;
+  margin-bottom: 24px;
+  img{
+    height: 20px;
+    margin-right: 8px;
+  }
+  span{
+    font-size: 14px;
+    line-height: 18px;
+    color:#D29B65;
+  }
+}
+div.PlaceTextLi{
+  width: calc(100% - 40px);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  margin-bottom: 8px;
+  p{
+    font-size: 14px;
+  }
+  span{
+    font-size: 14px;
+    color:#D29B65;
+    cursor: pointer;
+  }
+}
+div.whiteArea{
+  background-color: #fff;
+  margin-top: 36px;
+  padding-top: 16px;
+  border-radius: 16px 16px 0 0;
+  div.MenuWrap{
+    width: calc(100% - 32px);
+    margin: 0 auto;
+    margin-top: -10px;
+    margin-bottom: 36px;
+    div.MenuTextLi{
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      line-height: 20px;
+      padding: 14px 0;
+      border-bottom: 1px solid #F6EFE3;
+      p{font-size: 16px;}
+      span{
+        font-size: 16px;
+        color:#BB4537;
+      }
+    }
+  }
+  div.PlaceMapArea{
+    width: calc(100% - 32px);
+    margin: 0 auto;
+    height:210px;
+    border-radius: 16px;
+    background-color: #dcdcdc;
+  }
+  div.PlaceMapBtn{
+    width: calc(100% - 32px);
+    margin: 0 auto;
+    margin-top: 24px;
+    margin-bottom: 36px;
+    button{
+      width: 100%;
+      height: 52px;
+      line-height: 52px;
+      background-color: #fff;
+      border: 1px solid #D29B65;
+      color:#D29B65;
+      font-size: 14px;
+      margin-top: 18px;
+      border-radius: 12px;
+      transition: 0.2s;
+    }
+    button:hover{
+      background-color: #D29B65;
+      color:#fff;
+    }
+  }
+}
