@@ -47,6 +47,23 @@ const KakaoMap = () => {
         }
     }, [nowMarker]);
 
+    // 지도 렌더링 후 실행될 함수
+    useEffect(() => {
+        if (map !== null) {
+            console.log("지도 렌더링 후 실행");
+
+                // 지도 중심 좌표나 확대 수준이 변경시 발생하는 이벤트
+            kakao.maps.event.addListener(map, 'idle', mapChanged);
+
+        }
+    }, [map]);
+
+    // 지도 이동 및 확대 수준 변경시 실행될 함수
+    const mapChanged = () => {
+        const level = map.getLevel();
+        console.log(level);
+    };
+
 
 
     return (
