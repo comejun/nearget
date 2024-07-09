@@ -62,9 +62,9 @@ const UseCustomMap = () => {
             myLocation.lng,
         );
         const markerImage = new kakao.maps.MarkerImage(
-            "assets/imgs/icon/oval.svg",
-            new kakao.maps.Size(50, 50),
-            { offset: new kakao.maps.Point(25, 25) },
+            "assets/imgs/icon/ic_mypin.svg",
+            new kakao.maps.Size(24, 24),
+            { offset: new kakao.maps.Point(12, 12) },
         );
         const marker = new kakao.maps.Marker({
             position: markerPosition,
@@ -76,8 +76,9 @@ const UseCustomMap = () => {
 
 
 
-    return (
-        <div>UseCustomMap</div>
-    )
+    return {
+        myLocation,
+        myLocationMarker
+    };
 }
 export default UseCustomMap
