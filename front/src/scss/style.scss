@@ -6,6 +6,7 @@
 @import "./pages/mainPage.scss";    //메인
 @import "./pages/mapPage.scss";    //메인
 @import "./pages/loginPage.scss";   //로그인
+@import "./pages/placePage.scss"; //프로필
 @import "./pages/ProfilePage.scss"; //프로필
 
 // Parts
@@ -36,6 +37,7 @@ div.contentWrap{
   max-width: 500px;
   height: 100%;
   position: relative;
+  overflow-y: scroll;
 }
 div.mg-t{
   margin-top: 56px;

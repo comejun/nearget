@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { getKakaoLoginLink } from "../../api/kakaoAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
+import BottomNav from "../../layouts/BottomNav";
 
 const MylikePage = () => {
   const kakaoLoginLink = getKakaoLoginLink();
@@ -11,6 +12,7 @@ const MylikePage = () => {
     <BasicLayout>
       <HeaderBack imgSrc="/assets/imgs/icon/h1_Myget.png" />
       <div className="header_margin"></div>
+      <BottomNav />
     </BasicLayout>
   );
 };

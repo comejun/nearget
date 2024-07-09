@@ -5,7 +5,7 @@ import CategoryFilter from "./CategoryFilter";
 export default function HeaderMap() {
   return (
     <header>
-      <div className="headerWrap">
+      <div className="MainheaderWrap">
         {/* 메인페이지 헤더 */}
         <div className="headerSearchInput">
           <input type="text" name="search" maxLength="20" placeholder="검색어를 입력해주세요." />

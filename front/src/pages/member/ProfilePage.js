@@ -1,11 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { getKakaoLoginLink } from "../../api/kakaoAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
+import UseCustomMove from "../../hooks/useCustomMove";
 
 const ProfilePage = () => {
   const kakaoLoginLink = getKakaoLoginLink();
+  const { moveToProfileEdit, moveToMylike, moveToMyget } = UseCustomMove();
 
   return (
     <BasicLayout>
@@ -18,14 +19,14 @@ const ProfilePage = () => {
           <p>lakanti@naver.com</p>
         </div>
         <div className="PoEditWrap">
-          <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_edit.png"} />
+          <img onClick={moveToProfileEdit} src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_edit.png"} />
         </div>
       </div>
-      <div className="ProfileListWrap">
+      <div onClick={moveToMylike} className="ProfileListWrap">
         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/h2_MyLike.png"} />
         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_aro.png"} />
       </div>
-      <div className="ProfileListWrap">
+      <div onClick={moveToMyget} className="ProfileListWrap">
         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/h2_MyGet.png"} />
         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_aro.png"} />
       </div>

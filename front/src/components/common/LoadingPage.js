@@ -1,8 +1,11 @@
-import React from 'react'
+import React from "react";
+import BasicLayout from "../../layouts/BasicLayout";
 
 const LoadingPage = () => {
-    return (
-        <div>LoadingPage</div>
-    )
-}
-export default LoadingPage
+  return (
+    <BasicLayout>
+      <div>loding...</div>
+    </BasicLayout>
+  );
+};
+export default LoadingPage;
