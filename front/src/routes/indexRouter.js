@@ -34,6 +34,14 @@ const Router = () => {
       path: "member",
       children: memberRouter(),
     },
+    {
+      path: "load",
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <LoadingPage />
+        </Suspense>
+      ),
+    },
   ]);
 };
 export default Router;

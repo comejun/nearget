@@ -3,8 +3,9 @@
 /* import */
 
 // Pages
+@import "./pages/loadingPage.scss";    //로딩
 @import "./pages/mainPage.scss";    //메인
-@import "./pages/mapPage.scss";    //메인
+@import "./pages/mapPage.scss";    //지도
 @import "./pages/loginPage.scss";   //로그인
 @import "./pages/placePage.scss"; //프로필
 @import "./pages/ProfilePage.scss"; //프로필
