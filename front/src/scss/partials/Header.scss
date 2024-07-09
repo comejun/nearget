@@ -6,7 +6,7 @@ header{
   left:0;
   z-index: 999;
 }
-div.headerWrap, div.MainheaderWrap{
+div.headerWrap, div.MainheaderWrap, div.MainSearchWrap{
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
@@ -18,7 +18,15 @@ div.headerWrap, div.MainheaderWrap{
   justify-content: space-between;
   box-sizing: border-box;
 }
-div.MainheaderWrap{
+//레이어작업용
+div.MainSearchWrap{
+  display: none;
+  img{
+    cursor: pointer;
+  }
+}
+div.MainheaderWrap,
+div.MainSearchWrap{
   height:92px;
 }
 div.header_margin_main{
@@ -41,6 +49,47 @@ div.headerLogoContent{
 div.headerSearchContent{
   margin-top: 6px;
   margin-right: 16px;
+  img{
+    cursor: pointer;
+  }
+}
+div.SearchCloseContent{
+  margin-top: 6px;
+  margin-left: 16px;
+  img{
+    cursor: pointer;
+  }
+}
+div.SearchInputContent{
+  width: calc(100% - 84px);
+  margin-right: 16px;
+  input{
+        // 스타일 초기화
+        -webkit-appearance: none;
+        -moz-appearance: none;
+             appearance: none;
+    width: calc(100% - 16px);
+    padding: 0;
+    padding-left: 16px;
+    height: 34px;
+    line-height: 36px;
+    border-radius: 36px;
+    border: 1px solid #BD8C5B;
+    margin-top: 6px;
+    font-size: 14px;
+  }
+  input::placeholder{
+    color:#dcdcdc;
+  }
+  input:focus{
+    outline: none;
+  }
+  img{
+    position: absolute;
+    right: 16px;
+    top:6px;
+    cursor: pointer;
+  }
 }
 div.headerSearchInput{
   width: calc(100% - 84px);
@@ -50,18 +99,18 @@ div.headerSearchInput{
         -webkit-appearance: none;
         -moz-appearance: none;
              appearance: none;
-    width: 100%;
+    width: calc(100% - 36px);
+    padding: 0;
+    padding-left: 36px;
     height: 34px;
     line-height: 36px;
     border-radius: 36px;
     border: 1px solid #BD8C5B;
     margin-top: 6px;
-    padding: 0;
     font-size: 14px;
   }
   input::placeholder{
     color:#dcdcdc;
-    padding-left: 36px;
   }
   input:focus{
     outline: none;
@@ -70,6 +119,7 @@ div.headerSearchInput{
     position: absolute;
     left: 16px;
     top:6px;
+    cursor: pointer;
   }
 }
 div.headerLocationContent{
