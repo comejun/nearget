@@ -1,5 +1,5 @@
-export const API_SERVER_HOST = "http://comejun.ddns.net:8090";
-// export const API_SERVER_HOST = "http://localhost:8090";
+// export const API_SERVER_HOST = "http://comejun.ddns.net:8090";
+export const API_SERVER_HOST = "http://localhost:8090";
 
 
 // ToDo 카카오에서 발급 받은 내 REST API 키
