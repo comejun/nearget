@@ -1,3 +1,4 @@
+/*
 package com.nearget.back.domain;
 
 import javax.persistence.*;
@@ -43,3 +44,4 @@ public class GetPlace {
     // *************** 그룹 -> 음식점 저장 메소드 ***************
 
 }
+*/
