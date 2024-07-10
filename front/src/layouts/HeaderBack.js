@@ -7,11 +7,7 @@ export default function HeaderBack({ imgSrc }) {
   const { moveToMain } = UseCustomMove();
 
   const goBackOrToMain = () => {
-    if (navigate.length > 2) {
-      navigate(-1);
-    } else {
-      moveToMain();
-    }
+    navigate(-1);
   };
 
   return (

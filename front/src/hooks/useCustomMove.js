@@ -12,8 +12,14 @@ const UseCustomMove = () => {
   const moveToPlace = () => {
     navigate("/place");
   };
+  const moveToGet = () => {
+    navigate("/place/get");
+  };
   const moveToAdd = () => {
     navigate("/place/add");
+  };
+  const moveToEdit = () => {
+    navigate("/place/Edit");
   };
   //Profile
   const moveToProfile = () => {
@@ -33,7 +39,9 @@ const UseCustomMove = () => {
     moveToMain,
     moveToMap,
     moveToPlace,
+    moveToGet,
     moveToAdd,
+    moveToEdit,
     moveToProfile,
     moveToProfileEdit,
     moveToMylike,

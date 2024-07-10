@@ -6,6 +6,7 @@ const Profile = lazy(() => import("../pages/member/ProfilePage"));
 const Edit = lazy(() => import("../pages/member/ProfileEditPage"));
 const KakaoRedirect = lazy(() => import("../pages/member/KakaoRedirectPage"));
 const MyGet = lazy(() => import("../pages/member/MygetPage"));
+const MyGetGroup = lazy(() => import("../pages/member/MygetGroupPage"));
 const MyLike = lazy(() => import("../pages/member/MylikePage"));
 
 const memberRouter = () => {
@@ -55,6 +56,14 @@ const memberRouter = () => {
       element: (
         <Suspense fallback={<LoadingPage />}>
           <MyGet />
+        </Suspense>
+      ),
+    },
+    {
+      path: "mygetgroup",
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <MyGetGroup />
         </Suspense>
       ),
     },

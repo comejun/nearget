@@ -3,6 +3,7 @@ import { getKakaoLoginLink } from "../../api/kakaoAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
 import UseCustomMove from "../../hooks/useCustomMove";
+import BottomNav from "../../layouts/BottomNav";
 
 const ProfilePage = () => {
   const kakaoLoginLink = getKakaoLoginLink();
@@ -33,6 +34,8 @@ const ProfilePage = () => {
       <div className="textBtnWrap">
         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_LogOut.png"} alt="deleteID" />
       </div>
+      <div className="bottom_margin"></div>
+      <BottomNav />
     </BasicLayout>
   );
 };

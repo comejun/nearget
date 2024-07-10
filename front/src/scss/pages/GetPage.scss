@@ -1,0 +1,83 @@
+div.GetH1Wrap{
+  width: calc(100% - 32px);
+  margin: 0 auto;
+  position: relative;
+  margin-bottom: 24px;
+  img.GroupSum{
+    width: 100%;
+    height: auto;
+    min-height: 124px;
+    max-height: 172px;
+    object-fit: cover;
+    position: relative;
+    border-radius: 16px;
+    background-color: #dcdcdc;
+  }
+  h2.GroupTitle,
+  h3.GroupTitleEdit{
+    position: absolute;
+    width: 80%;
+    top:calc(50% - 10px);
+    left:16px;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 20px;
+    color:#fff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  h3.GroupTitleEdit{
+    width: 100%;
+    text-align: center;
+    left:0px;
+    cursor: pointer;
+  }
+  div.GetEditWrap{
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    img.GetEditBtn{
+      width:53px;
+      height: 32px;
+      cursor: pointer;
+      opacity: 1;
+    }
+    img.GetEditBtn:hover{
+      opacity: 0.9;
+    }
+  }
+}
+
+// 그룹 목록
+h2.GetGroupTitle{
+  width: 100%;
+  position: absolute;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  top:calc(50% - 10px);
+  color: #fff;
+  left: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// 삭제버튼
+img.GetDeleteBtn{
+  position: absolute;
+  top:8px;
+  right: 8px;
+  width: 24px;
+  transition: 0.2s;
+  opacity: 1;
+  cursor: pointer;
+}
+img.GetDeleteBtn:hover{
+  opacity: 0.9;
+}
+
+.GetPageMargin{
+  margin-bottom: 32px;
+}
