@@ -10,11 +10,11 @@ const AddPage = () => {
 
   return (
     <BasicLayout>
-      <HeaderBack imgSrc="/assets/imgs/icon/h1_AddGet.png" />
+      <HeaderBack imgSrc="/assets/imgs/icon/h1_EditGet.png" />
       <div className="header_margin"></div>
       <form>
         <div className="GetH1Wrap">
-          <img className="GroupSum" src={process.env.PUBLIC_URL + "/assets/imgs/icon/EditImgBack.png"} />
+          <img className="GroupSum" src={process.env.PUBLIC_URL + "/assets/imgs/sample.png"} />
           <h3 className="GroupTitleEdit">Edit</h3>
         </div>
         <div className="MyModifyInput">

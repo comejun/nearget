@@ -34,6 +34,7 @@ const ProfilePage = () => {
       <div className="textBtnWrap">
         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_LogOut.png"} alt="deleteID" />
       </div>
+      <div className="bottom_margin"></div>
       <BottomNav />
     </BasicLayout>
   );
