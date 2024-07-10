@@ -13,6 +13,7 @@ const UseCustomMap = () => {
     });
 
     // 내 위치 가져오기
+/*
     useEffect(() => {
         const interval = setInterval(() => {
             if (navigator.geolocation) {
@@ -38,6 +39,7 @@ const UseCustomMap = () => {
         }, 1000);
         return () => clearInterval(interval);
     }, []);
+*/
 
     // TODO 시연용 내위치 가져 오기 코드
     useEffect(() => {

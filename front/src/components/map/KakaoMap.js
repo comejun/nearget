@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import useCustomMap from "../../hooks/useCustomMap";
+import {useSelector} from "react-redux";
 
 const { kakao } = window;
 
@@ -9,6 +10,8 @@ const KakaoMap = () => {
     const [nowMarker, setNowMarker] = useState(null);
     const [map, setMap] = useState(null);
     const [renderCheck, setRenderCheck] = useState(true);
+
+    const myLocationBtnClicked = useSelector((state) => state.mapSlice.myLocationBtnClicked);
 
     // 내 위치로 이동
     const moveToMyLocation = () => {
@@ -64,6 +67,13 @@ const KakaoMap = () => {
         console.log(level);
     };
 
+    // 현위치로 이동 버튼 클릭 여부
+    useEffect(() => {
+        if(map!==null){
+            moveToMyLocation();
+        }
+    }, [myLocationBtnClicked]);
+
 
 
     return (
@@ -71,7 +81,7 @@ const KakaoMap = () => {
             id="map"
             style={{
                 width: "100%",
-                height: "calc(100vh - 52px)",
+                height: "calc(100vh)",
                 position: "relative",
             }}
         >

@@ -1,8 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import CategoryFilter from "./CategoryFilter";
+import {useDispatch} from "react-redux";
+import {clickedMyLocationBtn} from "../slices/mapSlice";
 
 export default function HeaderMap() {
+    const dispatch = useDispatch();
+
+    const handleMyLocationBtn = () => {
+        dispatch(clickedMyLocationBtn());
+    }
   return (
     <header>
       <div className="MainheaderWrap">
@@ -12,9 +18,7 @@ export default function HeaderMap() {
           <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_search_sm.svg"} />
         </div>
         <div className="headerLocationContent">
-          <Link to="/list">
-            <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_location.png"} alt="searchIcon" height="36px" />
-          </Link>
+            <img onClick={handleMyLocationBtn} src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_location.png"} alt="searchIcon" height="36px" />
         </div>
       </div>
       <CategoryFilter />
