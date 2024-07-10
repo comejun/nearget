@@ -6,7 +6,6 @@ import { login } from "../../slices/loginSlice";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import LoadingPage from "../../components/common/LoadingPage";
 
-
 const KakaoRedirectPage = () => {
   // 쿼리스트링 code 라는 이름으로 넘어오는 인가코드 꺼내기
   const [searchParams] = useSearchParams();
@@ -27,8 +26,7 @@ const KakaoRedirectPage = () => {
 
         dispatch(login(memberInfo));
 
-          moveToPath("/");
-
+        moveToPath("/");
       });
     });
   }, [authCode]); // authCode값이 변경될때만 요청되도록 useEffect 사용

@@ -1,0 +1,23 @@
+div.loadingPage{
+  width: 100%;
+  height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  img:nth-child(1){
+    transform: translateY(-60px);
+    width: 40%;
+  }
+  img:nth-child(2){
+    transform: translateY(-60px);
+    width: 50%;
+  }
+  p{
+    color:#D29B65;
+    transform: translateY(-60px);
+    font-size: 18px;
+  }
+}
