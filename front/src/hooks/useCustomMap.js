@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import {useSelector} from "react-redux";
 
 const { kakao } = window;
 
@@ -11,6 +12,10 @@ const UseCustomMap = () => {
         get: false,
         isLoaded: false,
     });
+
+
+    // 셀렉터로 카테고리 가져오기
+    const categoryFilter = useSelector((state) => state.categorySlice.category);
 
     // 내 위치 가져오기
 /*
