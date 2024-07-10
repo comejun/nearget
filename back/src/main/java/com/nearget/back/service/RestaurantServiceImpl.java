@@ -54,69 +54,9 @@ public class RestaurantServiceImpl implements RestaurantService {
                                             || businessInfo.UPTAENM.equals("일식") || businessInfo.UPTAENM.equals("호프/통닭") || businessInfo.UPTAENM.equals("중국식")
                                             || businessInfo.UPTAENM.equals("패스트푸트") || businessInfo.UPTAENM.equals("한식")) {
 
-                                        Category category = Category.KOREAN;
-                                        if (businessInfo.UPTAENM.equals("경양식")) {
-                                            category = Category.WESTERN;
-                                        } else if (businessInfo.UPTAENM.equals("까페")) {
-                                            category = Category.CAFE;
-                                        } else if (businessInfo.UPTAENM.equals("분식")) {
-                                            category = Category.STREET;
-                                        } else if (businessInfo.UPTAENM.equals("일식")) {
-                                            category = Category.JAPANESE;
-                                        } else if (businessInfo.UPTAENM.equals("호프/통닭")) {
-                                            category = Category.PUB;
-                                        } else if (businessInfo.UPTAENM.equals("중국식")) {
-                                            category = Category.CHINESE;
-                                        } else if (businessInfo.UPTAENM.equals("패스트푸트")) {
-                                            category = Category.FASTFOOD;
-                                        } else if (businessInfo.UPTAENM.equals("한식")) {
-                                            category = Category.KOREAN;
-                                        }
-
-// CRS 객체 생성
-                                        CRSFactory crsFactory = new CRSFactory();
-
-                                        // WGS84 system 정의
-                                        String wgs84Name = "WGS84";
-                                        String wgs84Proj = "+proj=longlat +datum=WGS84 +no_defs";
-                                        CoordinateReferenceSystem wgs84System = crsFactory.createFromParameters(wgs84Name, wgs84Proj);
-
-                                        // EPSG:2097 system 정의
-                                        String epsgName = "EPSG:2097";
-                                        String epsgProj = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43";
-                                        CoordinateReferenceSystem epsgSystem = crsFactory.createFromParameters(epsgName, epsgProj);
-
-                                        // 변환할 좌표계 정보 생성
-                                        ProjCoordinate p = new ProjCoordinate();
-                                        p.x = parseDoubleOrDefault(businessInfo.X, 0); // 경도 (x)
-                                        p.y = parseDoubleOrDefault(businessInfo.Y, 0); // 위도 (y)
-
-                                        // 변환된 좌표를 담을 객체 생성
-                                        ProjCoordinate p2 = new ProjCoordinate();
-
-                                        CoordinateTransformFactory ctFactory = new CoordinateTransformFactory();
-                                        // 변환 시스템 지정. (원본 시스템, 변환 시스템)
-                                        CoordinateTransform coordinateTransform = ctFactory.createTransform(epsgSystem, wgs84System);
-                                        // 좌표 변환
-                                        ProjCoordinate projCoordinate = coordinateTransform.transform(p, p2);
-
-                                        // 변환된 좌표
-                                        double wgsLng = projCoordinate.x;
-                                        double wgsLat = projCoordinate.y;
-
-
-
-                                        Restaurant restaurant = Restaurant.builder()
-                                                .id(Long.parseLong(businessInfo.MGTNO.replaceAll("[^0-9]", "")))
-                                                .name(businessInfo.BPLCNM)
-                                                .address(businessInfo.SITEWHLADDR)
-                                                .category(category)
-                                                .lng(wgsLng)
-                                                .lat(wgsLat)
-                                                .build();
+                                        Restaurant restaurant = getRestaurant(businessInfo);
                                         restaurants.add(restaurant);
                                     }
-
 
                                 }
                             }
@@ -138,6 +78,31 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     }
 
+    // BusinessInfo 객체의 좌표를  변환
+    private ProjCoordinate getProjCoordinate(BusinessInfo businessInfo) {
+        CRSFactory crsFactory = new CRSFactory();
+        CoordinateReferenceSystem wgs84System = crsFactory.createFromParameters("WGS84", "+proj=longlat +datum=WGS84 +no_defs");
+        CoordinateReferenceSystem epsgSystem = crsFactory.createFromParameters("EPSG:2097", "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43");
+        ProjCoordinate p = new ProjCoordinate(parseDoubleOrDefault(businessInfo.X, 0), parseDoubleOrDefault(businessInfo.Y, 0));
+        ProjCoordinate p2 = new ProjCoordinate();
+        new CoordinateTransformFactory().createTransform(epsgSystem, wgs84System).transform(p, p2);
+        return p2;
+    }
+
+    // BusinessInfo 객체를 Restaurant 객체로 변환
+    private Restaurant getRestaurant(BusinessInfo businessInfo) {
+        ProjCoordinate projCoordinate = getProjCoordinate(businessInfo);
+        Category category = getCategory(businessInfo.UPTAENM);
+        return Restaurant.builder()
+                .id(Long.parseLong(businessInfo.MGTNO.replaceAll("[^0-9]", "")))
+                .name(businessInfo.BPLCNM)
+                .address(businessInfo.SITEWHLADDR)
+                .category(category)
+                .lng(projCoordinate.x)
+                .lat(projCoordinate.y)
+                .build();
+    }
+
     @Override
     public List<RestaurantDTO> getRestaurantMarkerByCategory(String category) {
         return List.of();
@@ -156,17 +121,38 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .build();
     }
 
-    // JSON 데이터를 파싱하기 위한 클래스
+    // BusinessInfo 객체의 업태명을 Category로 변환
+    private Category getCategory(String businessType) {
+        return switch (businessType) {
+            case "경양식" -> Category.WESTERN;
+            case "까페" -> Category.CAFE;
+            case "분식" -> Category.STREET;
+            case "��식" -> Category.JAPANESE;
+            case "호프/통닭" -> Category.PUB;
+            case "중국식" -> Category.CHINESE;
+            case "패스트푸트" -> Category.FASTFOOD;
+            default -> Category.KOREAN;
+        };
+    }
+
+    // 문자열을 double로 변환하는 메서드
+    public static double parseDoubleOrDefault(String str, double defaultValue) {
+        try {
+            return Double.parseDouble(str);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    // ***** JSON 데이터를 파싱하기 위한 클래스 *****
     static class LocalData {
         LocalData_072404 LOCALDATA_072404;
     }
 
-    // JSON 데이터를 파싱하기 위한 클래스
     static class LocalData_072404 {
         List<BusinessInfo> row;
     }
 
-    //  JSON 데이터를 파싱하기 위한 클래스
     static class BusinessInfo {
         String BPLCNM;
         String SITEWHLADDR;
@@ -176,16 +162,6 @@ public class RestaurantServiceImpl implements RestaurantService {
         String X;
         String Y;
     }
-
-    public static double parseDoubleOrDefault(String str, double defaultValue) {
-        try {
-            return Double.parseDouble(str);
-        } catch (NumberFormatException e) {
-            return defaultValue;
-        }
-    }
-
-
 
 }
 

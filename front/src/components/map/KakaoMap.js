@@ -1,14 +1,19 @@
 import React, {useEffect, useState} from 'react'
 import useCustomMap from "../../hooks/useCustomMap";
+import {useSelector} from "react-redux";
 
-const { kakao } = window;
+const {kakao} = window;
 
 const KakaoMap = () => {
 
-    const {myLocation, myLocationMarker} = useCustomMap();
+    const {myLocation, myLocationMarker,clustererMarkers} = useCustomMap();
     const [nowMarker, setNowMarker] = useState(null);
     const [map, setMap] = useState(null);
     const [renderCheck, setRenderCheck] = useState(true);
+    const categoryFilter = useSelector((state) => state.categorySlice);
+    const [cluster, setCluster] = useState();
+
+    const myLocationBtnClicked = useSelector((state) => state.mapSlice.myLocationBtnClicked);
 
     // 내 위치로 이동
     const moveToMyLocation = () => {
@@ -30,6 +35,7 @@ const KakaoMap = () => {
             setMap(new kakao.maps.Map(container, options));
         }
     }, []);
+
     // 처음 현위치 받아 오면 마커 생성
     useEffect(() => {
         if (map != null && myLocation.isLoaded && myLocation.get) {
@@ -51,19 +57,54 @@ const KakaoMap = () => {
     useEffect(() => {
         if (map !== null) {
             console.log("지도 렌더링 후 실행");
-
-                // 지도 중심 좌표나 확대 수준이 변경시 발생하는 이벤트
+            // 지도 중심 좌표나 확대 수준이 변경시 발생하는 이벤트
             kakao.maps.event.addListener(map, 'idle', mapChanged);
-
         }
     }, [map]);
 
     // 지도 이동 및 확대 수준 변경시 실행될 함수
     const mapChanged = () => {
         const level = map.getLevel();
+        // "((33.44843745687413, 126.56798357402302), (33.452964008206735, 126.57333898904454))"
+        const bounds = map.getBounds();
         console.log(level);
+        console.log(bounds.toString());
+
     };
 
+    // 조건에 따른 마커 클러스터 생성 함수
+    const createCluster = () => {
+        if(map){
+            console.log("클러스터 생성");
+
+            // 현재 지도의 중심 좌표를 저장합니다.
+            const currentCenter = map.getCenter();
+
+            const newCluster = new kakao.maps.MarkerClusterer({
+                map: map,
+                averageCenter: true,
+                minClusterSize: 4,
+                minLevel: 7,
+                disableClickZoom: false,
+            });
+            // 마커 클러스터에 기존 마커 지우기
+            if (cluster != undefined) cluster.clear();
+            // clusterMarkers함수에 changePopup함수를 인자로 넘겨주어 마커 클릭시 팝업창을 띄울 수 있도록 함
+            const markers = clustererMarkers;
+            // 클러스터에 마커 추가
+            newCluster.addMarkers(markers);
+            setCluster(newCluster);
+            // 클러스터가 변경된 후에 이전에 저장한 중심 좌표를 다시 지도의 중심으로 설정합니다.
+            map.setCenter(currentCenter);
+        }
+    }
+
+    // 현위치로 이동 버튼 클릭 여부
+    useEffect(() => {
+        if (map !== null) {
+            moveToMyLocation();
+        }
+    }, [myLocationBtnClicked]);
 
 
     return (
@@ -71,7 +112,7 @@ const KakaoMap = () => {
             id="map"
             style={{
                 width: "100%",
-                height: "calc(100vh - 52px)",
+                height: "calc(100vh)",
                 position: "relative",
             }}
         >

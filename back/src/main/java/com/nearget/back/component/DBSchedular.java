@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class RestaurantDBSchedular {
+public class DBSchedular {
 
     private final RestaurantService restaurantService;
     private final DistrictService districtService;

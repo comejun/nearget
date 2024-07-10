@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import {useSelector} from "react-redux";
 
 const { kakao } = window;
 
@@ -12,7 +13,12 @@ const UseCustomMap = () => {
         isLoaded: false,
     });
 
+
+    // 셀렉터로 카테고리 가져오기
+    const categoryFilter = useSelector((state) => state.categorySlice.category);
+
     // 내 위치 가져오기
+/*
     useEffect(() => {
         const interval = setInterval(() => {
             if (navigator.geolocation) {
@@ -38,6 +44,7 @@ const UseCustomMap = () => {
         }, 1000);
         return () => clearInterval(interval);
     }, []);
+*/
 
     // TODO 시연용 내위치 가져 오기 코드
     useEffect(() => {
