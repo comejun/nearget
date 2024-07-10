@@ -1,8 +1,10 @@
 import React from "react";
 import UseCustomMove from "../hooks/useCustomMove";
+import { getCookie } from "../util/cookieUtil";
 
 export default function BottomNav() {
-  const { moveToMain, moveToMap, moveToAdd, moveToMylike, moveToProfile } = UseCustomMove();
+  const { moveToMain, moveToMap, moveToAdd, moveToMylike, moveToProfile, moveToLogin } = UseCustomMove();
+  const memberInfo = getCookie("member");
 
   return (
     <div className="bottomNavWrap">
@@ -15,13 +17,13 @@ export default function BottomNav() {
             <li onClick={moveToMap}>
               <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_map_bt.png"} />
             </li>
-            <li onClick={moveToAdd}>
+            <li onClick={memberInfo ? moveToAdd : moveToLogin}>
               <img className="nav_Add_Btn" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_add_bt.png"} />
             </li>
-            <li onClick={moveToMylike}>
+            <li onClick={memberInfo ? moveToMylike : moveToLogin}>
               <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_bt.png"} />
             </li>
-            <li onClick={moveToProfile}>
+            <li onClick={memberInfo ? moveToProfile : moveToLogin}>
               <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_pro_bt.png"} />
             </li>
           </ul>
