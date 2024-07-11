@@ -121,6 +121,9 @@ const KakaoMap = () => {
 
             // clusterMarkers함수에 changePopup함수를 인자로 넘겨주어 마커 클릭시 팝업창을 띄울 수 있도록 함
             await clustererMarkers(mapData).then((res) => {
+                if (mapData.level > 4) {
+                    cluster.setMinLevel(9);
+                }
                 cluster.clear();
                 cluster.addMarkers(res);
             });

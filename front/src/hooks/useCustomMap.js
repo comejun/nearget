@@ -83,54 +83,55 @@ const UseCustomMap = () => {
         console.log("clustererMarkers");
         console.log(mapData);
 
+        if (mapData.level>4) {
+            return await getRestaurantsLocation(mapData).then((res) => {
+                console.log(res);
+                const markers = res.filter(location => location.count > 0).sort((a, b) => a.count - b.count).map((location) => {
 
-        const restaurantsLocationList = await getRestaurantsLocation(mapData).then((res) => {
-            console.log(res);
-            const markers = res.filter(location => location.count > 0).sort((a, b) => a.count - b.count).map((location) => {
 
+                    console.log(res.indexOf(location))
+                    // res 배열 길이 가져오기
+                    console.log(res.length)
+                    const imgSize = 60+ (20 / res.length * (res.indexOf(location) + 1));
 
-                console.log(res.indexOf(location))
-                // res 배열 길이 가져오기
-                console.log(res.length)
-                const imgSize = 60+ (20 / res.length * (res.indexOf(location) + 1));
+                    const content = '<div>' +
+                        '<img' +
+                        '    style="' +
+                        '        width: ' + imgSize + 'px;' +
+                        '        height: ' + imgSize + 'px;' +
+                        '    "' +
+                        '    src="assets/imgs/icon/ic_cluster.png" alt="cluster" />' +
+                        '<p' +
+                        '    style="' +
+                        '        color: white;' +
+                        '        font-size: 20px;' +
+                        '        position: absolute;' +
+                        '        top: 50%;' +
+                        '        left: 50%;' +
+                        '        transform: translate(-50%, -50%);' +
+                        '    ">' +
+                        location.count +
+                        '</p>' +
+                        '</div>';
 
-                const content = '<div>' +
-                    '<img' +
-                    '    style="' +
-                    '        width: ' + imgSize + 'px;' +
-                    '        height: ' + imgSize + 'px;' +
-                    '    "' +
-                    '    src="assets/imgs/icon/ic_cluster.png" alt="cluster" />' +
-                    '<p' +
-                    '    style="' +
-                    '        color: white;' +
-                    '        font-size: 20px;' +
-                    '        position: absolute;' +
-                    '        top: 50%;' +
-                    '        left: 50%;' +
-                    '        transform: translate(-50%, -50%);' +
-                    '    ">' +
-                    location.count +
-                    '</p>' +
-                    '</div>';
+                    const position = new kakao.maps.LatLng(location.lat, location.lng);
 
-                const position = new kakao.maps.LatLng(location.lat, location.lng);
+                    const customOverlay = new kakao.maps.CustomOverlay({
+                        position: position,
+                        content: content,
+                        xAnchor: 0.5,
+                        yAnchor: 1,
+                    });
+                    return customOverlay;
 
-                const customOverlay = new kakao.maps.CustomOverlay({
-                    position: position,
-                    content: content,
-                    xAnchor: 0.5,
-                    yAnchor: 1,
                 });
-                return customOverlay;
+                console.log(markers);
+                return markers;
 
             });
-            console.log(markers);
-            return markers;
+        }
 
-        });
-
-        return restaurantsLocationList;
+            return null
 
     };
 
