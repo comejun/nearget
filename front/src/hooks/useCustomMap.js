@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react'
-import {useSelector} from "react-redux";
+import {useEffect, useState} from 'react'
+import {getRestaurantsLocation} from "../api/mapAPI";
 
-const { kakao } = window;
+
+const {kakao} = window;
 
 const UseCustomMap = () => {
 
@@ -14,37 +15,34 @@ const UseCustomMap = () => {
     });
 
 
-    // 셀렉터로 카테고리 가져오기
-    const categoryFilter = useSelector((state) => state.categorySlice.category);
-
     // 내 위치 가져오기
-/*
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
+    /*
+        useEffect(() => {
+            const interval = setInterval(() => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        setMyLocation({
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            get: true,
+                            isLoaded: true,
+                        });
+                    });
+                    // console.log("Geolocation is supported by this browser.");
+                } else {
+                    console.log("Geolocation is not supported by this browser.");
                     setMyLocation({
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                        get: true,
+                        lat: 37.55498771600092,
+                        lng: 126.93601217931102,
+                        get: false,
                         isLoaded: true,
                     });
-                });
-                // console.log("Geolocation is supported by this browser.");
-            } else {
-                console.log("Geolocation is not supported by this browser.");
-                setMyLocation({
-                    lat: 37.55498771600092,
-                    lng: 126.93601217931102,
-                    get: false,
-                    isLoaded: true,
-                });
-            }
-            //TODO : 1초마다 위치 업데이트
-        }, 1000);
-        return () => clearInterval(interval);
-    }, []);
-*/
+                }
+                //TODO : 1초마다 위치 업데이트
+            }, 1000);
+            return () => clearInterval(interval);
+        }, []);
+    */
 
     // TODO 시연용 내위치 가져 오기 코드
     useEffect(() => {
@@ -71,7 +69,7 @@ const UseCustomMap = () => {
         const markerImage = new kakao.maps.MarkerImage(
             "assets/imgs/icon/ic_mypin.svg",
             new kakao.maps.Size(24, 24),
-            { offset: new kakao.maps.Point(12, 12) },
+            {offset: new kakao.maps.Point(12, 12)},
         );
         const marker = new kakao.maps.Marker({
             position: markerPosition,
@@ -81,11 +79,61 @@ const UseCustomMap = () => {
         return marker;
     };
 
+    const clustererMarkers = async (mapData) => {
+        console.log("clustererMarkers");
+        console.log(mapData);
+
+
+        const restaurantsLocationList = await getRestaurantsLocation(mapData).then((res) => {
+            console.log(res);
+            const markers =  res.map((location) => {
+
+                const content = '<div\n' +
+                    '                <img\n' +
+                    '                    style={\n' +
+                    '                        {\n' +
+                    '                            width: "100px",\n' +
+                    '                            height: "100px"\n' +
+                    '                        }\n' +
+                    '                    }\n' +
+                    '                    src="assets/imgs/icon/ic_cluster.png" alt="cluster" />\n' +
+                    '                <p\n' +
+                    '                    style={{\n' +
+                    '                        color: "white",\n' +
+                    '                        fontSize: "20px",\n' +
+                    '                        position: "absolute",\n' +
+                    '                        top: "50%",\n' +
+                    '                        left: "50%",\n' +
+                    '                        transform: "translate(-50%, -50%)",\n' +
+                    '                    }}\n' +
+                    '                >' + location.count + '</p>\n' +
+                    '            </div>';
+
+                const position = new kakao.maps.LatLng(location.lat, location.lng);
+
+                const customOverlay = new kakao.maps.CustomOverlay({
+                    position: position,
+                    content: content,
+                    xAnchor: 0.5,
+                    yAnchor: 1,
+                });
+                return customOverlay;
+
+            });
+            console.log(markers);
+            return markers;
+
+        });
+
+        return restaurantsLocationList;
+
+    };
 
 
     return {
         myLocation,
-        myLocationMarker
+        myLocationMarker,
+        clustererMarkers
     };
 }
 export default UseCustomMap

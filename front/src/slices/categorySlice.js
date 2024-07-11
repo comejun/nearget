@@ -1,7 +1,8 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import { createSlice} from "@reduxjs/toolkit";
 
 const initState = {
   category: "ALL",
+  restaurantList: [],
 };
 
 const categorySlice = createSlice({

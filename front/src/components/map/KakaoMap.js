@@ -12,6 +12,29 @@ const KakaoMap = () => {
     const [renderCheck, setRenderCheck] = useState(true);
     const categoryFilter = useSelector((state) => state.categorySlice);
     const [cluster, setCluster] = useState();
+    const [mapBoundLevel, setMapBoundLevel] = useState(
+        {
+            level: 3,
+            bounds: {
+
+            }
+        }
+    );
+
+
+
+    // 현재 카테고리와 지도 데이터 기반으로 클러스터 생성
+    useEffect(() => {
+        if(mapBoundLevel != undefined && mapBoundLevel.level != undefined && mapBoundLevel.bounds != undefined){
+
+            const mapData = {
+                level: mapBoundLevel.level,
+                bounds: mapBoundLevel.bounds,
+                category: categoryFilter.category,
+            }
+            createCluster(mapData);
+        }
+    }, [mapBoundLevel,categoryFilter.category]);
 
     const myLocationBtnClicked = useSelector((state) => state.mapSlice.myLocationBtnClicked);
 
@@ -62,40 +85,60 @@ const KakaoMap = () => {
         }
     }, [map]);
 
-    // 지도 이동 및 확대 수준 변경시 실행될 함수
+    // 지도 이동 및 확대 수준 변경 또는 카테고리 변경시 실행될 함수
     const mapChanged = () => {
         const level = map.getLevel();
         // "((33.44843745687413, 126.56798357402302), (33.452964008206735, 126.57333898904454))"
         const bounds = map.getBounds();
-        console.log(level);
-        console.log(bounds.toString());
+
+        if(level >= 5 && mapBoundLevel.level===level){
+            setMapBoundLevel({
+                level: level
+            })
+        }
+        else{
+            setMapBoundLevel({
+                level: level,
+                bounds: bounds,
+            });
+
+        }
+
+
+
+
+
 
     };
 
-    // 조건에 따른 마커 클러스터 생성 함수
-    const createCluster = () => {
+    // 조건에 따른 마커 클러스터 또는 커스텀오버레이 생성 함수
+    const createCluster = async (mapData) => {
         if(map){
             console.log("클러스터 생성");
 
-            // 현재 지도의 중심 좌표를 저장합니다.
-            const currentCenter = map.getCenter();
+
 
             const newCluster = new kakao.maps.MarkerClusterer({
                 map: map,
                 averageCenter: true,
-                minClusterSize: 4,
-                minLevel: 7,
+                minClusterSize: 2,
+                minLevel: 2,
                 disableClickZoom: false,
             });
-            // 마커 클러스터에 기존 마커 지우기
-            if (cluster != undefined) cluster.clear();
+
             // clusterMarkers함수에 changePopup함수를 인자로 넘겨주어 마커 클릭시 팝업창을 띄울 수 있도록 함
-            const markers = clustererMarkers;
+            const markers = await clustererMarkers(mapData);
+
+            console.log("클러스터에 마커 추가");
             // 클러스터에 마커 추가
             newCluster.addMarkers(markers);
+            // 이전 클러스터가 존재한다면 지우기
+            if (cluster != undefined) {
+                cluster.clear();
+            }
             setCluster(newCluster);
             // 클러스터가 변경된 후에 이전에 저장한 중심 좌표를 다시 지도의 중심으로 설정합니다.
-            map.setCenter(currentCenter);
+
         }
     }
 
@@ -116,6 +159,10 @@ const KakaoMap = () => {
                 position: "relative",
             }}
         >
+
+
+
+
         </div>)
 }
 export default KakaoMap

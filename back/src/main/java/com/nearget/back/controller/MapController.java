@@ -1,13 +1,14 @@
 package com.nearget.back.controller;
 
+import com.nearget.back.dto.DistrictDTO;
+import com.nearget.back.dto.MapDataDTO;
 import com.nearget.back.dto.RestaurantDTO;
+import com.nearget.back.service.DistrictService;
 import com.nearget.back.service.RestaurantService;
+import com.nearget.back.service.SmallDistrictService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,19 +20,34 @@ import java.util.List;
 public class MapController {
 
     private final RestaurantService restaurantService;
+    private final DistrictService districtService;
+    private final SmallDistrictService smallDistrictService;
 
-    @GetMapping("/{category}")
-    public List<RestaurantDTO> getMarkerLocation(@PathVariable("category") String category) {
-        log.info("********** MapController GET /:category - category : {}", category);
-        // Entity Category를 이용해서 해당 카테고리의 위치정보를 가져온다.
-        // 이 정보를 이용해서 지도에 마커를 찍는다
+    @PostMapping("/mapdata")
+    public List<Object> getMarkersData(@RequestBody MapDataDTO mapDataDTO){
 
-        List<RestaurantDTO> RestaurantsMarkerByCategory = new ArrayList<>();
-        RestaurantsMarkerByCategory = restaurantService.getRestaurantMarkerByCategory(category);
-        log.info("********** MapController GET /:category - studyMarkerByCategory : {}", RestaurantsMarkerByCategory);
+        List<Object> objectList = new ArrayList<>();
 
+        log.info("************ MapController - getMarkersData -mapDataDTO : {}", mapDataDTO);
+        log.info("************ MapController - getMarkersData -mapDataDTO : {}", mapDataDTO.getCategory());
+        // mapDataDTO.getLevel() 값이 7또는 8일경우 실행될 함수
+        if(mapDataDTO.getLevel() == 7 || mapDataDTO.getLevel() == 8){
+            List<DistrictDTO> districtDTOList = districtService.countRestaurantsByCategory(mapDataDTO.getCategory());
+            // districtDTOList를 List<Object>로 변환
+            for(DistrictDTO districtDTO : districtDTOList){
+                objectList.add(districtDTO);
+            }
+        }
+        // mapDataDTO.getLevel() 값이 7또는 8일경우 실행될 함수
+        if(mapDataDTO.getLevel() == 5 || mapDataDTO.getLevel() == 6){
+        }
+        if(mapDataDTO.getLevel() <=4){
 
-        return RestaurantsMarkerByCategory;
+        }
+
+        log.info("************ MapController - getMarkersData -objectList : {}", objectList);
+
+        return objectList;
     }
 }
 

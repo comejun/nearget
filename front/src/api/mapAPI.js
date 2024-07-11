@@ -3,10 +3,10 @@ import axios from "axios";
 
 const host = `${API_SERVER_HOST}/api/map`;
 
-export const getAllRestaurantsLocation = async (mapData) => {
+export const getRestaurantsLocation = async (mapData) => {
 
   console.log(mapData);
-  const response = await axios.post(`${host}/map`, mapData)
+  const response = await axios.post(`${host}/mapdata`, mapData)
 
   return response.data;
 };
