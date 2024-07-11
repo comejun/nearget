@@ -35,4 +35,6 @@ public interface MemberService {
     DataMemberDTO getMember(String email);
     // 회원 정보 수정 처리
     void modifyMember(DataMemberDTO dataMemberDTO);
+    // 회원 탈퇴
+    Member disableMember(String email);
 }

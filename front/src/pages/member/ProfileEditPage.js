@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getKakaoLoginLink } from "../../api/kakaoAPI";
-import { modifyMember } from "../../api/memberAPI";
+import { modifyMember, disableMember } from "../../api/memberAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
 import useCustomLogin from "../../hooks/useCustomLogin";
@@ -13,6 +13,7 @@ import UseCustomMove from "../../hooks/useCustomMove";
 const ProfileEditPage = () => {
   const kakaoLoginLink = getKakaoLoginLink();
   const { moveToProfile } = UseCustomMove();
+  const { execLogout, moveToPath } = useCustomLogin();
   // 현재 로그인 된 회원의 이메일 가져오기
   const userEmail = useSelector((state) => state.loginSlice.email);
 
@@ -79,6 +80,14 @@ const ProfileEditPage = () => {
     }
   };
 
+  // 회원탈퇴
+  const handleClickDisabled = async () => {
+    const response = await disableMember(userEmail);
+    execLogout();
+    moveToPath("/");
+    alert("회원 탈퇴가 완료되었습니다.");
+  };
+
   return (
     <BasicLayout>
       <HeaderBack imgSrc="/assets/imgs/icon/h1_EditProfile.png" />
@@ -115,7 +124,7 @@ const ProfileEditPage = () => {
           </span>
         </div>
         <div className="textBtnWrap">
-          <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_DeleteID.png"} alt="deleteID" />
+          <img onClick={handleClickDisabled} src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_DeleteID.png"} alt="deleteID" />
         </div>
       </form>
       <div className="bottomBtnWrap">

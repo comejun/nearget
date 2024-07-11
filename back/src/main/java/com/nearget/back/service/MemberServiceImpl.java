@@ -185,4 +185,13 @@ public class MemberServiceImpl implements MemberService {
         log.info("******** kakaoAccount : {}", kakaoAccount);
         return kakaoAccount.get("email"); // 이메일만 꺼내서 리턴
     }
+
+    // 회원 탈퇴
+    public Member disableMember(String email) {
+        Member member = memberRepository.findById(email)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+        member.updateDisabled(true);
+        member.updateDisabledDate();
+        return memberRepository.save(member);
+    }
 }
