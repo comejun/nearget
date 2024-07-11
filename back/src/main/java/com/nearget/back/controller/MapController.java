@@ -40,6 +40,11 @@ public class MapController {
         }
         // mapDataDTO.getLevel() 값이 7또는 8일경우 실행될 함수
         if(mapDataDTO.getLevel() == 5 || mapDataDTO.getLevel() == 6){
+            List<DistrictDTO> districtDTOList = smallDistrictService.countRestaurantsByCategory(mapDataDTO.getCategory());
+            // districtDTOList를 List<Object>로 변환
+            for(DistrictDTO districtDTO : districtDTOList){
+                objectList.add(districtDTO);
+            }
         }
         if(mapDataDTO.getLevel() <=4){
 

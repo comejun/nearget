@@ -43,7 +43,6 @@ public class DistrictServiceImpl implements DistrictService {
 
         log.info("************ DistrictServiceImpl - countRestaurantsByCategory -category : {}", category);
 
-
         List<DistrictDTO> districtDTOList = new ArrayList<>();
 
         if (category.equals("ALL")) {

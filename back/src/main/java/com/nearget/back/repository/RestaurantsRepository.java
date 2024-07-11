@@ -18,4 +18,10 @@ public interface RestaurantsRepository extends JpaRepository<Restaurant, Long> {
     // adrress가 주어진 주소를 포함하는 식당을 개수를 구하는 쿼리
     @Query("SELECT count(r) FROM Restaurant r WHERE r.address LIKE %:address%")
     Long countByAddressContaining(String address);
+
+    // Id가 300 으로 시작하는 식당의 개수를 카테고리로 조회하는 쿼리
+    @Query("SELECT count(r) FROM Restaurant r WHERE r.address LIKE %:address% AND r.category = :category")
+    Long countByRestaurantIdAndCategoryStartingWith(String address, Category category);
+
+
 }
