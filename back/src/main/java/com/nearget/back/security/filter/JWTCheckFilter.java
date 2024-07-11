@@ -19,29 +19,33 @@ import java.util.Map;
 
 @Slf4j
 public class JWTCheckFilter extends OncePerRequestFilter {
-  @Override
-  protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-    // Preflight 필터 체크 X (Ajax CORS 요청 전에 날리는것)
-    if (request.getMethod().equals("OPTIONS")) {
-      return true;
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        // Preflight 필터 체크 X (Ajax CORS 요청 전에 날리는것)
+        if (request.getMethod().equals("OPTIONS")) {
+            return true;
+        }
+        String requestURI = request.getRequestURI();
+        log.info("************** JWTCheckFilter - shouldNotFilter : requestURI : {}",
+                requestURI);
+        // /api/member/.. 경로 요청은 필터 체크 X
+        if (requestURI.startsWith("/api/member/")) {
+            return true;
+        }
+        // 이미지 경로 요청은 필터 체크 X
+        if (requestURI.startsWith("/api/image")) {
+            return true;
+        }
+        // 카테고리 필터 불러오기 경로 요청은 체크 하지 않음
+        if (requestURI.startsWith("/api/categories")) {
+            return true;
+        }
+        // 지도 데이터 불러오기 경로 요청은 체크 하지 않음
+        if (requestURI.startsWith("/api/map")) {
+            return true;
+        }
+        return false;
     }
-    String requestURI = request.getRequestURI();
-    log.info("************** JWTCheckFilter - shouldNotFilter : requestURI : {}",
-        requestURI);
-    // /api/member/.. 경로 요청은 필터 체크 X
-    if (requestURI.startsWith("/api/member")) {
-      return true;
-    }
-    // 이미지 경로 요청은 필터 체크 X
-    if (requestURI.startsWith("/api/image")) {
-      return true;
-    }
-    // 카테고리 필터 불러오기 경로 요청은 체크 하지 않음
-    if (requestURI.startsWith("/api/categories")) {
-      return true;
-    }
-    return false;
-  }
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

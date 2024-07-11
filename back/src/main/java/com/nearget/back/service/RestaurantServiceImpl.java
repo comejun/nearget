@@ -2,7 +2,10 @@ package com.nearget.back.service;
 
 import com.google.gson.Gson;
 import com.nearget.back.domain.Category;
+import com.nearget.back.domain.DistrictCountResult;
 import com.nearget.back.domain.Restaurant;
+import com.nearget.back.domain.SmallDistrictEnum;
+import com.nearget.back.dto.DistrictDTO;
 import com.nearget.back.dto.RestaurantDTO;
 import com.nearget.back.repository.RestaurantsRepository;
 import lombok.AllArgsConstructor;
@@ -16,6 +19,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service
@@ -48,11 +52,11 @@ public class RestaurantServiceImpl implements RestaurantService {
 
                         if (localData != null && localData.LOCALDATA_072404 != null) {
                             for (BusinessInfo businessInfo : localData.LOCALDATA_072404.row) {
-                                if (!businessInfo.TRDSTATEGBN.equals("03") && !businessInfo.UPTAENM.equals("기타") && !businessInfo.SITEWHLADDR.isEmpty()){
+                                if (!businessInfo.TRDSTATEGBN.equals("03") && !businessInfo.UPTAENM.equals("기타")&&!businessInfo.SITEWHLADDR.isEmpty()) {
 
                                     if (businessInfo.UPTAENM.equals("경양식") || businessInfo.UPTAENM.equals("까페") || businessInfo.UPTAENM.equals("분식")
                                             || businessInfo.UPTAENM.equals("일식") || businessInfo.UPTAENM.equals("호프/통닭") || businessInfo.UPTAENM.equals("중국식")
-                                            || businessInfo.UPTAENM.equals("패스트푸트") || businessInfo.UPTAENM.equals("한식")) {
+                                            || businessInfo.UPTAENM.equals("패스트푸드") || businessInfo.UPTAENM.equals("한식")) {
 
                                         Restaurant restaurant = getRestaurant(businessInfo);
                                         restaurants.add(restaurant);
@@ -82,7 +86,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     private ProjCoordinate getProjCoordinate(BusinessInfo businessInfo) {
         CRSFactory crsFactory = new CRSFactory();
         CoordinateReferenceSystem wgs84System = crsFactory.createFromParameters("WGS84", "+proj=longlat +datum=WGS84 +no_defs");
-        CoordinateReferenceSystem epsgSystem = crsFactory.createFromParameters("EPSG:2097", "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43");
+        CoordinateReferenceSystem epsgSystem = crsFactory.createFromParameters("EPSG:5174", "+proj=tmerc +lat_0=38 +lon_0=127.0028902777778 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43");
         ProjCoordinate p = new ProjCoordinate(parseDoubleOrDefault(businessInfo.X, 0), parseDoubleOrDefault(businessInfo.Y, 0));
         ProjCoordinate p2 = new ProjCoordinate();
         new CoordinateTransformFactory().createTransform(epsgSystem, wgs84System).transform(p, p2);
@@ -104,8 +108,76 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<RestaurantDTO> getRestaurantMarkerByCategory(String category) {
-        return List.of();
+    public List<RestaurantDTO> getRestaurantsByCategoryAndBounds(String category, Object bounds) {
+
+        // bounds의 안의 데이터 추출
+        Gson gson = new Gson();
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        // If obj is a String that represents a JSON
+        if (bounds instanceof String) {
+            log.info("1번");
+            map = gson.fromJson((String) bounds, LinkedHashMap.class);
+        }
+        else {
+            // If obj is not a String but needs to be treated as a JSON-like structure
+            log.info("2번");
+            String json = gson.toJson(bounds);
+            map = gson.fromJson(json, LinkedHashMap.class);
+        }
+
+        log.info("map : {}", map);
+        double swLng = (double) map.get("ha");
+        double swLat = (double) map.get("qa");
+        double neLng = (double) map.get("oa");
+        double neLat = (double) map.get("pa");
+
+        log.info("swLng : {}", swLng);
+        log.info("swLat : {}", swLat);
+        log.info("neLng : {}", neLng);
+        log.info("neLat : {}", neLat);
+
+        log.info("************ DistrictServiceImpl - countRestaurantsByCategory -category : {}", category);
+
+        List<RestaurantDTO> restaurantDTOList = new ArrayList<>();
+
+        if (category.equals("ALL")) {
+
+            List<Restaurant> restaurantList = restaurantsRepository.findByLngBetweenAndLatBetween(swLng, neLng, swLat, neLat);
+            // restaurantList를 List<RestaurantDTO>로 변환
+            for (Restaurant restaurant : restaurantList) {
+                RestaurantDTO restaurantDTO = RestaurantDTO.builder()
+                        .id(restaurant.getId())
+                        .name(restaurant.getName())
+                        .address(restaurant.getAddress())
+                        .category(restaurant.getCategory().getValue())
+                        .lat(restaurant.getLat())
+                        .lng(restaurant.getLng())
+                        .build();
+                restaurantDTOList.add(restaurantDTO);
+            }
+
+            return restaurantDTOList;
+
+
+        }
+
+        Category categoryEntity = Category.of(category);
+
+        List<Restaurant> restaurantList = restaurantsRepository.findByLngBetweenAndLatBetweenAndCategory(swLng, neLng, swLat, neLat, categoryEntity);
+        // restaurantList를 List<RestaurantDTO>로 변환
+        for (Restaurant restaurant : restaurantList) {
+            RestaurantDTO restaurantDTO = RestaurantDTO.builder()
+                    .id(restaurant.getId())
+                    .name(restaurant.getName())
+                    .address(restaurant.getAddress())
+                    .category(restaurant.getCategory().getValue())
+                    .lat(restaurant.getLat())
+                    .lng(restaurant.getLng())
+                    .build();
+            restaurantDTOList.add(restaurantDTO);
+        }
+
+        return restaurantDTOList;
     }
 
     // WebClient 설정 및 생성
@@ -127,10 +199,10 @@ public class RestaurantServiceImpl implements RestaurantService {
             case "경양식" -> Category.WESTERN;
             case "까페" -> Category.CAFE;
             case "분식" -> Category.STREET;
-            case "��식" -> Category.JAPANESE;
+            case "일식" -> Category.JAPANESE;
             case "호프/통닭" -> Category.PUB;
             case "중국식" -> Category.CHINESE;
-            case "패스트푸트" -> Category.FASTFOOD;
+            case "패스트푸드" -> Category.FASTFOOD;
             default -> Category.KOREAN;
         };
     }

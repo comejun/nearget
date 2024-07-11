@@ -8,5 +8,5 @@ public interface RestaurantService {
 
     void saveAllRestaurant(Long page);
 
-    List<RestaurantDTO> getRestaurantMarkerByCategory(String category);
+    List<RestaurantDTO> getRestaurantsByCategoryAndBounds(String category, Object bounds);
 }
