@@ -16,7 +16,6 @@ const KakaoMap = () => {
         {
             level: 3,
             bounds: {
-
             }
         }
     );
@@ -82,6 +81,14 @@ const KakaoMap = () => {
             console.log("지도 렌더링 후 실행");
             // 지도 중심 좌표나 확대 수준이 변경시 발생하는 이벤트
             kakao.maps.event.addListener(map, 'idle', mapChanged);
+
+            setCluster(new kakao.maps.MarkerClusterer({
+                map: map,
+                averageCenter: true,
+                minClusterSize: 2,
+                minLevel: 2,
+                disableClickZoom: false,
+            }))
         }
     }, [map]);
 
@@ -104,11 +111,6 @@ const KakaoMap = () => {
 
         }
 
-
-
-
-
-
     };
 
     // 조건에 따른 마커 클러스터 또는 커스텀오버레이 생성 함수
@@ -116,28 +118,14 @@ const KakaoMap = () => {
         if(map){
             console.log("클러스터 생성");
 
-
-
-            const newCluster = new kakao.maps.MarkerClusterer({
-                map: map,
-                averageCenter: true,
-                minClusterSize: 2,
-                minLevel: 2,
-                disableClickZoom: false,
-            });
+            cluster.clear();
 
             // clusterMarkers함수에 changePopup함수를 인자로 넘겨주어 마커 클릭시 팝업창을 띄울 수 있도록 함
             const markers = await clustererMarkers(mapData);
 
             console.log("클러스터에 마커 추가");
             // 클러스터에 마커 추가
-            newCluster.addMarkers(markers);
-            // 이전 클러스터가 존재한다면 지우기
-            if (cluster != undefined) {
-                cluster.clear();
-            }
-            setCluster(newCluster);
-            // 클러스터가 변경된 후에 이전에 저장한 중심 좌표를 다시 지도의 중심으로 설정합니다.
+            cluster.addMarkers(markers);
 
         }
     }
