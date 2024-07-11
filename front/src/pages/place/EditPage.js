@@ -1,9 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { getKakaoLoginLink } from "../../api/kakaoAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
-import BottomBtn from "../../layouts/BottomBtn";
 
 const AddPage = () => {
   const kakaoLoginLink = getKakaoLoginLink();
@@ -23,7 +21,12 @@ const AddPage = () => {
           <span></span>
         </div>
         <div className="bottom_margin"></div>
-        <BottomBtn btnTitle="Save" />
+
+        <div className="bottomBtnWrap">
+          <div className="bottomBtnContent">
+            <button>Save</button>
+          </div>
+        </div>
       </form>
     </BasicLayout>
   );

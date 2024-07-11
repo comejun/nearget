@@ -9,7 +9,10 @@ div.MyModifyImg{
   background-color: #dcdcdc;
   margin: 0 auto;
   margin-bottom: 24px;
-  span{
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  label{
     width: 100%;
     display: block;
     font-size: 14px;
@@ -43,9 +46,12 @@ div.MyModifyInput{
         padding: 0;
         font-size: 14px;
   }
+  input{
+    width: calc(100% - 8px);
+    padding-left: 8px;
+  }
   input::placeholder{
     color:#dcdcdc;
-    padding-left: 8px;
   }
   input:focus, select:focus{
     outline: none;

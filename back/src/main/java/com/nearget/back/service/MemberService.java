@@ -1,8 +1,8 @@
 package com.nearget.back.service;
 
 import com.nearget.back.domain.Member;
+import com.nearget.back.dto.DataMemberDTO;
 import com.nearget.back.dto.MemberDTO;
-import com.nearget.back.dto.ModifyMemberDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
@@ -31,6 +31,8 @@ public interface MemberService {
         return memberDTO;
     }
 
+    // 회원 조회
+    DataMemberDTO getMember(String email);
     // 회원 정보 수정 처리
-    void modifyMember(ModifyMemberDTO modifyMemberDTO);
+    void modifyMember(DataMemberDTO dataMemberDTO);
 }
