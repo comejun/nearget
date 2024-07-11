@@ -1,9 +1,13 @@
 package com.nearget.back.repository;
 
 import com.nearget.back.domain.Category;
+import com.nearget.back.domain.DistrictCountResult;
 import com.nearget.back.domain.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface RestaurantsRepository extends JpaRepository<Restaurant, Long> {
 
@@ -23,5 +27,10 @@ public interface RestaurantsRepository extends JpaRepository<Restaurant, Long> {
     @Query("SELECT count(r) FROM Restaurant r WHERE r.address LIKE %:address% AND r.category = :category")
     Long countByRestaurantIdAndCategoryStartingWith(String address, Category category);
 
+    @Query("SELECT new com.nearget.back.domain.DistrictCountResult(s.smallDistrict, count(r), s.lat, s.lng) " +
+            "FROM Restaurant r RIGHT JOIN SmallDistrict s ON r.address LIKE CONCAT('%', s.smallDistrict, '%') " +
+            "WHERE r.category = :category OR :category = 'ALL' " +
+            "GROUP BY s.smallDistrict, s.lat, s.lng")
+    List<DistrictCountResult> countRestaurantsByCategoryForAllSmallDistricts(@Param("category") Category category);
 
 }

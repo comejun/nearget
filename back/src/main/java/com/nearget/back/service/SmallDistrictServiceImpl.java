@@ -1,9 +1,6 @@
 package com.nearget.back.service;
 
-import com.nearget.back.domain.Category;
-import com.nearget.back.domain.DistrictEnum;
-import com.nearget.back.domain.SmallDistrict;
-import com.nearget.back.domain.SmallDistrictEnum;
+import com.nearget.back.domain.*;
 import com.nearget.back.dto.DistrictDTO;
 import com.nearget.back.repository.RestaurantsRepository;
 import com.nearget.back.repository.SmallDistrictRepository;
@@ -61,13 +58,14 @@ public class SmallDistrictServiceImpl implements SmallDistrictService{
         Category categoryEntity = Category.of(category);
         log.info("************ DistrictServiceImpl - countRestaurantsByCategory -categoryEntity : {}", categoryEntity);
 
+        List<DistrictCountResult> results = restaurantsRepository.countRestaurantsByCategoryForAllSmallDistricts(categoryEntity);
 
-        for (int i = 0; i < SmallDistrictEnum.values().length; i++) {
+        for (DistrictCountResult result : results) {
             DistrictDTO districtDTO = DistrictDTO.builder()
-                    .districtName(SmallDistrictEnum.values()[i].getName())
-                    .count(restaurantsRepository.countByRestaurantIdAndCategoryStartingWith(SmallDistrictEnum.values()[i].getName(), categoryEntity))
-                    .lat(SmallDistrictEnum.values()[i].getLat())
-                    .lng(SmallDistrictEnum.values()[i].getLng())
+                    .districtName(result.getName())
+                    .count(result.getCount())
+                    .lat(result.getLat())
+                    .lng(result.getLng())
                     .build();
             districtDTOList.add(districtDTO);
         }
