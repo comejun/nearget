@@ -52,9 +52,11 @@ public class RestaurantServiceImpl implements RestaurantService {
 
                         if (localData != null && localData.LOCALDATA_072404 != null) {
                             for (BusinessInfo businessInfo : localData.LOCALDATA_072404.row) {
-                                if (!businessInfo.TRDSTATEGBN.equals("03") && !businessInfo.UPTAENM.equals("기타") && !businessInfo.SITEWHLADDR.isEmpty()){
+                                if (!businessInfo.TRDSTATEGBN.equals("03") && !businessInfo.UPTAENM.equals("기타")&&!businessInfo.SITEWHLADDR.isEmpty()) {
 
-                                    if (businessInfo.UPTAENM.equals("경양식") || businessInfo.UPTAENM.equals("까페") || businessInfo.UPTAENM.equals("분식") || businessInfo.UPTAENM.equals("일식") || businessInfo.UPTAENM.equals("호프/통닭") || businessInfo.UPTAENM.equals("중국식") || businessInfo.UPTAENM.equals("패스트푸드") || businessInfo.UPTAENM.equals("한식")) {
+                                    if (businessInfo.UPTAENM.equals("경양식") || businessInfo.UPTAENM.equals("까페") || businessInfo.UPTAENM.equals("분식")
+                                            || businessInfo.UPTAENM.equals("일식") || businessInfo.UPTAENM.equals("호프/통닭") || businessInfo.UPTAENM.equals("중국식")
+                                            || businessInfo.UPTAENM.equals("패스트푸드") || businessInfo.UPTAENM.equals("한식")) {
 
                                         Restaurant restaurant = getRestaurant(businessInfo);
                                         restaurants.add(restaurant);
@@ -197,10 +199,10 @@ public class RestaurantServiceImpl implements RestaurantService {
             case "경양식" -> Category.WESTERN;
             case "까페" -> Category.CAFE;
             case "분식" -> Category.STREET;
-            case "��식" -> Category.JAPANESE;
+            case "일식" -> Category.JAPANESE;
             case "호프/통닭" -> Category.PUB;
             case "중국식" -> Category.CHINESE;
-            case "패스트푸트" -> Category.FASTFOOD;
+            case "패스트푸드" -> Category.FASTFOOD;
             default -> Category.KOREAN;
         };
     }
