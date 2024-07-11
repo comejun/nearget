@@ -53,6 +53,11 @@ public class Member {
     @Builder.Default
     private boolean isNew = true;
 
+    // 라이크 리스트
+    @ElementCollection
+    @Builder.Default
+    private List<Long> likeRestaurantList = new ArrayList<>();
+
     // ********** 값 수정 함수 **********
 
     // 닉네임 수정

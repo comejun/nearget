@@ -2,11 +2,12 @@ package com.nearget.back.service;
 
 import com.nearget.back.domain.Member;
 import com.nearget.back.domain.Role;
+import com.nearget.back.dto.DataMemberDTO;
 import com.nearget.back.dto.MemberDTO;
-import com.nearget.back.dto.ModifyMemberDTO;
 import com.nearget.back.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,7 +28,15 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
+    // 멤버 조회
+    @Override
+    public DataMemberDTO getMember(String email) {
+        Member findMember = memberRepository.getMemberWithRoles(email);
+        // Member Entity -> DataMemberDTO
+        return modelMapper.map(findMember, DataMemberDTO.class);
+    }
 
     @Override
     public MemberDTO getKakaoMember(String accessToken) {
@@ -50,13 +59,13 @@ public class MemberServiceImpl implements MemberService {
 
     // 회원 정보 수정
     @Override
-    public void modifyMember(ModifyMemberDTO modifyMemberDTO) {
+    public void modifyMember(DataMemberDTO dataMemberDTO) {
         // DataMemberDTO -> Member Entity
-        Member member=  memberRepository.findById(modifyMemberDTO.getEmail()).orElseThrow(
+        Member member=  memberRepository.findById(dataMemberDTO.getEmail()).orElseThrow(
                 ()-> new IllegalArgumentException("해당 회원이 없습니다.")
         );
-        member.updateNickname(modifyMemberDTO.getNickname());
-        member.updateProfileImg(modifyMemberDTO.getProfileImg());
+        member.updateNickname(dataMemberDTO.getNickname());
+        member.updateProfileImg(dataMemberDTO.getProfileImg());
         member.updateIsNew(false);
         memberRepository.save(member);
     }

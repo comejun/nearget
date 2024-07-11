@@ -1,9 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { getKakaoLoginLink } from "../../api/kakaoAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
-import BottomBtn from "../../layouts/BottomBtn";
 import InfinityContent from "../../layouts/InfinityContent";
 
 const PlacePage = () => {
@@ -73,7 +71,11 @@ const PlacePage = () => {
         <div className="bottom_margin"></div>
       </div>
 
-      <BottomBtn btnTitle="Get" />
+      <div className="bottomBtnWrap">
+        <div className="bottomBtnContent">
+          <button>Get</button>
+        </div>
+      </div>
     </BasicLayout>
   );
 };
