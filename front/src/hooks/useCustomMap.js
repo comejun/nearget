@@ -86,28 +86,33 @@ const UseCustomMap = () => {
 
         const restaurantsLocationList = await getRestaurantsLocation(mapData).then((res) => {
             console.log(res);
-            const markers =  res.map((location) => {
+            const markers = res.filter(location => location.count > 0).sort((a, b) => a.count - b.count).map((location) => {
 
-                const content = '<div\n' +
-                    '                <img\n' +
-                    '                    style={\n' +
-                    '                        {\n' +
-                    '                            width: "100px",\n' +
-                    '                            height: "100px"\n' +
-                    '                        }\n' +
-                    '                    }\n' +
-                    '                    src="assets/imgs/icon/ic_cluster.png" alt="cluster" />\n' +
-                    '                <p\n' +
-                    '                    style={{\n' +
-                    '                        color: "white",\n' +
-                    '                        fontSize: "20px",\n' +
-                    '                        position: "absolute",\n' +
-                    '                        top: "50%",\n' +
-                    '                        left: "50%",\n' +
-                    '                        transform: "translate(-50%, -50%)",\n' +
-                    '                    }}\n' +
-                    '                >' + location.count + '</p>\n' +
-                    '            </div>';
+
+                console.log(res.indexOf(location))
+                // res 배열 길이 가져오기
+                console.log(res.length)
+                const imgSize = 60+ (20 / res.length * (res.indexOf(location) + 1));
+
+                const content = '<div>' +
+                    '<img' +
+                    '    style="' +
+                    '        width: ' + imgSize + 'px;' +
+                    '        height: ' + imgSize + 'px;' +
+                    '    "' +
+                    '    src="assets/imgs/icon/ic_cluster.png" alt="cluster" />' +
+                    '<p' +
+                    '    style="' +
+                    '        color: white;' +
+                    '        font-size: 20px;' +
+                    '        position: absolute;' +
+                    '        top: 50%;' +
+                    '        left: 50%;' +
+                    '        transform: translate(-50%, -50%);' +
+                    '    ">' +
+                    location.count +
+                    '</p>' +
+                    '</div>';
 
                 const position = new kakao.maps.LatLng(location.lat, location.lng);
 
