@@ -51,6 +51,9 @@ dependencies {
     // 좌표 변환 라이브러리
     implementation 'org.locationtech.proj4j:proj4j:1.2.2'
 
+    // 썸네일
+    implementation 'net.coobird:thumbnailator:0.4.14'
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'

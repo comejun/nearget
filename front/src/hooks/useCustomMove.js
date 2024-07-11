@@ -5,6 +5,9 @@ const UseCustomMove = () => {
   const moveToMain = () => {
     navigate("/");
   };
+  const moveToLogin = () => {
+    navigate("/member/login");
+  };
   const moveToMap = () => {
     navigate("/map");
   };
@@ -37,6 +40,7 @@ const UseCustomMove = () => {
 
   return {
     moveToMain,
+    moveToLogin,
     moveToMap,
     moveToPlace,
     moveToGet,
