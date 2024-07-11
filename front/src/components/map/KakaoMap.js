@@ -21,6 +21,7 @@ const KakaoMap = () => {
     );
     const [mapLevel, setMapLevel] = useState(3);
 
+    // 지도 확대 수준이 변경될 경우 bounds값을 제외한 level값만 저장
     useEffect(() => {
         if(mapLevel !== mapBoundLevel.level){
             setMapBoundLevel({
@@ -62,7 +63,7 @@ const KakaoMap = () => {
             const options = {
                 center: new kakao.maps.LatLng(myLocation.lat, myLocation.lng),
                 level: 3,
-                disableDoubleClickZoom: true,
+                draggable: true,
                 maxLevel: 8,
             };
             setMap(new kakao.maps.Map(container, options));
@@ -96,7 +97,6 @@ const KakaoMap = () => {
                 averageCenter: true,
                 minClusterSize: 2,
                 minLevel: 2,
-                disableClickZoom: false,
             }))
         }
     }, [map]);
@@ -124,18 +124,18 @@ const KakaoMap = () => {
         if(map){
             console.log("클러스터 생성");
 
-
             // clusterMarkers함수에 changePopup함수를 인자로 넘겨주어 마커 클릭시 팝업창을 띄울 수 있도록 함
             await clustererMarkers(mapData).then((res) => {
                 if (mapData.level > 4) {
                     cluster.setMinLevel(9);
+                } else {
+                    cluster.setMinLevel(2);
                 }
                 cluster.clear();
                 cluster.addMarkers(res);
             });
 
             console.log("클러스터에 마커 추가");
-            // 클러스터에 마커 추가
 
         }
     }

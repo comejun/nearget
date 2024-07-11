@@ -134,7 +134,7 @@ const UseCustomMap = () => {
 
                     // res 배열 길이 가져오기
                     // 반올림 해서 정수로 만들기
-                    const imgSize = Math.round(20+ (60 / res.length * (sort.indexOf(location) + 1)));
+                    const imgSize = Math.round(20+ (60 / sort.length * (sort.indexOf(location) + 1)));
 
                     const content = '<div>' +
                         '<img' +
@@ -172,9 +172,27 @@ const UseCustomMap = () => {
 
             });
         }
+        else{
+            return await getRestaurantsLocation(mapData).then((res) => {
+                const markers = res.map((location) => {
 
-            return null
+                    const markerPosition = new kakao.maps.LatLng(location.lat, location.lng);
+                    const markerImage = new kakao.maps.MarkerImage(
+                        "assets/imgs/icon/ic_mark.svg",
+                        new kakao.maps.Size(30, 30),
+                        {offset: new kakao.maps.Point(15, 15)},
+                    );
+                    const marker = new kakao.maps.Marker({
+                        position: markerPosition,
+                        image: markerImage,
+                    });
 
+                    return marker;
+                })
+
+                return markers;
+            });
+        }
     };
 
 

@@ -2,7 +2,10 @@ package com.nearget.back.service;
 
 import com.google.gson.Gson;
 import com.nearget.back.domain.Category;
+import com.nearget.back.domain.DistrictCountResult;
 import com.nearget.back.domain.Restaurant;
+import com.nearget.back.domain.SmallDistrictEnum;
+import com.nearget.back.dto.DistrictDTO;
 import com.nearget.back.dto.RestaurantDTO;
 import com.nearget.back.repository.RestaurantsRepository;
 import lombok.AllArgsConstructor;
@@ -16,6 +19,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service
@@ -104,8 +108,76 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<RestaurantDTO> getRestaurantMarkerByCategory(String category) {
-        return List.of();
+    public List<RestaurantDTO> getRestaurantsByCategoryAndBounds(String category, Object bounds) {
+
+        // bounds의 안의 데이터 추출
+        Gson gson = new Gson();
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        // If obj is a String that represents a JSON
+        if (bounds instanceof String) {
+            log.info("1번");
+            map = gson.fromJson((String) bounds, LinkedHashMap.class);
+        }
+        else {
+            // If obj is not a String but needs to be treated as a JSON-like structure
+            log.info("2번");
+            String json = gson.toJson(bounds);
+            map = gson.fromJson(json, LinkedHashMap.class);
+        }
+
+        log.info("map : {}", map);
+        double swLng = (double) map.get("ha");
+        double swLat = (double) map.get("qa");
+        double neLng = (double) map.get("oa");
+        double neLat = (double) map.get("pa");
+
+        log.info("swLng : {}", swLng);
+        log.info("swLat : {}", swLat);
+        log.info("neLng : {}", neLng);
+        log.info("neLat : {}", neLat);
+
+        log.info("************ DistrictServiceImpl - countRestaurantsByCategory -category : {}", category);
+
+        List<RestaurantDTO> restaurantDTOList = new ArrayList<>();
+
+        if (category.equals("ALL")) {
+
+            List<Restaurant> restaurantList = restaurantsRepository.findByLngBetweenAndLatBetween(swLng, neLng, swLat, neLat);
+            // restaurantList를 List<RestaurantDTO>로 변환
+            for (Restaurant restaurant : restaurantList) {
+                RestaurantDTO restaurantDTO = RestaurantDTO.builder()
+                        .id(restaurant.getId())
+                        .name(restaurant.getName())
+                        .address(restaurant.getAddress())
+                        .category(restaurant.getCategory().getValue())
+                        .lat(restaurant.getLat())
+                        .lng(restaurant.getLng())
+                        .build();
+                restaurantDTOList.add(restaurantDTO);
+            }
+
+            return restaurantDTOList;
+
+
+        }
+
+        Category categoryEntity = Category.of(category);
+
+        List<Restaurant> restaurantList = restaurantsRepository.findByLngBetweenAndLatBetweenAndCategory(swLng, neLng, swLat, neLat, categoryEntity);
+        // restaurantList를 List<RestaurantDTO>로 변환
+        for (Restaurant restaurant : restaurantList) {
+            RestaurantDTO restaurantDTO = RestaurantDTO.builder()
+                    .id(restaurant.getId())
+                    .name(restaurant.getName())
+                    .address(restaurant.getAddress())
+                    .category(restaurant.getCategory().getValue())
+                    .lat(restaurant.getLat())
+                    .lng(restaurant.getLng())
+                    .build();
+            restaurantDTOList.add(restaurantDTO);
+        }
+
+        return restaurantDTOList;
     }
 
     // WebClient 설정 및 생성
