@@ -17,7 +17,11 @@ public class RestaurantsGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long groupId; // 그룹 ID
 
+    @Column(nullable = false)
     private String groupName; // 그룹 이름
+
+    @Builder.Default
+    private String thImg = "";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "email")

@@ -1,12 +1,12 @@
 package com.nearget.back.service;
 
 import com.google.gson.Gson;
-import com.nearget.back.domain.Category;
-import com.nearget.back.domain.DistrictCountResult;
-import com.nearget.back.domain.Restaurant;
-import com.nearget.back.domain.SmallDistrictEnum;
+import com.nearget.back.domain.*;
 import com.nearget.back.dto.DistrictDTO;
 import com.nearget.back.dto.RestaurantDTO;
+import com.nearget.back.dto.RestaurantsGroupDTO;
+import com.nearget.back.repository.MemberRepository;
+import com.nearget.back.repository.RestaurantsGroupRepository;
 import com.nearget.back.repository.RestaurantsRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,9 @@ import java.util.List;
 @Transactional
 public class RestaurantServiceImpl implements RestaurantService {
 
+    private final MemberRepository memberRepository;
     private final RestaurantsRepository restaurantsRepository;
+    private final RestaurantsGroupRepository restaurantsGroupRepository;
 
     @Override
     public void saveAllRestaurant(Long page) {
@@ -180,6 +182,12 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantDTOList;
     }
 
+    @Override
+    public void add(RestaurantsGroupDTO restaurantsGroupDTO) {
+        RestaurantsGroup restaurantsGroup = dtoToEntity(restaurantsGroupDTO);
+        RestaurantsGroup saved = restaurantsGroupRepository.save(restaurantsGroup);
+    }
+
     // WebClient 설정 및 생성
     public WebClient createWebClient() {
         ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
@@ -233,6 +241,21 @@ public class RestaurantServiceImpl implements RestaurantService {
         String MGTNO;
         String X;
         String Y;
+    }
+
+    private RestaurantsGroup dtoToEntity(RestaurantsGroupDTO restaurantsGroupDTO){
+        // MemberRepository를 사용하여 이메일 주소로 Member 엔티티를 조회합니다.
+        Member member = memberRepository.findByEmail(restaurantsGroupDTO.getMemberEmail())
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+
+        RestaurantsGroup restaurantsGroup = RestaurantsGroup.builder()
+                .groupId(restaurantsGroupDTO.getGroupId())
+                .groupName(restaurantsGroupDTO.getGroupName())
+                .thImg(restaurantsGroupDTO.getThImg())
+                .member(member)
+//                .restaurantList(restaurantsGroupDTO.get)
+                .build();
+        return restaurantsGroup;
     }
 
 }

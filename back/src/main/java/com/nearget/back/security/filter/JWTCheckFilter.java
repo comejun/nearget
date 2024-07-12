@@ -36,6 +36,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (requestURI.startsWith("/api/image")) {
             return true;
         }
+        // 위치 그룹관련 경로 요청은 필터 체크 X
+        if (requestURI.startsWith("/api/place")) {
+            return true;
+        }
         // 카테고리 필터 불러오기 경로 요청은 체크 하지 않음
         if (requestURI.startsWith("/api/categories")) {
             return true;
