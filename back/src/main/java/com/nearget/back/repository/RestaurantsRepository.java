@@ -27,6 +27,7 @@ public interface RestaurantsRepository extends JpaRepository<Restaurant, Long> {
     @Query("SELECT count(r) FROM Restaurant r WHERE r.address LIKE %:address% AND r.category = :category")
     Long countByRestaurantIdAndCategoryStartingWith(String address, Category category);
 
+    // 카테고리로 모든 소구역의 식당 개수를 조회하는 쿼리
     @Query("SELECT new com.nearget.back.domain.DistrictCountResult(s.smallDistrict, count(r), s.lat, s.lng) " +
             "FROM Restaurant r RIGHT JOIN SmallDistrict s ON r.address LIKE CONCAT('%', s.smallDistrict, '%') " +
             "WHERE r.category = :category OR :category = 'ALL' " +

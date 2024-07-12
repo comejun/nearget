@@ -26,7 +26,7 @@ const KakaoMap = () => {
         if(mapLevel !== mapBoundLevel.level){
             setMapBoundLevel({
                 level: mapLevel,
-                bounds: map.getBounds(),
+                bounds: mapBoundLevel.bounds,
             });
         }
     }, [mapLevel]);
@@ -92,11 +92,54 @@ const KakaoMap = () => {
             // 지도 중심 좌표나 확대 수준이 변경시 발생하는 이벤트
             kakao.maps.event.addListener(map, 'idle', mapChanged);
 
+
             setCluster(new kakao.maps.MarkerClusterer({
                 map: map,
                 averageCenter: true,
                 minClusterSize: 2,
                 minLevel: 2,
+                clickable: false,
+                calculator: [10, 30, 50, 100],
+                styles: [{
+                    width : '40px', height : '40px',
+                    borderRadius: '50%',
+                    background: 'rgba(187, 69, 55, 0.8)',
+                    color: '#fff',
+                    textAlign: 'center',
+                    lineHeight: '40px'
+                },
+                    {
+                        width : '45px', height : '45px',
+                        borderRadius: '50%',
+                        background: 'rgba(187, 69, 55, 0.8)',
+                        color: '#fff',
+                        textAlign: 'center',
+                        lineHeight: '45px'
+                    },
+                    {
+                        width : '50px', height : '50px',
+                        borderRadius: '50%',
+                        background: 'rgba(187, 69, 55, 0.8)',
+                        color: '#fff',
+                        textAlign: 'center',
+                        lineHeight: '50px'
+                    },
+                    {
+                        width : '55px', height : '55px',
+                        borderRadius: '50%',
+                        background: 'rgba(187, 69, 55, 0.8)',
+                        color: '#fff',
+                        textAlign: 'center',
+                        lineHeight: '55px'
+                    },{
+                        width : '60px', height : '60px',
+                        borderRadius: '50%',
+                        background: 'rgba(187, 69, 55, 0.8)',
+                        color: '#fff',
+                        textAlign: 'center',
+                        lineHeight: '60px'
+                    }
+                ]
             }))
         }
     }, [map]);
@@ -107,7 +150,7 @@ const KakaoMap = () => {
         const bounds = map.getBounds();
 
         // 지도 확대 수준이 5이상일 경우 bounds값을 제외한 level값만 저장 기존 mapBoundLevel의 level과 level값이 같을 경우 저장하지 않음
-        if(level >= 5){
+        if(level > 4){
             setMapLevel(level)
         }
         else{
