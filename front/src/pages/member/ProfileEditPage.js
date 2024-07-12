@@ -66,6 +66,7 @@ const ProfileEditPage = () => {
       exceptionHandle(err);
     }
     moveToProfile();
+    alert("수정완료이 완료되었습니다.");
   };
 
   // 사용자 닉네임 글자 수 상태
@@ -82,10 +83,10 @@ const ProfileEditPage = () => {
 
   // 회원탈퇴
   const handleClickDisabled = async () => {
+    alert("회원 탈퇴가 완료되었습니다.");
     const response = await disableMember(userEmail);
     execLogout();
     moveToPath("/");
-    alert("회원 탈퇴가 완료되었습니다.");
   };
 
   return (
