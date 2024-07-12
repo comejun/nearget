@@ -187,6 +187,14 @@ const UseCustomMap = () => {
                         image: markerImage,
                     });
 
+                    // 마우스 클릭 이벤트 리스너 추가
+                    kakao.maps.event.addListener(marker, 'click', function(){
+                        // 마우스 클릭시 수행할 동작
+                            const restaurantId = location.id;
+                            console.log("restaurantId", restaurantId);
+                            console.log("location name", location.name);
+                    });
+
                     return marker;
                 })
 

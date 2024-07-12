@@ -27,6 +27,7 @@ public class MapController {
     public List<Object> getMarkersData(@RequestBody MapDataDTO mapDataDTO){
 
         List<Object> objectList = new ArrayList<>();
+
         // mapDataDTO.getLevel() 값이 7또는 8일경우 실행될 함수
         if(mapDataDTO.getLevel() == 7 || mapDataDTO.getLevel() == 8){
             List<DistrictDTO> districtDTOList = districtService.countRestaurantsByCategory(mapDataDTO.getCategory());
@@ -35,7 +36,8 @@ public class MapController {
                 objectList.add(districtDTO);
             }
         }
-        // mapDataDTO.getLevel() 값이 7또는 8일경우 실행될 함수
+
+        // mapDataDTO.getLevel() 값이 5또는 6일경우 실행될 함수
         if(mapDataDTO.getLevel() == 5 || mapDataDTO.getLevel() == 6){
             List<DistrictDTO> districtDTOList = smallDistrictService.countRestaurantsByCategory(mapDataDTO.getCategory());
             // districtDTOList를 List<Object>로 변환
@@ -43,6 +45,7 @@ public class MapController {
                 objectList.add(districtDTO);
             }
         }
+
         if(mapDataDTO.getLevel() <=4){
             List<RestaurantDTO> restaurantDTOList = restaurantService.getRestaurantsByCategoryAndBounds(mapDataDTO.getCategory(),mapDataDTO.getBounds());
             // restaurantDTOList를 List<Object>로 변환
