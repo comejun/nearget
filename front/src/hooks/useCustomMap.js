@@ -1,5 +1,7 @@
 import {useEffect, useState} from 'react'
 import {getRestaurantsLocation} from "../api/mapAPI";
+import useCustomMove from "./useCustomMove";
+
 
 
 const {kakao} = window;
@@ -13,6 +15,7 @@ const UseCustomMap = () => {
         get: false,
         isLoaded: false,
     });
+    const {moveToPlace} = useCustomMove();
 
 
     // 내 위치 가져오기
@@ -191,6 +194,7 @@ const UseCustomMap = () => {
                     kakao.maps.event.addListener(marker, 'click', function(){
                         // 마우스 클릭시 수행할 동작
                             const restaurantId = location.id;
+                            moveToPlace(restaurantId);
                             console.log("restaurantId", restaurantId);
                             console.log("location name", location.name);
                     });
