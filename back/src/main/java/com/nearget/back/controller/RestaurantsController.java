@@ -33,6 +33,7 @@ public class RestaurantsController {
     }
     // 그룹 수정
 
+
     // 그룹 삭제
     @DeleteMapping("/delete/{groupId}")
     public Map<String, String> delete(@PathVariable Long groupId){
@@ -40,6 +41,9 @@ public class RestaurantsController {
         restaurantService.delete(groupId);
         return Map.of("RESULT", "SUCCESS");
     }
+
+    // 그룹에 저장
+
 
 
 }

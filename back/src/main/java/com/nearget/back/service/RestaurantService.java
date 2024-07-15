@@ -20,4 +20,7 @@ public interface RestaurantService {
 
     // 삭제
     void delete(Long groupId);
+
+    // 그룹에 리스트 추가
+
 }
