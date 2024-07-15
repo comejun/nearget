@@ -44,7 +44,7 @@ public class DBSchedular {
 
     private ForkJoinPool customThreadPool = new ForkJoinPool(10); // 클래스 레벨로 이동
 
-    /*// 매일 0시 0분 0초에 실행
+    // 매일 0시 0분 0초에 실행
     //    @Scheduled(cron = "0 0 0 * * *")
     @Scheduled(fixedDelay = 1000 * 60 * 60)
     public void scheduleRestaurant() {
@@ -62,7 +62,7 @@ public class DBSchedular {
         }
         saveRestaurantsDataOptimized();
         scheduleDistrict();
-    }*/
+    }
 
     public void scheduleDistrict() {
         for (int i = 0; i < DistrictEnum.values().length; i++) {
