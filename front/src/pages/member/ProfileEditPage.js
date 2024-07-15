@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getKakaoLoginLink } from "../../api/kakaoAPI";
 import { modifyMember, disableMember } from "../../api/memberAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
@@ -11,7 +10,6 @@ import useCharacterCheck from "../../hooks/useCharacterCheck";
 import UseCustomMove from "../../hooks/useCustomMove";
 
 const ProfileEditPage = () => {
-  const kakaoLoginLink = getKakaoLoginLink();
   const { moveToProfile } = UseCustomMove();
   const { execLogout, moveToPath } = useCustomLogin();
   // 현재 로그인 된 회원의 이메일 가져오기

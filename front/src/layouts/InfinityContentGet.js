@@ -1,16 +1,62 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { API_SERVER_HOST } from "../staticData"; // 수정된 부분
+
+export const host = `${API_SERVER_HOST}/api/place`;
+const imghost = `${API_SERVER_HOST}/api/image`;
 
 export default function InfinityContentGet() {
+  // 현재 로그인 된 회원의 이메일 가져오기
+  const userEmail = useSelector((state) => state.loginSlice.email);
+
+  // 그룹 데이터를 저장할 상태
+  const [groups, setGroups] = useState([]);
+
+  // 그룹 삭제 함수
+  const deleteGroup = (groupId) => {
+    // 사용자에게 확인 메시지 표시
+    if (window.confirm("정말로 이 그룹을 삭제하시겠습니까?")) {
+      axios
+        .delete(`${host}/delete/${groupId}`)
+        .then((response) => {
+          console.log("Group deleted:", response);
+          // 그룹 목록을 다시 불러옴
+          fetchGroups();
+        })
+        .catch((error) => {
+          console.error("Error deleting group:", error);
+        });
+    }
+  };
+
+  // 그룹 목록 불러오는 함수
+  const fetchGroups = () => {
+    axios
+      .get(`${host}/groups?email=${userEmail}`)
+      .then((response) => {
+        setGroups(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching groups:", error);
+      });
+  };
+
+  useEffect(() => {
+    fetchGroups();
+  }, [userEmail]);
+
   return (
     <div className="InfinityContentWrap">
       <div className="InfinityContent">
         <ul>
-          <li>
-            <img className="InfinityContentSum" src={process.env.PUBLIC_URL + "/assets/imgs/sample2.png"} />
-            <img className="GetDeleteBtn" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_del.png"} />
-            <h2 className="GetGroupTitle">내가 갈집</h2>
-          </li>
+          {groups.map((group) => (
+            <li key={group.groupId}>
+              <img className="InfinityContentSum" src={`${imghost}/view/th_${group.thImg}`} />
+              <img className="GetDeleteBtn" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_del.png"} onClick={() => deleteGroup(group.groupId)} />
+              <h2 className="GetGroupTitle">{group.groupName}</h2>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

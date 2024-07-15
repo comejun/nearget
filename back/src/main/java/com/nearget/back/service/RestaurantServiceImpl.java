@@ -182,11 +182,36 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantDTOList;
     }
 
+
+
+    @Override
+    public List<RestaurantsGroupDTO> getGroupsByEmail(String email) {
+        // 이메일에 해당하는 그룹을 데이터베이스에서 조회
+        List<RestaurantsGroup> restaurantsGroups = restaurantsGroupRepository.findByMemberEmail(email);
+
+        // RestaurantsGroup 객체를 RestaurantsGroupDTO 객체로 변환
+        List<RestaurantsGroupDTO> restaurantsGroupDTOlist = new ArrayList<>();
+        for (RestaurantsGroup restaurantsGroup : restaurantsGroups) {
+            RestaurantsGroupDTO restaurantsGroupDTO = RestaurantsGroupDTO.convert(restaurantsGroup);
+            restaurantsGroupDTOlist.add(restaurantsGroupDTO);
+        }
+
+        return restaurantsGroupDTOlist;
+    }
+
+
+
     @Override
     public void add(RestaurantsGroupDTO restaurantsGroupDTO) {
         RestaurantsGroup restaurantsGroup = dtoToEntity(restaurantsGroupDTO);
         RestaurantsGroup saved = restaurantsGroupRepository.save(restaurantsGroup);
     }
+
+    @Override
+    public void delete(Long groupId) {
+        restaurantsGroupRepository.deleteById(groupId);
+    }
+
 
     // WebClient 설정 및 생성
     public WebClient createWebClient() {

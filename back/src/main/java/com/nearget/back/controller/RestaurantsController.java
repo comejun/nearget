@@ -4,10 +4,9 @@ import com.nearget.back.dto.RestaurantsGroupDTO;
 import com.nearget.back.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -16,7 +15,14 @@ import java.util.Map;
 @Slf4j
 public class RestaurantsController {
     private final RestaurantService restaurantService;
-    // 그룹 조회
+    // 그룹 조회(그룹ID)
+
+    // 그룹 조회(생성자EMAIL)
+    @GetMapping("/groups")
+    public List<RestaurantsGroupDTO> getGroupsByEmail(@RequestParam String email){
+        log.info("**** GET / groups by email {} ****", email);
+        return restaurantService.getGroupsByEmail(email);
+    }
 
     // 그룹 등록
     @PostMapping("/add")
@@ -28,5 +34,12 @@ public class RestaurantsController {
     // 그룹 수정
 
     // 그룹 삭제
+    @DeleteMapping("/delete/{groupId}")
+    public Map<String, String> delete(@PathVariable Long groupId){
+        log.info("**** DELETE / delete {} ****", groupId);
+        restaurantService.delete(groupId);
+        return Map.of("RESULT", "SUCCESS");
+    }
+
 
 }
