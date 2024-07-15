@@ -278,7 +278,7 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .groupName(restaurantsGroupDTO.getGroupName())
                 .thImg(restaurantsGroupDTO.getThImg())
                 .member(member)
-//                .restaurantList(restaurantsGroupDTO.get)
+                .restaurantList(restaurantsGroupDTO.getRestaurantList())
                 .build();
         return restaurantsGroup;
     }

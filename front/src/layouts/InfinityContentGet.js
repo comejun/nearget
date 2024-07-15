@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { API_SERVER_HOST } from "../staticData"; // 수정된 부분
+import { API_SERVER_HOST } from "../staticData";
+import UseCustomMove from "../hooks/useCustomMove";
 
 export const host = `${API_SERVER_HOST}/api/place`;
 const imghost = `${API_SERVER_HOST}/api/image`;
 
 export default function InfinityContentGet() {
+  const { moveToAdd } = UseCustomMove();
+
   // 현재 로그인 된 회원의 이메일 가져오기
   const userEmail = useSelector((state) => state.loginSlice.email);
 
@@ -35,7 +38,12 @@ export default function InfinityContentGet() {
     axios
       .get(`${host}/groups?email=${userEmail}`)
       .then((response) => {
-        setGroups(response.data);
+        if (!response.data || response.data.length === 0) {
+          alert("저장된 그룹이 없어 그룹 생성으로 이동합니다.");
+          moveToAdd();
+        } else {
+          setGroups(response.data);
+        }
       })
       .catch((error) => {
         console.error("Error fetching groups:", error);

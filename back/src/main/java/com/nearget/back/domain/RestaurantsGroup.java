@@ -29,6 +29,6 @@ public class RestaurantsGroup {
 
     @ElementCollection
     @Builder.Default
-    private List<Long> restaurantList = new ArrayList<>(); // 식당 리스트
+    private List<Restaurant> restaurantList = new ArrayList<>(); // 식당 리스트
 
 }
