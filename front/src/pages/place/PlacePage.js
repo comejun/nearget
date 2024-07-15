@@ -1,11 +1,26 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { getKakaoLoginLink } from "../../api/kakaoAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
 import InfinityContent from "../../layouts/InfinityContent";
+import {useParams} from "react-router-dom";
+import {getRestaurants} from "../../api/RestaurantAPI";
 
 const PlacePage = () => {
   const kakaoLoginLink = getKakaoLoginLink();
+
+  const {restaurantId} = useParams();
+
+  console.log("restaurantId : ", restaurantId);
+
+  const [restaurantData, setRestaurantData] = useState()
+
+    useEffect(() => {
+
+      const restaurant = getRestaurants(restaurantId);
+      console.log("restaurant : ", restaurant);
+
+    }, [restaurantId]);
 
   return (
     <BasicLayout>

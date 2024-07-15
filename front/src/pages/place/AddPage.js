@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { postAdd } from "../../api/RestaurantsAPI";
+import { postAdd } from "../../api/GroupAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
 import useProfileImage from "../../hooks/useProfileImage";

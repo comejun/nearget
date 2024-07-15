@@ -54,6 +54,7 @@ public class MapController {
             }
         }
 
+        log.info("objectList : {}", objectList);
         return objectList;
     }
 }

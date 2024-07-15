@@ -48,6 +48,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (requestURI.startsWith("/api/map")) {
             return true;
         }
+        if (requestURI.startsWith("/api/restaurant")) {
+            return true;
+        }
         return false;
     }
 

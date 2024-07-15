@@ -1,6 +1,8 @@
 package com.nearget.back.controller;
 
+import com.nearget.back.dto.RestaurantDTO;
 import com.nearget.back.dto.RestaurantsGroupDTO;
+import com.nearget.back.service.RestaurantDataService;
 import com.nearget.back.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +15,9 @@ import java.util.Map;
 @RequestMapping("/api/place")
 @RequiredArgsConstructor
 @Slf4j
-public class RestaurantsController {
+public class GroupController {
     private final RestaurantService restaurantService;
+    private final RestaurantDataService restaurantDataService;
     // 그룹 조회(그룹ID)
 
     // 그룹 조회(생성자EMAIL)
@@ -43,6 +46,8 @@ public class RestaurantsController {
     }
 
     // 그룹에 저장
+
+
 
 
 

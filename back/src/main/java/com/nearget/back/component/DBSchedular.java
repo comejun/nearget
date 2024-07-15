@@ -44,9 +44,9 @@ public class DBSchedular {
 
     private ForkJoinPool customThreadPool = new ForkJoinPool(10); // 클래스 레벨로 이동
 
-    /*// 매일 0시 0분 0초에 실행
+    // 매일 0시 0분 0초에 실행
     //    @Scheduled(cron = "0 0 0 * * *")
-    @Scheduled(fixedDelay = 1000 * 60 * 60)
+    /*@Scheduled(fixedDelay = 1000 * 60 * 60)
     public void scheduleRestaurant() {
 
         // 오류 발생 전까지 saveAllRestaurant page 0부터 1씩 증가하며 실행
@@ -56,7 +56,7 @@ public class DBSchedular {
 
         // 2분 뒤에 실행
         try {
-            Thread.sleep(1000 * 60 * 2);
+            Thread.sleep(1000 * 60 * 5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -95,6 +95,8 @@ public class DBSchedular {
                                 .id(restaurant.getId())
                                 .restaurantName(restaurant.getName())
                                 .restaurantAddress(restaurant.getAddress())
+                                .lat(restaurant.getLat())
+                                .lng(restaurant.getLng())
                                 .build())).collect(Collectors.toList())
         ).join();
 
@@ -138,8 +140,7 @@ public class DBSchedular {
     }*/
 
 
-
-    // Jsoup을 이용하여 식당 이미지를 크롤링하여 반환하는 함수
+   /* // Jsoup을 이용하여 식당 이미지를 크롤링하여 반환하는 함수
     public CompletableFuture<String> getRestaurantImageAsync(String searchText) {
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -162,7 +163,7 @@ public class DBSchedular {
                 return "오류";
             }
         });
-    }
+    }*/
 
 
     /*@Scheduled(fixedDelay = 1000 * 60 * 60)

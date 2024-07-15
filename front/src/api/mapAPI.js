@@ -8,5 +8,7 @@ export const getRestaurantsLocation = async (mapData) => {
   console.log(mapData);
   const response = await axios.post(`${host}/mapdata`, mapData)
 
+  console.log(response.data);
+
   return response.data;
 };
