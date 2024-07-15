@@ -26,13 +26,6 @@ const MainPage = () => {
     }
   }, [member.new]);
 
-  const { execLogout, moveToPath } = useCustomLogin();
-
-  const handleClickLogout = () => {
-    execLogout();
-    moveToPath("/");
-  };
-
   return (
     <BasicLayout>
       <HeaderMain />
@@ -45,7 +38,7 @@ const MainPage = () => {
         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/h2_PricebyPlace.png"} />
       </div>
       <MainPriceby />
-      <div className="MainH2Wrap">
+      <div id="SearchTopScroll" className="MainH2Wrap">
         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/h2_NearbyPlace.png"} />
       </div>
       <InfinityContent />
