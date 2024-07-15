@@ -54,7 +54,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
                         if (localData != null && localData.LOCALDATA_072404 != null) {
                             for (BusinessInfo businessInfo : localData.LOCALDATA_072404.row) {
-                                if (!businessInfo.TRDSTATEGBN.equals("03") && !businessInfo.UPTAENM.equals("기타")&&!businessInfo.SITEWHLADDR.isEmpty()) {
+                                if (businessInfo.TRDSTATEGBN.equals("01") && !businessInfo.UPTAENM.equals("기타")&&!businessInfo.SITEWHLADDR.isEmpty()) {
 
                                     if (businessInfo.UPTAENM.equals("경양식") || businessInfo.UPTAENM.equals("까페") || businessInfo.UPTAENM.equals("분식")
                                             || businessInfo.UPTAENM.equals("일식") || businessInfo.UPTAENM.equals("호프/통닭") || businessInfo.UPTAENM.equals("중국식")

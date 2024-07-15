@@ -54,6 +54,9 @@ dependencies {
     // 썸네일
     implementation 'net.coobird:thumbnailator:0.4.14'
 
+    // 데이터 크롤링 위한 Jsoup
+    implementation 'org.jsoup:jsoup:1.13.1'
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
