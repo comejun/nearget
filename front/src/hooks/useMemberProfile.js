@@ -9,6 +9,7 @@ const useMemberProfile = (userEmail) => {
     email: "",
     nickname: "",
     profileImg: "",
+    new: false,
   };
   const [member, setMember] = useState(initState);
   const [imgSrc, setImgSrc] = useState("");

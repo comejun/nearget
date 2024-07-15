@@ -17,7 +17,11 @@ public class RestaurantsGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long groupId; // 그룹 ID
 
+    @Column(nullable = false)
     private String groupName; // 그룹 이름
+
+    @Builder.Default
+    private String thImg = "";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "email")
@@ -25,6 +29,6 @@ public class RestaurantsGroup {
 
     @ElementCollection
     @Builder.Default
-    private List<Long> restaurantList = new ArrayList<>(); // 식당 리스트
+    private List<Restaurant> restaurantList = new ArrayList<>(); // 식당 리스트
 
 }

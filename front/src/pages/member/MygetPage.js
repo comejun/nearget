@@ -1,13 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { getKakaoLoginLink } from "../../api/kakaoAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
 import BottomNav from "../../layouts/BottomNav";
 import InfinityContentGet from "../../layouts/InfinityContentGet";
+import UseCustomMove from "../../hooks/useCustomMove";
 
 const MyGetPage = () => {
-  const kakaoLoginLink = getKakaoLoginLink();
+  const { moveToAdd } = UseCustomMove();
 
   return (
     <BasicLayout>
@@ -15,7 +13,7 @@ const MyGetPage = () => {
       <div className="header_margin"></div>
       <InfinityContentGet />
       <div className="textBtnWrap">
-        <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_AddGet.png"} />
+        <img onClick={moveToAdd} src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_AddGet.png"} />
       </div>
       <div className="bottom_margin"></div>
       <BottomNav />

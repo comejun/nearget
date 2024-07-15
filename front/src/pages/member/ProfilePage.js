@@ -22,6 +22,7 @@ const ProfilePage = () => {
   // 로그아웃
   const handleLogout = () => {
     dispatch(logout());
+    alert("로그아웃 되었습니다.");
     moveToMain();
   };
 

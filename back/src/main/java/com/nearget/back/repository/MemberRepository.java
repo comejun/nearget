@@ -6,11 +6,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface MemberRepository extends JpaRepository<Member, String> {
     // 회원 조회 + 권한 목록 포함
     // select 한번만 하기 위해 @EntityGraph 사용
     @EntityGraph(attributePaths = {"roleList"})
     @Query("select m from Member m where m.email = :email")
     Member getMemberWithRoles(@Param("email") String email);
+
+    // 회원 이메일
+    Optional<Member> findByEmail(String email);
 
 }

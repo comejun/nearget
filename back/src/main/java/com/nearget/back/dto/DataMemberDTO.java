@@ -15,5 +15,6 @@ public class DataMemberDTO {
     private String nickname;
     private String profileImg;
     private String role;
+    private boolean isNew;
 }
 
