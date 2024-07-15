@@ -10,10 +10,7 @@ const jwtAxios = axios.create();
 const refreshJWT = async (accessToken, refreshToken) => {
   const host = API_SERVER_HOST;
   const header = { headers: { Authorization: `Bearer ${accessToken}` } };
-  const response = await axios.get(
-    `${host}/api/member/refresh?refreshToken=${refreshToken}`,
-    header,
-  );
+  const response = await axios.get(`${host}/api/member/refresh?refreshToken=${refreshToken}`, header);
   console.log("**************************");
   console.log(response.data);
   return response.data;
@@ -51,10 +48,7 @@ const beforeRes = async (res) => {
   const data = res.data; // API 서버에서 보내준 응답 데이터
   if (data && data.error === "ERROR_ACCESS_TOKEN") {
     const memberCookie = getCookie("member");
-    const result = await refreshJWT(
-      memberCookie.accessToken,
-      memberCookie.refreshToken,
-    );
+    const result = await refreshJWT(memberCookie.accessToken, memberCookie.refreshToken);
     console.log("refreshed token : ", result);
 
     // 쿠키의 토큰 값 갱신
