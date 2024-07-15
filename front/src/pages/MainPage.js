@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import useCustomLogin from "../hooks/useCustomLogin";
 import BasicLayout from "../layouts/BasicLayout";
@@ -7,10 +7,25 @@ import BottomNav from "../layouts/BottomNav";
 import MainTodayGet from "../layouts/MainTodayGet";
 import MainPriceby from "../layouts/MainPriceby";
 import InfinityContent from "../layouts/InfinityContent";
+import useMemberProfile from "../hooks/useMemberProfile";
+import UseCustomMove from "../hooks/useCustomMove";
 
 const MainPage = () => {
   // 현재 로그인 된 회원의 이메일 가져오기
   const loginState = useSelector((state) => state.loginSlice);
+  const userEmail = useSelector((state) => state.loginSlice.email);
+  const { moveToProfileEdit } = UseCustomMove();
+
+  // 수정이 필요없는 조회용 회원 정보 가져오기
+  const { member } = useMemberProfile(userEmail);
+
+  useEffect(() => {
+    console.log(userEmail);
+    if (member.new) {
+      moveToProfileEdit();
+    }
+  }, [member.new]);
+
   const { execLogout, moveToPath } = useCustomLogin();
 
   const handleClickLogout = () => {

@@ -1,9 +1,11 @@
 package com.nearget.back.controller;
 
+import com.nearget.back.domain.Member;
 import com.nearget.back.dto.DataMemberDTO;
 import com.nearget.back.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -34,4 +36,10 @@ public class MemberController {
     }
 
     // 회원 탈퇴
+    @PutMapping("/{email}/disable")
+    public ResponseEntity<Member> disableMember(@PathVariable String email) {
+        Member updatedMember = memberService.disableMember(email);
+        log.info("************ MemberController - disableMember : {}", email);
+        return ResponseEntity.ok(updatedMember);
+    }
 }

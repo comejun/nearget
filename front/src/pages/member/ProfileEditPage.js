@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getKakaoLoginLink } from "../../api/kakaoAPI";
-import { modifyMember } from "../../api/memberAPI";
+import { modifyMember, disableMember } from "../../api/memberAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
 import useCustomLogin from "../../hooks/useCustomLogin";
@@ -11,8 +10,8 @@ import useCharacterCheck from "../../hooks/useCharacterCheck";
 import UseCustomMove from "../../hooks/useCustomMove";
 
 const ProfileEditPage = () => {
-  const kakaoLoginLink = getKakaoLoginLink();
   const { moveToProfile } = UseCustomMove();
+  const { execLogout, moveToPath } = useCustomLogin();
   // 현재 로그인 된 회원의 이메일 가져오기
   const userEmail = useSelector((state) => state.loginSlice.email);
 
@@ -65,6 +64,7 @@ const ProfileEditPage = () => {
       exceptionHandle(err);
     }
     moveToProfile();
+    alert("수정완료이 완료되었습니다.");
   };
 
   // 사용자 닉네임 글자 수 상태
@@ -77,6 +77,14 @@ const ProfileEditPage = () => {
       handleChange(e); // 원래의 handleChange 함수 호출
       setNicknameLength(inputLength); // 글자 수 상태 업데이트
     }
+  };
+
+  // 회원탈퇴
+  const handleClickDisabled = async () => {
+    alert("회원 탈퇴가 완료되었습니다.");
+    const response = await disableMember(userEmail);
+    execLogout();
+    moveToPath("/");
   };
 
   return (
@@ -115,7 +123,7 @@ const ProfileEditPage = () => {
           </span>
         </div>
         <div className="textBtnWrap">
-          <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_DeleteID.png"} alt="deleteID" />
+          <img onClick={handleClickDisabled} src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_DeleteID.png"} alt="deleteID" />
         </div>
       </form>
       <div className="bottomBtnWrap">
