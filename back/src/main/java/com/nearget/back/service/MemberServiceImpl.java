@@ -1,10 +1,12 @@
 package com.nearget.back.service;
 
 import com.nearget.back.domain.Member;
+import com.nearget.back.domain.Restaurant;
 import com.nearget.back.domain.Role;
 import com.nearget.back.dto.DataMemberDTO;
 import com.nearget.back.dto.MemberDTO;
 import com.nearget.back.repository.MemberRepository;
+import com.nearget.back.repository.RestaurantsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -27,6 +29,7 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final RestaurantsRepository restaurantsRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
@@ -193,5 +196,25 @@ public class MemberServiceImpl implements MemberService {
         member.updateDisabled(true);
         member.updateDisabledDate();
         return memberRepository.save(member);
+    }
+
+    // 좋아요 추가
+    @Override
+    public void addLike(String email, Long id) {
+        Member member = memberRepository.findById(email)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email: " + email));
+        Restaurant restaurant = restaurantsRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid restaurant ID: " + id));
+        member.addLike(restaurant.getId());
+        memberRepository.save(member);
+    }
+
+    // 좋아요 삭제
+    @Override
+    public void deleteLike(String email, Long id) {
+        Member member = memberRepository.findById(email)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email: " + email));
+        member.deleteLike(id);
+        memberRepository.save(member);
     }
 }

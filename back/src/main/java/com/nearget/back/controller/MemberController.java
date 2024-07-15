@@ -42,4 +42,19 @@ public class MemberController {
         log.info("************ MemberController - disableMember : {}", email);
         return ResponseEntity.ok(updatedMember);
     }
+
+    // 좋아요 추가
+    @PostMapping("/like/{id}")
+    public ResponseEntity<?> addLike(@PathVariable Long id, @RequestParam String email) {
+        memberService.addLike(email, id);
+        return ResponseEntity.ok().build();
+    }
+
+    // 좋아요 삭제
+    @DeleteMapping("/like/{id}")
+    public ResponseEntity<?> deleteLike(@PathVariable Long id, @RequestParam String email) {
+        memberService.deleteLike(email, id);
+        return ResponseEntity.ok().build();
+    }
+
 }
