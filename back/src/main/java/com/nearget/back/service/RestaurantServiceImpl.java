@@ -182,6 +182,12 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantDTOList;
     }
 
+    @Override
+    public RestaurantsGroupDTO getGroupById(Long groupId) {
+        RestaurantsGroup group = restaurantsGroupRepository.findById(groupId).orElseThrow(() -> new IllegalArgumentException("Invalid group ID: " + groupId));
+        RestaurantsGroupDTO restaurantsGroupDTO = RestaurantsGroupDTO.convert(group);
+        return restaurantsGroupDTO;
+    }
 
 
     @Override
@@ -201,16 +207,66 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 
 
-    @Override
+    @Override // 추가
     public void add(RestaurantsGroupDTO restaurantsGroupDTO) {
+        log.info("ResServiceImpl --> add" + restaurantsGroupDTO);
         RestaurantsGroup restaurantsGroup = dtoToEntity(restaurantsGroupDTO);
         RestaurantsGroup saved = restaurantsGroupRepository.save(restaurantsGroup);
     }
 
-    @Override
+    @Override // 수정
+    public void modify(RestaurantsGroupDTO restaurantsGroupDTO) {
+        log.info("ResServiceImpl --> modify" + restaurantsGroupDTO);
+        RestaurantsGroup restaurantsGroup = restaurantsGroupRepository.findById(restaurantsGroupDTO.getGroupId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 그룹이 존재하지 않습니다."));
+        // 수정사항 업데이트
+        restaurantsGroup.changeGroupName(restaurantsGroupDTO.getGroupName());
+        restaurantsGroup.changeThImg(restaurantsGroupDTO.getThImg());
+        // 변경사항 저장
+        restaurantsGroupRepository.save(restaurantsGroup);
+    }
+
+
+    @Override // 삭제
     public void delete(Long groupId) {
         restaurantsGroupRepository.deleteById(groupId);
     }
+
+
+    @Override // 그룹에 추가
+    public void addPlace(Long id, Long groupId) {
+        // id에 해당하는 Restaurant 조회
+        Restaurant restaurant = restaurantsRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid restaurant ID: " + id));
+
+        // groupId에 해당하는 RestaurantsGroup 조회
+        RestaurantsGroup group = restaurantsGroupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid group ID: " + groupId));
+
+        // RestaurantsGroup에 Restaurant 추가
+        group.addRestaurant(restaurant);
+
+        // RestaurantsGroup 저장
+        restaurantsGroupRepository.save(group);
+    }
+
+    @Override // 그룹에 삭제
+    public void deletePlace(Long id, Long groupId) {
+        // id에 해당하는 Restaurant 조회
+        Restaurant restaurant = restaurantsRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid restaurant ID: " + id));
+
+        // groupId에 해당하는 RestaurantsGroup 조회
+        RestaurantsGroup group = restaurantsGroupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid group ID: " + groupId));
+
+        // RestaurantsGroup에서 Restaurant 삭제
+        group.getRestaurantList().remove(restaurant);
+
+        // RestaurantsGroup 저장
+        restaurantsGroupRepository.save(group);
+    }
+
 
 
     // WebClient 설정 및 생성

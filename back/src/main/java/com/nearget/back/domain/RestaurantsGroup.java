@@ -31,4 +31,13 @@ public class RestaurantsGroup {
     @Builder.Default
     private List<Restaurant> restaurantList = new ArrayList<>(); // 식당 리스트
 
+    // ** 식당 리스트에 추가 ** //
+    public void addRestaurant(Restaurant restaurant) {
+        this.restaurantList.add(restaurant);
+    }
+
+    // ** 식당 그룹 수정 ** //
+    public void changeGroupName(String groupName){this.groupName = groupName;}
+    public void changeThImg(String thImg){this.thImg = thImg;}
 }
+
