@@ -152,7 +152,7 @@ public class RestaurantServiceImpl implements RestaurantService {
                         .strId(restaurant.getId().toString())
                         .name(restaurant.getName())
                         .address(restaurant.getAddress())
-                        .category(restaurant.getCategory().getValue())
+                        .category(restaurant.getCategory())
                         .lat(restaurant.getLat())
                         .lng(restaurant.getLng())
                         .build();
@@ -173,7 +173,7 @@ public class RestaurantServiceImpl implements RestaurantService {
                     .id(restaurant.getId())
                     .name(restaurant.getName())
                     .address(restaurant.getAddress())
-                    .category(restaurant.getCategory().getValue())
+                    .category(restaurant.getCategory())
                     .lat(restaurant.getLat())
                     .lng(restaurant.getLng())
                     .build();

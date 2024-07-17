@@ -3,6 +3,7 @@ package com.nearget.back.service;
 import com.nearget.back.domain.RestaurantsData;
 import com.nearget.back.dto.RestaurantDTO;
 import com.nearget.back.dto.RestaurantMenuDto;
+import com.nearget.back.repository.MemberRepository;
 import com.nearget.back.repository.RestaurantsDataRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ import java.util.Optional;
 public class RestaurantDataServiceImpl implements RestaurantDataService {
 
     private final RestaurantsDataRepository restaurantsDataRepository;
+    private final MemberRepository memberRepository;
 
 
     @Override
@@ -36,12 +38,56 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
 
         if (restaurantDTO.getImage().isEmpty() || restaurantDTO.getImage().equals("")){
            restaurantDTO =  getRestaurantDataFromWeb(restaurantDTO);
+           log.info("restaurantDTO : {}", restaurantDTO);
            restaurantsDataRepository.save(restaurantDTO.toRestaurantsDataEntity());
         }
+        int likeCount = memberRepository.countByRestaurantId(restaurantDTO.getId());
+        restaurantDTO.changeLikeCount(likeCount);
 
         log.info(" ************* restaurantDTO : {}", restaurantDTO);
 
         return restaurantDTO;
+    }
+
+    @Override
+    public List<RestaurantDTO> getTodayRestaurants(Double lat, Double lng) {
+
+        log.info("************ RestaurantDataServiceImpl - getTodayRestaurants -latlng : {},{}", lat, lng);
+
+        // lat lng을 기준으로 1km 좌표값 계산
+        Double lat1 = lat - 0.009;
+        Double lat2 = lat + 0.009;
+        Double lng1 = lng - 0.009;
+        Double lng2 = lng + 0.009;
+
+        // 오늘의 음식점 조회
+        List<RestaurantsData> restaurantsDataList = restaurantsDataRepository.findTop5ByLatBetweenAndLngBetween(lat1, lat2, lng1, lng2);
+        // restaurantsDataList를 List<RestaurantDTO>로 변환
+        List<RestaurantDTO> restaurantDTOList = new ArrayList<>();
+        for (RestaurantsData restaurantsData : restaurantsDataList) {
+            RestaurantDTO restaurantDTO = restaurantsData.toDTO();
+            // 현위치 기준으로 음식점까지의 거리를 M단위로 변환 후 RestaurantDTO 객체에 저장
+            double distance = calculateDistanceInMeters(lat, lng, restaurantDTO.getLat(), restaurantDTO.getLng());
+            // member_like_restaurant_list 테이블에서 해당 음식점의 좋아요 개수 조회
+            int likeCount = memberRepository.countByRestaurantId(restaurantDTO.getId());
+            restaurantDTO.changeLikeCount(likeCount);
+            restaurantDTO.changeDistance(distance);
+            restaurantDTOList.add(restaurantDTO);
+        }
+        return restaurantDTOList;
+    }
+
+    public static double calculateDistanceInMeters(double lat1, double lng1, double lat2, double lng2) {
+        final int R = 6371000; // 지구의 반지름(m)
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lngDistance = Math.toRadians(lng2 - lng1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c; // 결과 거리(m)
+
+        return distance;
     }
 
     public RestaurantDTO getRestaurantDataFromWeb(RestaurantDTO restaurantDTO) {
@@ -65,11 +111,21 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
             String restaurantName = element.select("#_title > a > span.GHAhO").text();
             restaurantDTO.changeName(restaurantName);
 
-            Element imgElement = element.select("#_autoPlayable > img").first();
-            String imgSrc = imgElement.attr("src");
-            restaurantDTO.changeImage(imgSrc);
+            if(element.select(("#_autoPlayable > img")).first() == null){
+                restaurantDTO.changeImage("이미지없음");
+            }
+            else {
 
-            Element menuElement = element.select("div.place_section_content > ul").first();
+                Element imgElement = element.select("#_autoPlayable > img").first();
+                String imgSrc = imgElement.attr("src");
+                restaurantDTO.changeImage(imgSrc);
+            }
+
+            // 마지막 하나 전의 div 태그 선택
+            Elements menu = element.select("div.place_section_content");
+            log.info("menu : {}", menu);
+            Element menuElement = menu.select("ul").first();
+            log.info("menuElement : {}", menuElement);
             Elements liElements = menuElement.select("li");
             List<RestaurantMenuDto> menuList = new ArrayList<>();
             for (Element menuItem : liElements) {
@@ -91,8 +147,14 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
             restaurantDTO.changeMenuList(menuList);
 
 
-            String phoneElement = element.select("div.place_section_content > div > div.O8qbU.nbXkr > div > span").first().text();
-            restaurantDTO.changePhone(phoneElement);
+            if (element.select("div.place_section_content > div > div.O8qbU.nbXkr > div > span").first() == null){
+                restaurantDTO.changePhone("");
+            }
+            else{
+                String phoneElement = element.select("div.place_section_content > div > div.O8qbU.nbXkr > div > span").first().text();
+                restaurantDTO.changePhone(phoneElement);
+            }
+
 
 
         } catch (IOException e) {

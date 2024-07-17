@@ -14,6 +14,33 @@ const PlacePage = () => {
 
     const {restaurantId} = useParams();
 
+    const getCategoryValue = (category) => {
+        if (category === "WESTERN") {
+            return "양식";
+        }
+        if (category === "CAFE") {
+            return "카페";
+        }
+        if (category === "KOREAN") {
+            return "한식";
+        }
+        if (category === "CHINESE") {
+            return "중식";
+        }
+        if (category === "JAPANESE") {
+            return "일식";
+        }
+        if (category === "FASTFOOD") {
+            return "패스트푸드";
+        }
+        if (category === "PUB") {
+            return "술집";
+        }
+        if (category === "STREET") {
+            return "분식";
+        }
+    }
+
     console.log("restaurantId : ", restaurantId);
 
     const [restaurantData, setRestaurantData] = useState()
@@ -50,10 +77,10 @@ const PlacePage = () => {
             {restaurantData ? <>
                     <div className="placeContentWrap">
                         {/*<img src={process.env.PUBLIC_URL + "/assets/imgs/sample.png"}/>*/}
-                        {restaurantData.image === "없음" ? <img src={process.env.PUBLIC_URL + "/assets/imgs/sample.png"}/> :
+                        {restaurantData.image === "없음"||restaurantData.image==="이미지없음" ? <img src={process.env.PUBLIC_URL + "/assets/imgs/sample.png"}/> :
                             <img src={restaurantData.image}/>}
                         {/*<img src={restaurantData.image}/>*/}
-                        <h3>양식</h3>
+                        <h3>{getCategoryValue(restaurantData.category)}</h3>
                     </div>
                     <div className="PlaceH2Wrap">
                         <h2>{restaurantData.name}</h2>
@@ -64,11 +91,11 @@ const PlacePage = () => {
                     {restaurantData.image === "없음" ? <></> :
                         <div className="PlaceLikeWrap">
                             <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_sm.png"}/>
-                            <span>9,999</span>
+                            <span>{restaurantData.likeCount}</span>
                         </div>
                     }
                     <div>
-                        {restaurantData.image === "없음" ?
+                        {restaurantData.image === "없음"||restaurantData.phone==="" ?
                             <></>
                             : <div className="PlaceTextLi">
                                 <p>{restaurantData.phone}</p>

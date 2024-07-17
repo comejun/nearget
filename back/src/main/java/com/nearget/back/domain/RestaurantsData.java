@@ -7,10 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +22,9 @@ public class RestaurantsData {
     private Long id;
 
     private String restaurantName;
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     private String restaurantAddress;
 
@@ -62,8 +62,10 @@ public class RestaurantsData {
 
         return RestaurantDTO.builder()
                 .id(id)
+                .strId(String.valueOf(id))
                 .name(restaurantName)
                 .address(restaurantAddress)
+                .category(category)
                 .image(restaurantImage)
                 .lat(lat)
                 .lng(lng)

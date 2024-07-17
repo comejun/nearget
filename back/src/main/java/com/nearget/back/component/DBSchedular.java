@@ -1,9 +1,6 @@
 package com.nearget.back.component;
 
-import com.nearget.back.domain.DistrictEnum;
-import com.nearget.back.domain.Restaurant;
-import com.nearget.back.domain.RestaurantsData;
-import com.nearget.back.domain.SmallDistrictEnum;
+import com.nearget.back.domain.*;
 import com.nearget.back.repository.RestaurantsDataRepository;
 import com.nearget.back.repository.RestaurantsRepository;
 import com.nearget.back.service.DistrictService;
@@ -48,22 +45,21 @@ public class DBSchedular {
     //    @Scheduled(cron = "0 0 0 * * *")
     @Scheduled(fixedDelay = 1000 * 60 * 60)
     public void scheduleRestaurant() {
-
-        // 오류 발생 전까지 saveAllRestaurant page 0부터 1씩 증가하며 실행
-        for (long i = 0; i < 51; i++) {
-            restaurantService.saveAllRestaurant(i);
-        }
-
-        // 2분 뒤에 실행
-        try {
-            Thread.sleep(1000 * 60 * 5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        saveRestaurantsDataOptimized();
-        scheduleDistrict();
+/*
+    // 오류 발생 전까지 saveAllRestaurant page 0부터 1씩 증가하며 실행
+    for (long i = 0; i < 51; i++) {
+        restaurantService.saveAllRestaurant(i);
     }
 
+    // 2분 뒤에 실행
+    try {
+        Thread.sleep(1000 * 60 * 5);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }*/
+//        saveRestaurantsDataOptimized();
+//        scheduleDistrict();
+    }
     public void scheduleDistrict() {
         for (int i = 0; i < DistrictEnum.values().length; i++) {
             districtService.saveDistrict(DistrictEnum.values()[i]);
@@ -95,6 +91,7 @@ public class DBSchedular {
                                 .id(restaurant.getId())
                                 .restaurantName(restaurant.getName())
                                 .restaurantAddress(restaurant.getAddress())
+                                .category(restaurant.getCategory())
                                 .lat(restaurant.getLat())
                                 .lng(restaurant.getLng())
                                 .build())).collect(Collectors.toList())
@@ -104,8 +101,71 @@ public class DBSchedular {
     }
 
 
+/*
+    // RestaurantsData에 RestaurantImage가 비어있는 경우 RestaurantImage를 추가하는 함수
+    @Scheduled(fixedDelay = 1000 * 60 * 60)
+    public void addRestaurantImage() {
+        int pageSize = 50; // 적절한 페이지 크기 설정
+        int page = 0;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        List<RestaurantsData> pageData;
 
-   /* @Scheduled(fixedDelay = 1000 * 60 * 60)
+
+        do {
+            pageData = restaurantsDataRepository.findAll(pageable).getContent();
+            List<CompletableFuture<Void>> futures = pageData.stream()
+                    .filter(restaurantData -> restaurantData.getRestaurantImage() == null || restaurantData.getRestaurantImage().isEmpty())
+                    .map(restaurantData -> CompletableFuture.supplyAsync(() -> {
+                        try {
+                            // 랜덤 딜레이 추가
+                            int delay = (int) (Math.random() * 1000);
+                            Thread.sleep(delay); // 요청 간격 조절
+                            return getRestaurantImageAsync(restaurantData.getRestaurantAddress().split(" ")[2] + " " + restaurantData.getRestaurantName()).join();
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                            return null;
+                        }
+                    }).thenAccept(restaurantImage -> {
+                        synchronized (restaurantData) {
+                            restaurantData.changeRestaurantImage(restaurantImage);
+                        }
+                    }))
+                    .collect(Collectors.toList());
+
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+            restaurantsDataRepository.saveAll(pageData);
+            pageable = pageable.next();
+        } while (!pageData.isEmpty());
+    }*/
+
+
+   /* // Jsoup을 이용하여 식당 이미지를 크롤링하여 반환하는 함수
+    public CompletableFuture<String> getRestaurantImageAsync(String searchText) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                String url = "https://m.search.naver.com/search.naver?sm=mtb_sly.hst&where=m&ssc=tab.m.all&oquery=&tqi=ipfL%2FdqVbxVss55cmVossssstjG-030495&query=" + searchText;
+                log.info(searchText);
+                Document doc = Jsoup.connect(url)
+                        .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3")
+                        .referrer("http://www.google.com")
+                        .get();
+                // Assuming the image URL is in an <img> tag within a specific class or ID
+
+                Elements elements = doc.select("#_autoPlayable > img");
+                if (!elements.isEmpty()) {
+                    return elements.get(0).attr("src");
+                } else {
+                    return "없음";
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "오류";
+            }
+        });
+    }*/
+
+
+    /*@Scheduled(fixedDelay = 1000 * 60 * 60)
     public void IpBlockCheck() {
         // Method to check website access
 
