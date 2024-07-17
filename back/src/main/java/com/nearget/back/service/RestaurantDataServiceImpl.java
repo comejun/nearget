@@ -73,9 +73,11 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
             Elements liElements = menuElement.select("li");
             List<RestaurantMenuDto> menuList = new ArrayList<>();
             for (Element menuItem : liElements) {
-                String itemName = menuItem.select("span").text();
-                if (itemName.equals("")) {
-                    itemName = menuItem.select("a").text();
+                log.info("menuItem : {}", menuItem);
+                // li 태그 안에 place_bluelink 클래스 가지고 있는 a태그 선택
+                String itemName = menuItem.select( "span").text();
+                if (itemName.equals("") || itemName.isEmpty() || itemName.equals("사진")){
+                    itemName = menuItem.select("a.place_bluelink").first().text();
                 }
                 String itemPrice = menuItem.select("em").text();
                 // itemPrice에서 숫자 외의 문자 제거
