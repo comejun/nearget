@@ -21,6 +21,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -198,23 +199,33 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.save(member);
     }
 
-    // 좋아요 추가
+    // 좋아요 리스트 조회
     @Override
-    public void addLike(String email, Long id) {
-        Member member = memberRepository.findById(email)
+    public List<String> getLikeList(String email) {
+        Member member = memberRepository.findWithLikeRestaurantListByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email: " + email));
-        Restaurant restaurant = restaurantsRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid restaurant ID: " + id));
-        member.addLike(restaurant.getId());
-        memberRepository.save(member);
+        List<Long> likeList = member.getLikeRestaurantList();
+
+        // 레스토랑 id String 리스트로 변환
+        List<String> likeListString = likeList.stream().map(str -> str.toString()).toList();
+
+
+        return likeListString;
     }
 
-    // 좋아요 삭제
     @Override
-    public void deleteLike(String email, Long id) {
+    public void changeLike(String email, String restaurantId) {
         Member member = memberRepository.findById(email)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email: " + email));
-        member.deleteLike(id);
+        List<Long> likeList = member.getLikeRestaurantList();
+
+        Long restaurantIdLong = Long.parseLong(restaurantId);
+        if (likeList.contains(restaurantIdLong)) {
+            likeList.remove(restaurantIdLong);
+        } else {
+            likeList.add(restaurantIdLong);
+        }
+        member.changeLikeRestaurantList(likeList);
         memberRepository.save(member);
     }
 }

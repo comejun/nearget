@@ -94,10 +94,9 @@ public class Member {
         roleList.clear();
     }
 
-    // 좋아요 리스트 추가
-    public void addLike(Long id){likeRestaurantList.add(id);}
-    // 좋아요 리스트 삭제
-    public void deleteLike(Long id){likeRestaurantList.remove(id);}
-
+    // 좋아요 리스트 수정
+    public void changeLikeRestaurantList(List<Long> likeRestaurantList) {
+        this.likeRestaurantList = likeRestaurantList;
+    }
 
 }

@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import PlaceCard from "../components/common/PlaceCard";
 import {getTodayRestaurant} from "../api/RestaurantAPI";
 
-export default function MainTodayGet({myLocation}) {
+export default function MainTodayGet({likeList, myLocation}) {
 
     const [todayGet, setTodayGet] = useState()
 
@@ -14,7 +14,6 @@ export default function MainTodayGet({myLocation}) {
             setTodayGet(todayGet);
         };
         fetchTodayGet();
-        console.log(todayGet);
     }, []);
 
 
@@ -24,7 +23,7 @@ export default function MainTodayGet({myLocation}) {
                 <ul>
                     {todayGet && todayGet.map((restaurant, index) => (
                         <li key={restaurant.id || index}> {/* restaurant.id가 고유 식별자라고 가정 */}
-                            <PlaceCard restaurant={restaurant}/>
+                            <PlaceCard likeList={likeList} restaurant={restaurant}/>
                             <div className="scrollTextContent">
                                 <div className="scrollTextLi">
                                     <p>{restaurant.phone}</p>

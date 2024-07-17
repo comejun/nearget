@@ -1,7 +1,11 @@
-import React from 'react'
 import useCustomMove from "../../hooks/useCustomMove";
+import {useSelector} from "react-redux";
+import {useEffect, useState} from "react";
+import {getTodayRestaurant} from "../../api/RestaurantAPI";
+import {modifyLikeList} from "../../api/memberAPI";
 
-const PlaceCard = ({restaurant}) => {
+const PlaceCard = ({likeList, restaurant}) => {
+    const loginState = useSelector((state) => state.loginSlice);
     const {moveToPlace} = useCustomMove();
     const getCategoryValue = (category) => {
         if (category === "WESTERN") {
@@ -29,10 +33,34 @@ const PlaceCard = ({restaurant}) => {
             return "분식";
         }
     }
+    const [isLike, setIsLike] = useState()
+
+    useEffect(() => {
+        setIsLike(likeList ? likeList.some((like) => like === restaurant.strId) : false);
+    }, []);
+
+    console.log(isLike)
+
+    const clickedLikeBtn = (strId) => {
+        if (loginState.email) {
+            const fetchLikeList = async () => {
+                await modifyLikeList(loginState.email, strId);
+            };
+            fetchLikeList();
+            setIsLike(!isLike);
+        }
+    }
+
     return (
-        <div className="scrollContent" onClick={() => moveToPlace(restaurant.strId)}>
-            <img className="scrollContentSum" src={restaurant.image}/>
-            <img className="scrollContentLike" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_wh.png"}/>
+        <div className="scrollContent">
+            <img onClick={() => moveToPlace(restaurant.strId)} className="scrollContentSum" src={restaurant.image}/>
+            {loginState.email ? (
+                <img onClick={()=>clickedLikeBtn(restaurant.strId)} className="scrollContentLike"
+                     src={process.env.PUBLIC_URL + (isLike ? "/assets/imgs/icon/ic_like_ac.png" : "/assets/imgs/icon/ic_like_wh.png")}
+                     alt="like"/>
+            ) : (
+                <></>
+            )}
             <div className="itemTitle">
                 <div>
                     <h3>{restaurant.name}</h3>

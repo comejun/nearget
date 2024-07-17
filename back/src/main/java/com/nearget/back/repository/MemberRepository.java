@@ -22,5 +22,9 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     @Query("SELECT COUNT(m) FROM Member m JOIN m.likeRestaurantList l WHERE l = :restaurantId")
     int countByRestaurantId(@Param("restaurantId") Long restaurantId);
 
+    // 회원의 좋아요 레스토랑 포함 조회
+    @EntityGraph(attributePaths = {"likeRestaurantList"})
+    Optional<Member> findWithLikeRestaurantListByEmail(String email);
+
 
 }
