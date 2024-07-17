@@ -31,6 +31,4 @@ public class RestaurantsGroupDTO {
         return restaurantsGroupDTO;
     }
 
-//    public List<Long> getRestaurantList() {
-//    }
 }

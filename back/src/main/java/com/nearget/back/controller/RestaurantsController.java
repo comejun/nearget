@@ -31,6 +31,7 @@ public class RestaurantsController {
         restaurantService.add(restaurantsGroupDTO);
         return Map.of("RESULT", "SUCCESS");
     }
+
     // 그룹 수정
 
 
@@ -41,9 +42,6 @@ public class RestaurantsController {
         restaurantService.delete(groupId);
         return Map.of("RESULT", "SUCCESS");
     }
-
-    // 그룹에 저장
-
 
 
 }
