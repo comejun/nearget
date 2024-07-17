@@ -17,7 +17,7 @@ const placeRouter = () => {
       ),
     },
     {
-      path: "place",
+      path: ":restaurantId",
       element: (
         <Suspense fallback={<LoadingPage />}>
           <Place />
