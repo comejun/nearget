@@ -18,4 +18,9 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     // 회원 이메일
     Optional<Member> findByEmail(String email);
 
+    // 전체 회원으ㅢ member_like_restaurant_list 테이블에서 레스토랑 id의 개수를 조회
+    @Query("SELECT COUNT(m) FROM Member m JOIN m.likeRestaurantList l WHERE l = :restaurantId")
+    int countByRestaurantId(@Param("restaurantId") Long restaurantId);
+
+
 }

@@ -1,9 +1,6 @@
 package com.nearget.back.component;
 
-import com.nearget.back.domain.DistrictEnum;
-import com.nearget.back.domain.Restaurant;
-import com.nearget.back.domain.RestaurantsData;
-import com.nearget.back.domain.SmallDistrictEnum;
+import com.nearget.back.domain.*;
 import com.nearget.back.repository.RestaurantsDataRepository;
 import com.nearget.back.repository.RestaurantsRepository;
 import com.nearget.back.service.DistrictService;
@@ -46,24 +43,23 @@ public class DBSchedular {
 
     // 매일 0시 0분 0초에 실행
     //    @Scheduled(cron = "0 0 0 * * *")
-    /*@Scheduled(fixedDelay = 1000 * 60 * 60)
+    @Scheduled(fixedDelay = 1000 * 60 * 60)
     public void scheduleRestaurant() {
-
-        // 오류 발생 전까지 saveAllRestaurant page 0부터 1씩 증가하며 실행
-        for (long i = 0; i < 51; i++) {
-            restaurantService.saveAllRestaurant(i);
-        }
-
-        // 2분 뒤에 실행
-        try {
-            Thread.sleep(1000 * 60 * 5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        saveRestaurantsDataOptimized();
-        scheduleDistrict();
+/*
+    // 오류 발생 전까지 saveAllRestaurant page 0부터 1씩 증가하며 실행
+    for (long i = 0; i < 51; i++) {
+        restaurantService.saveAllRestaurant(i);
     }
 
+    // 2분 뒤에 실행
+    try {
+        Thread.sleep(1000 * 60 * 5);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }*/
+//        saveRestaurantsDataOptimized();
+//        scheduleDistrict();
+    }
     public void scheduleDistrict() {
         for (int i = 0; i < DistrictEnum.values().length; i++) {
             districtService.saveDistrict(DistrictEnum.values()[i]);
@@ -95,6 +91,7 @@ public class DBSchedular {
                                 .id(restaurant.getId())
                                 .restaurantName(restaurant.getName())
                                 .restaurantAddress(restaurant.getAddress())
+                                .category(restaurant.getCategory())
                                 .lat(restaurant.getLat())
                                 .lng(restaurant.getLng())
                                 .build())).collect(Collectors.toList())
@@ -103,8 +100,10 @@ public class DBSchedular {
         restaurantsDataRepository.saveAll(restaurantsData);
     }
 
+
+/*
     // RestaurantsData에 RestaurantImage가 비어있는 경우 RestaurantImage를 추가하는 함수
-    /*@Scheduled(fixedDelay = 1000 * 60 * 60)
+    @Scheduled(fixedDelay = 1000 * 60 * 60)
     public void addRestaurantImage() {
         int pageSize = 50; // 적절한 페이지 크기 설정
         int page = 0;

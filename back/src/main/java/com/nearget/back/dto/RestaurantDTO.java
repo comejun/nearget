@@ -18,12 +18,14 @@ public class RestaurantDTO {
     private Long id;
     private String strId;
     private String address;
-    private String category;
+    private Category category;
     private Double lat;
     private Double lng;
     private String name;
     private String phone;
     private String image;
+    private Double distance;
+    private Integer likeCount;
     private List<RestaurantMenuDto> menuList;
 
     public void changeName(String name){
@@ -40,12 +42,21 @@ public class RestaurantDTO {
         this.menuList = menuList;
     }
 
+    public void changeLikeCount(Integer likeCount){
+        this.likeCount = likeCount;
+    }
+
+    public void changeDistance(Double distance){
+        this.distance = distance;
+    }
+
     public RestaurantsData toRestaurantsDataEntity(){
         return RestaurantsData.builder()
                 .id(id)
                 .restaurantName(name)
                 .restaurantAddress(address)
                 .restaurantImage(image)
+                .category(category)
                 .lat(lat)
                 .lng(lng)
                 .phone(phone)

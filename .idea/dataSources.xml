@@ -13,13 +13,11 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="neargetapi@localhost" uuid="b5b6370b-7633-4c9a-88f3-7eea22066a55">
+    <data-source source="LOCAL" name="neargetapi@comejun.ddns.net" uuid="7d343085-9e15-44f8-a97d-2fc0cd282ac0">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
-      <imported>true</imported>
-      <remarks>$PROJECT_DIR$/back/src/main/resources/application.yml</remarks>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/neargetapi?useUnicode=true&amp;characterEncoding=utf8&amp;characterSetResults=utf8&amp;useSSL=true</jdbc-url>
+      <jdbc-url>jdbc:mysql://comejun.ddns.net:3306/neargetapi?useUnicode=true&amp;characterEncoding=utf8&amp;characterSetResults=utf8&amp;useSSL=true&amp;rewriteBatchedStatements=true</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.host.port" />
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
