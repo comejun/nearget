@@ -62,7 +62,7 @@ public class DBSchedular {
         }
         saveRestaurantsDataOptimized();
         scheduleDistrict();
-    }*/
+    }
 
     public void scheduleDistrict() {
         for (int i = 0; i < DistrictEnum.values().length; i++) {

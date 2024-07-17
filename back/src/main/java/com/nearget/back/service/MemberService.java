@@ -37,4 +37,9 @@ public interface MemberService {
     void modifyMember(DataMemberDTO dataMemberDTO);
     // 회원 탈퇴
     Member disableMember(String email);
+
+    // 좋아요 추가 처리
+    void addLike(String email, Long id);
+    // 좋아요 삭제 처리
+    void deleteLike(String email, Long id);
 }
