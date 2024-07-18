@@ -24,7 +24,7 @@ export default function MainTodayGet({likeList, myLocation}) {
             <div className="TodayGetContainer">
                 <ul>
                     {todayGet && todayGet.map((restaurant, index) => (
-                        <li key={restaurant.id || index}> {/* restaurant.id가 고유 식별자라고 가정 */}
+                        <li key={restaurant.strId}> {/* restaurant.id가 고유 식별자라고 가정 */}
                             <PlaceCard likeList={likeList} restaurant={restaurant}/>
                             <div className="scrollTextContent">
                                 {restaurant.phone ? <div className="scrollTextLi">

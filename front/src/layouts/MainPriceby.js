@@ -16,7 +16,7 @@ export default function MainPriceby({likeList, myLocation}) {
             setPriceBy(priceGet);
         };
         fetchPriceBy();
-    }, []);
+    }, [category]);
 
 
     return (
@@ -24,7 +24,7 @@ export default function MainPriceby({likeList, myLocation}) {
             <div className="PricebyPlaceContainer">
                 <ul>
                     {priceBy.map((restaurant, index) => (
-                        <li key={restaurant.id || index}>
+                        <li key={restaurant.strId}>
                             <PlaceCard likeList={likeList} restaurant={restaurant}/>
 
                             <div className="scrollTextContent">
