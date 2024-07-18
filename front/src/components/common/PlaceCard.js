@@ -3,60 +3,58 @@ import {useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {getTodayRestaurant} from "../../api/RestaurantAPI";
 import {modifyLikeList} from "../../api/memberAPI";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { getTodayRestaurant } from "../../api/RestaurantAPI";
-import { modifyLikeList } from "../../api/memberAPI";
 
-const PlaceCard = ({ likeList, restaurant }) => {
-  const loginState = useSelector((state) => state.loginSlice);
-  const { moveToPlace } = useCustomMove();
-  const getCategoryValue = (category) => {
-    if (category === "WESTERN") {
-      return "양식";
+const PlaceCard = ({likeList, restaurant}) => {
+    const loginState = useSelector((state) => state.loginSlice);
+    const {moveToPlace} = useCustomMove();
+    const getCategoryValue = (category) => {
+        if (category === "WESTERN") {
+            return "양식";
+        }
+        if (category === "CAFE") {
+            return "카페";
+        }
+        if (category === "KOREAN") {
+            return "한식";
+        }
+        if (category === "CHINESE") {
+            return "중식";
+        }
+        if (category === "JAPANESE") {
+            return "일식";
+        }
+        if (category === "FASTFOOD") {
+            return "패스트푸드";
+        }
+        if (category === "PUB") {
+            return "술집";
+        }
+        if (category === "STREET") {
+            return "분식";
+        }
     }
-    if (category === "CAFE") {
-      return "카페";
-    }
-    if (category === "KOREAN") {
-      return "한식";
-    }
-    if (category === "CHINESE") {
-      return "중식";
-    }
-    if (category === "JAPANESE") {
-      return "일식";
-    }
-    if (category === "FASTFOOD") {
-      return "패스트푸드";
-    }
-    if (category === "PUB") {
-      return "술집";
-    }
-    if (category === "STREET") {
-      return "분식";
-    }
-  };
-  const [isLike, setIsLike] = useState();
+    const [isLike, setIsLike] = useState()
 
-  useEffect(() => {
-    setIsLike(likeList ? likeList.some((like) => like === restaurant.strId) : false);
-  }, []);
+    useEffect(() => {
+        setIsLike(likeList ? likeList.some((like) => like === restaurant.strId) : false);
+    }, []);
 
-  const clickedLikeBtn = (strId) => {
-    if (loginState.email) {
-      const fetchLikeList = async () => {
-        await modifyLikeList(loginState.email, strId);
-      };
-      fetchLikeList();
-      setIsLike(!isLike);
+
+    const clickedLikeBtn = (strId) => {
+        if (loginState.email) {
+            const fetchLikeList = async () => {
+                await modifyLikeList(loginState.email, strId);
+            };
+            fetchLikeList();
+            setIsLike(!isLike);
+        }
     }
-  };
 
     return (
         <div className="scrollContent">
-            <img onClick={() => moveToPlace(restaurant.strId)} className="scrollContentSum" src={restaurant.image}/>
-            {loginState.email ? (
+            <div className="imageWrapper" onClick={() => moveToPlace(restaurant.strId)}>
+                <img className="scrollContentSum" src={restaurant.image} alt="restaurant" />
+            </div>            {loginState.email ? (
                 <img onClick={()=>clickedLikeBtn(restaurant.strId)} className="scrollContentLike"
                      src={process.env.PUBLIC_URL + (isLike ? "/assets/imgs/icon/ic_like_ac.png" : "/assets/imgs/icon/ic_like_wh.png")}
                      alt="like"/>
