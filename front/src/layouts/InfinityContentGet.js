@@ -54,6 +54,10 @@ export default function InfinityContentGet() {
     fetchGroups();
   }, [userEmail]);
 
+  useEffect(() => {
+    console.log(groups);
+  }, [groups]);
+
   return (
     <div className="InfinityContentWrap">
       <div className="InfinityContent">

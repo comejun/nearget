@@ -135,7 +135,8 @@ div.scrollTextLi{
   }
 }
 
-div.itemTitle h3, div.itemTitle h4, div.itemTitle span, div.scrollTextLi p {
+div.itemTitle h3, div.itemTitle h4,
+div.scrollTextLi p {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
