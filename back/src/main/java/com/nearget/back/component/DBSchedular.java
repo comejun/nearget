@@ -104,7 +104,7 @@ public class DBSchedular {
 
     public static Double distanceValue = 0.009;
     // 작업이 끝난후 2초 마다 실행
-   /* @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 1000)
     public void addImage(){
         Double lat = 37.55498771600092;
         Double lng = 126.93601217931102;
@@ -125,7 +125,7 @@ public class DBSchedular {
            return;
         }
 
-    }*/
+    }
 
 
 
