@@ -59,8 +59,12 @@ const PlacePage = () => {
     }, [loginState.email]);
 
     useEffect(() => {
-        setIsLike(likeList ? likeList.some((like) => like === restaurantData.strId) : false);
-    }, [likeList]);
+
+        if(restaurantData){
+            setIsLike(likeList ? likeList.some((like) => like === restaurantData.strId) : false);
+
+        }
+    }, [likeList,restaurantData]);
 
     useEffect(() => {
         const fetchRestaurant = async () => {

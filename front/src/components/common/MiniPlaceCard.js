@@ -1,10 +1,11 @@
+import React, {useState} from 'react'
 import useCustomMove from "../../hooks/useCustomMove";
-import {useSelector} from "react-redux";
-import React, {useEffect, useState} from "react";
-import {getTodayRestaurant} from "../../api/RestaurantAPI";
 import {modifyLikeList} from "../../api/memberAPI";
+import {useSelector} from "react-redux";
 
-const PlaceCard = ({likeList, restaurant}) => {
+const MiniPlaceCard = ({restaurant}) => {
+
+    const [isLike, setIsLike] = useState(true)
     const loginState = useSelector((state) => state.loginSlice);
     const {moveToPlace} = useCustomMove();
     const getCategoryValue = (category) => {
@@ -33,13 +34,6 @@ const PlaceCard = ({likeList, restaurant}) => {
             return "분식";
         }
     }
-    const [isLike, setIsLike] = useState()
-
-    useEffect(() => {
-        setIsLike(likeList ? likeList.some((like) => like === restaurant.strId) : false);
-    }, []);
-
-
     const clickedLikeBtn = (strId) => {
         if (loginState.email) {
             const fetchLikeList = async () => {
@@ -51,36 +45,24 @@ const PlaceCard = ({likeList, restaurant}) => {
     }
 
     return (
-        <div className="scrollContent">
-            <img onClick={() => moveToPlace(restaurant.strId)} className="scrollContentSum" src={restaurant.image}/>
-            {loginState.email ? (
-                <img onClick={()=>clickedLikeBtn(restaurant.strId)} className="scrollContentLike"
-                     src={process.env.PUBLIC_URL + (isLike ? "/assets/imgs/icon/ic_like_ac.png" : "/assets/imgs/icon/ic_like_wh.png")}
-                     alt="like"/>
-            ) : (
-                <></>
-            )}
-            <div className="itemTitle">
-                <div>
-                    <h3>{restaurant.name}</h3>
-                    <span>
-                        {/*정수로 출력*/}
-                        {parseInt(restaurant.distance) > 1000?
-                            // 소숫점 두자리까지만 출력
-                            (parseInt(restaurant.distance) / 1000).toFixed(2)
-                            : parseInt(restaurant.distance)}
-                        {parseInt(restaurant.distance) > 1000 ? <span>KM</span> : <span>M</span>}
-                  </span>
-                </div>
+        <div>
+            <img onClick={() => moveToPlace(restaurant.strId)} className="InfinityContentSum" src={restaurant.image}/>
+            <img onClick={() => clickedLikeBtn(restaurant.strId)} className="scrollContentLike"
+                 src={process.env.PUBLIC_URL + (isLike ? "/assets/imgs/icon/ic_like_ac.png" : "/assets/imgs/icon/ic_like_wh.png")}/>
+            <div className="infinityItemTitle">
                 <div>
                     <h4>{getCategoryValue(restaurant.category)}</h4>
                     <span>
-                    <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_sm.png"} alt="like"/>
-                    <span>{restaurant.likeCount}</span>
-                  </span>
+                   {/*정수로 출력*/}
+                        {parseInt(restaurant.distance) > 1000?
+                            (parseInt(restaurant.distance) / 1000).toFixed(2)
+                            : parseInt(restaurant.distance)}
+                        {parseInt(restaurant.distance) > 1000 ? <span>KM</span> : <span>M</span>}
+                </span>
                 </div>
             </div>
+            <h3>{restaurant.name}</h3>
         </div>
     )
 }
-export default PlaceCard
+export default MiniPlaceCard
