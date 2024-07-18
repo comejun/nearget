@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from "react";
 import useCustomMove from "../../hooks/useCustomMove";
 import {modifyLikeList} from "../../api/memberAPI";
 import {useSelector} from "react-redux";
 
-const MiniPlaceCard = ({restaurant}) => {
+const MiniPlaceCard = ({restaurant, likeList}) => {
 
-    const [isLike, setIsLike] = useState(true)
+    const [isLike, setIsLike] = useState()
     const loginState = useSelector((state) => state.loginSlice);
     const {moveToPlace} = useCustomMove();
     const getCategoryValue = (category) => {
@@ -44,11 +44,20 @@ const MiniPlaceCard = ({restaurant}) => {
         }
     }
 
+    useEffect(() => {
+        setIsLike(likeList ? likeList.some((like) => like === restaurant.strId) : false);
+    }, []);
+
     return (
         <div>
             <img onClick={() => moveToPlace(restaurant.strId)} className="InfinityContentSum" src={restaurant.image}/>
-            <img onClick={() => clickedLikeBtn(restaurant.strId)} className="scrollContentLike"
-                 src={process.env.PUBLIC_URL + (isLike ? "/assets/imgs/icon/ic_like_ac.png" : "/assets/imgs/icon/ic_like_wh.png")}/>
+            {loginState.email ? (
+                <img onClick={()=>clickedLikeBtn(restaurant.strId)} className="scrollContentLike"
+                     src={process.env.PUBLIC_URL + (isLike ? "/assets/imgs/icon/ic_like_ac.png" : "/assets/imgs/icon/ic_like_wh.png")}
+                     alt="like"/>
+            ) : (
+                <></>
+            )}
             <div className="infinityItemTitle">
                 <div>
                     <h4>{getCategoryValue(restaurant.category)}</h4>

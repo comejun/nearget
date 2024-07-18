@@ -12,4 +12,7 @@ public interface RestaurantDataService {
     List<RestaurantDTO> getTodayRestaurants(Double lat, Double lng, String category);
     // 가격순 음식점 조회
     List<RestaurantDTO> getPriceRestaurants(Double lat, Double lng, String category);
+
+    // 거리순 음식점 조회
+    List<RestaurantDTO> getDistanceRestaurants(Double lat, Double lng, String category);
 }
