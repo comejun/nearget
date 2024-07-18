@@ -52,7 +52,6 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
     @Override
     public List<RestaurantDTO> getTodayRestaurants(Double lat, Double lng) {
 
-        log.info("************ RestaurantDataServiceImpl - getTodayRestaurants -latlng : {},{}", lat, lng);
 
         // lat lng을 기준으로 1km 좌표값 계산
         Double lat1 = lat - 0.009;
@@ -74,6 +73,42 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
             restaurantDTO.changeDistance(distance);
             restaurantDTOList.add(restaurantDTO);
         }
+        return restaurantDTOList;
+    }
+
+    @Override
+    public List<RestaurantDTO> getPriceRestaurants(Double lat, Double lng) {
+
+        // lat lng을 기준으로 2km 좌표값 계산
+        Double lat1 = lat - 0.018;
+        Double lat2 = lat + 0.018;
+        Double lng1 = lng - 0.018;
+        Double lng2 = lng + 0.018;
+
+        // 가격순 음식점 조회
+        List<RestaurantsData> restaurantsDataList = restaurantsDataRepository.findByLatBetweenAndLngBetweenOrderByMenu(lat1, lat2, lng1, lng2);
+        // restaurantsDataList를 List<RestaurantDTO>로 변환
+        List<RestaurantDTO> restaurantDTOList = new ArrayList<>();
+        for (RestaurantsData restaurantsData : restaurantsDataList) {
+            RestaurantDTO restaurantDTO = restaurantsData.toDTO();
+            // 현위치 기준으로 음식점까지의 거리를 M단위로 변환 후 RestaurantDTO 객체에 저장
+            double distance = calculateDistanceInMeters(lat, lng, restaurantDTO.getLat(), restaurantDTO.getLng());
+            // member_like_restaurant_list 테이블에서 해당 음식점의 좋아요 개수 조회
+            int likeCount = memberRepository.countByRestaurantId(restaurantDTO.getId());
+
+            // menuList의 가격 평균값을 구한 후 RestaurantDTO 객체에 저장
+            Double menuPriceSum = 0.0;
+            for (RestaurantMenuDto restaurantMenuDto : restaurantDTO.getMenuList()) {
+                menuPriceSum += restaurantMenuDto.getPrice();
+            }
+            restaurantDTO.changeAvgPrice(menuPriceSum / restaurantDTO.getMenuList().size());
+            log.info("************ RestaurantDataServiceImpl - getPriceRestaurants - 이름 : {} menuPriceAvg : {}", restaurantDTO.getName(),restaurantDTO.getAvgPrice());
+            restaurantDTO.changeLikeCount(likeCount);
+            restaurantDTO.changeDistance(distance);
+            restaurantDTOList.add(restaurantDTO);
+        }
+        // 가격 낮은순으로 정렬
+        restaurantDTOList.sort((o1, o2) -> o1.getAvgPrice().compareTo(o2.getAvgPrice()));
         return restaurantDTOList;
     }
 

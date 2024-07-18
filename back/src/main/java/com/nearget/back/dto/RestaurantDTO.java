@@ -27,6 +27,7 @@ public class RestaurantDTO {
     private Double distance;
     private Integer likeCount;
     private List<RestaurantMenuDto> menuList;
+    private Double avgPrice;
 
     public void changeName(String name){
         this.name = name;
@@ -48,6 +49,10 @@ public class RestaurantDTO {
 
     public void changeDistance(Double distance){
         this.distance = distance;
+    }
+
+    public void changeAvgPrice(Double avgPrice){
+        this.avgPrice = avgPrice;
     }
 
     public RestaurantsData toRestaurantsDataEntity(){

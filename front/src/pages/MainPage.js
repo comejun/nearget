@@ -51,7 +51,7 @@ const MainPage = () => {
                     <div className="MainH2Wrap">
                         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/h2_PricebyPlace.png"}/>
                     </div>
-                    <MainPriceby/>
+                    <MainPriceby likeList={likeList} myLocation={nowMyLocation}/>
                     <div id="SearchTopScroll" className="MainH2Wrap">
                         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/h2_NearbyPlace.png"}/>
                     </div>
