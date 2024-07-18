@@ -1,10 +1,24 @@
-import React from "react";
-import { getKakaoLoginLink } from "../../api/kakaoAPI";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getRestaurants } from "../../api/RestaurantAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
 
 const GetPage = () => {
-  const kakaoLoginLink = getKakaoLoginLink();
+  const loginState = useSelector((state) => state.loginSlice);
+  const { restaurantId } = useParams();
+  const [restaurantData, setRestaurantData] = useState();
+
+  useEffect(() => {
+    const fetchRestaurant = async () => {
+      const restaurant = await getRestaurants(restaurantId);
+      setRestaurantData(restaurant);
+      console.log("restaurant : ", restaurant);
+    };
+
+    fetchRestaurant();
+  }, [restaurantId]);
 
   return (
     <BasicLayout>

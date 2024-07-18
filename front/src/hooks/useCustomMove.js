@@ -15,8 +15,8 @@ const UseCustomMove = () => {
   const moveToPlace = (restaurantId) => {
     navigate(`/place/${restaurantId}`);
   };
-  const moveToGet = () => {
-    navigate("/place/get");
+  const moveToGet = (restaurantId) => {
+    navigate(`/place/get/${restaurantId}`);
   };
   const moveToAdd = () => {
     navigate("/place/add");
