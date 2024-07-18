@@ -6,13 +6,19 @@ import InfinityContent from "../../layouts/InfinityContent";
 import {useParams} from "react-router-dom";
 import {getRestaurants} from "../../api/RestaurantAPI";
 import LoadingPage from "../../components/common/LoadingPage";
+import {getLikeList, modifyLikeList} from "../../api/memberAPI";
+import {useSelector} from "react-redux";
 
 const {kakao} = window;
 
 const PlacePage = () => {
     const kakaoLoginLink = getKakaoLoginLink();
-
+    const loginState = useSelector((state) => state.loginSlice);
     const {restaurantId} = useParams();
+    const [restaurantData, setRestaurantData] = useState()
+    const [isLike, setIsLike] = useState()
+    const [likeList, setLikeList] = useState()
+
 
     const getCategoryValue = (category) => {
         if (category === "WESTERN") {
@@ -41,9 +47,20 @@ const PlacePage = () => {
         }
     }
 
-    console.log("restaurantId : ", restaurantId);
+    // 로그인시 좋아요 리스트 가져오기
+    useEffect(() => {
+        if(loginState.email){
+            const fetchTLikeList = async () => {
+                const likeListGet = await getLikeList(loginState.email);
+                setLikeList(likeListGet);
+            };
+            fetchTLikeList();
+        }
+    }, [loginState.email]);
 
-    const [restaurantData, setRestaurantData] = useState()
+    useEffect(() => {
+        setIsLike(likeList ? likeList.some((like) => like === restaurantData.strId) : false);
+    }, [likeList]);
 
     useEffect(() => {
         const fetchRestaurant = async () => {
@@ -56,17 +73,27 @@ const PlacePage = () => {
         fetchRestaurant();
     }, [restaurantId]);
 
-  useEffect(() => {
-    if(restaurantData){
-      const staticMapContainer   = document.getElementById('miniMap');
-      const staticMapOption  = {
-        center: new kakao.maps.LatLng(restaurantData.lat, restaurantData.lng),
-        level: 2,
-      };
+    useEffect(() => {
+        if (restaurantData) {
+            const staticMapContainer = document.getElementById('miniMap');
+            const staticMapOption = {
+                center: new kakao.maps.LatLng(restaurantData.lat, restaurantData.lng),
+                level: 2,
+            };
 
-      const map = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
+            const map = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
+        }
+    }, [restaurantData]);
+
+    const clickedLikeBtn = (strId) => {
+        if (loginState.email) {
+            const fetchLikeList = async () => {
+                await modifyLikeList(loginState.email, strId);
+            };
+            fetchLikeList();
+            setIsLike(!isLike);
+        }
     }
-  }, [restaurantData]);
 
 
     return (
@@ -77,16 +104,21 @@ const PlacePage = () => {
             {restaurantData ? <>
                     <div className="placeContentWrap">
                         {/*<img src={process.env.PUBLIC_URL + "/assets/imgs/sample.png"}/>*/}
-                        {restaurantData.image === "없음"||restaurantData.image==="이미지없음" ? <img src={process.env.PUBLIC_URL + "/assets/imgs/sample.png"}/> :
+                        {restaurantData.image === "없음" || restaurantData.image === "이미지없음" ?
+                            <img src={process.env.PUBLIC_URL + "/assets/imgs/sample.png"}/> :
                             <img src={restaurantData.image}/>}
                         {/*<img src={restaurantData.image}/>*/}
                         <h3>{getCategoryValue(restaurantData.category)}</h3>
                     </div>
                     <div className="PlaceH2Wrap">
                         <h2>{restaurantData.name}</h2>
-                        {restaurantData.image === "없음" ? <></> :
-                            <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_bk.png"}/>
-                        }
+                        {restaurantData.image !== "없음" && (
+                            loginState.email ? (
+                                <img onClick={() => clickedLikeBtn(restaurantData.strId)} className="scrollContentLike"
+                                     src={process.env.PUBLIC_URL + (isLike ? "/assets/imgs/icon/ic_like_ac.png" : "/assets/imgs/icon/ic_like_bk.png")}
+                                     alt="like"/>
+                            ) : null
+                        )}
                     </div>
                     {restaurantData.image === "없음" ? <></> :
                         <div className="PlaceLikeWrap">
@@ -95,7 +127,7 @@ const PlacePage = () => {
                         </div>
                     }
                     <div>
-                        {restaurantData.image === "없음"||restaurantData.phone==="" ?
+                        {restaurantData.image === "없음" || restaurantData.phone === "" ?
                             <></>
                             : <div className="PlaceTextLi">
                                 <p>{restaurantData.phone}</p>
@@ -122,7 +154,7 @@ const PlacePage = () => {
                                                 <p>{menu.menuName}</p>
                                                 <span>{menu.price}
                                                     <span>원</span>
-            </span>
+                                                </span>
                                             </div>
                                         </React.Fragment>))
                                     }

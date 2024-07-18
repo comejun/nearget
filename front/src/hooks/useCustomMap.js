@@ -49,7 +49,7 @@ const UseCustomMap = () => {
 
     // TODO 시연용 내위치 가져 오기 코드
     useEffect(() => {
-        const interval = setInterval(() => {
+        // const interval = setInterval(() => {
             setMyLocation({
                 lat: 37.55498771600092,
                 lng: 126.93601217931102,
@@ -59,8 +59,9 @@ const UseCustomMap = () => {
             });
 
             //TODO : 1초마다 위치 업데이트
-        }, 1000);
-        return () => clearInterval(interval);
+
+        // }, 1000);
+        // return () => clearInterval(interval);
     }, []);
 
     // 내 위치 마커 생성

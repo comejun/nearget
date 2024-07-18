@@ -1,10 +1,11 @@
 import React from "react";
 import UseCustomMove from "../hooks/useCustomMove";
 import { getCookie } from "../util/cookieUtil";
+import {useSelector} from "react-redux";
 
 export default function BottomNav() {
   const { moveToMain, moveToMap, moveToAdd, moveToMylike, moveToProfile, moveToLogin } = UseCustomMove();
-  const memberInfo = getCookie("member");
+  const loginState = useSelector((state) => state.loginSlice);
 
   return (
     <div className="bottomNavWrap">
@@ -17,13 +18,13 @@ export default function BottomNav() {
             <li onClick={moveToMap}>
               <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_map_bt.png"} />
             </li>
-            <li onClick={memberInfo ? moveToAdd : moveToLogin}>
+            <li onClick={loginState.email ? moveToAdd : moveToLogin}>
               <img className="nav_Add_Btn" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_add_bt.png"} />
             </li>
-            <li onClick={memberInfo ? moveToMylike : moveToLogin}>
+            <li onClick={loginState.email ? moveToMylike : moveToLogin}>
               <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_bt.png"} />
             </li>
-            <li onClick={memberInfo ? moveToProfile : moveToLogin}>
+            <li onClick={loginState.email ? moveToProfile : moveToLogin}>
               <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_pro_bt.png"} />
             </li>
           </ul>

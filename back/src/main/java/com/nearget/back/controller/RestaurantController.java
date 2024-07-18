@@ -26,9 +26,15 @@ public class RestaurantController {
     // 오늘의 음식점 조회
     @PostMapping("/today")
     public List<RestaurantDTO> getTodayRestaurants(@RequestBody Double[]latlng) {
-        log.info("************ RestaurantController - getTodayRestaurants -latlng : {},{}", latlng[0], latlng[1]);
-        List<RestaurantDTO> restaurantDTOList = restaurantDataService.getTodayRestaurants(latlng[0], latlng[1]);
-        log.info("************ RestaurantController - getTodayRestaurants -restaurantDTOList : {}", restaurantDTOList);
+        return restaurantDataService.getTodayRestaurants(latlng[0], latlng[1]);
+    }
+
+    // 가격순 음식점 조회
+    @PostMapping("/price")
+    public List<RestaurantDTO> getPriceRestaurants(@RequestBody Double[]latlng) {
+        log.info("************ RestaurantController - getPriceRestaurants ***************************");
+        List<RestaurantDTO> restaurantDTOList = restaurantDataService.getPriceRestaurants(latlng[0], latlng[1]);
+        log.info("************ RestaurantController - getPriceRestaurants -restaurantDTOList : {}", restaurantDTOList);
         return restaurantDTOList;
     }
 }

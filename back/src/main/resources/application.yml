@@ -1,8 +1,8 @@
 #DB setting
 spring:
   datasource:
-    url: jdbc:mysql://comejun.ddns.net:3306/neargetapi?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&useSSL=true&rewriteBatchedStatements=true
-#    url: jdbc:mysql://localhost:3306/neargetapi?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&useSSL=true&rewriteBatchedStatements=true
+#    url: jdbc:mysql://comejun.ddns.net:3306/neargetapi?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&useSSL=true&rewriteBatchedStatements=true
+    url: jdbc:mysql://localhost:3306/neargetapi?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&useSSL=true&rewriteBatchedStatements=true
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver

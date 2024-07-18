@@ -37,3 +37,24 @@ export const disableMember = async (email) => {
     console.error("회원 탈퇴에 실패했습니다.", error);
   }
 };
+
+// 좋아요 가게 리스트 가져오기
+export const getLikeList = async (email) => {
+  try {
+    const response = await jwtAxios.get(`${host}/${email}/like`);
+    return response.data;
+  } catch (error) {
+    console.error("좋아요 리스트를 가져오는데 실패했습니다.", error);
+  }
+};
+
+// 좋아요 가게 추가/삭제
+export const modifyLikeList = async (email, restaurantId) => {
+  console.log(email, restaurantId);
+  try {
+    const response = await jwtAxios.put(`${host}/${email}/like/${restaurantId}`);
+    return response.data;
+  } catch (error) {
+    console.error("좋아요 리스트를 수정하는데 실패했습니다.", error);
+  }
+};

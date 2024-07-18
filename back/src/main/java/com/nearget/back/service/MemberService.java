@@ -5,6 +5,7 @@ import com.nearget.back.dto.DataMemberDTO;
 import com.nearget.back.dto.MemberDTO;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -38,8 +39,9 @@ public interface MemberService {
     // 회원 탈퇴
     Member disableMember(String email);
 
-    // 좋아요 추가 처리
-    void addLike(String email, Long id);
-    // 좋아요 삭제 처리
-    void deleteLike(String email, Long id);
+    // 좋아요 리스트 조회
+    List<String> getLikeList(String email);
+
+    // 좋아요 추가/삭제
+    void changeLike(String email, String restaurantId);
 }

@@ -44,7 +44,7 @@ const requestFail = (err) => {
 const beforeRes = async (res) => {
   console.log("before return response....");
 
-  console.log(res);
+  // console.log(res);
   const data = res.data; // API 서버에서 보내준 응답 데이터
   if (data && data.error === "ERROR_ACCESS_TOKEN") {
     const memberCookie = getCookie("member");

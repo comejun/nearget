@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -43,18 +44,17 @@ public class MemberController {
         return ResponseEntity.ok(updatedMember);
     }
 
-    // 좋아요 추가
-    @PostMapping("/like/{id}")
-    public ResponseEntity<?> addLike(@PathVariable Long id, @RequestParam String email) {
-        memberService.addLike(email, id);
-        return ResponseEntity.ok().build();
+    // 좋아요 리스트 조회
+    @GetMapping("/{email}/like")
+    public List<String> getLikeList(@PathVariable String email) {
+        log.info("************ MemberController - getLikeList : {}", email);
+        return memberService.getLikeList(email);
     }
 
-    // 좋아요 삭제
-    @DeleteMapping("/like/{id}")
-    public ResponseEntity<?> deleteLike(@PathVariable Long id, @RequestParam String email) {
-        memberService.deleteLike(email, id);
-        return ResponseEntity.ok().build();
+    @PutMapping("/{email}/like/{restaurantId}")
+    public void changeLike(@PathVariable String email, @PathVariable String restaurantId) {
+        // 좋아요 추가/삭제
+        memberService.changeLike(email, restaurantId);
     }
 
 }
