@@ -5,6 +5,7 @@ div.placeContentWrap{
   margin-bottom: 12px;
   img{
     width: 100%;
+    display: block;
     height: auto;
     min-height: 260px;
     max-height: 374px;
@@ -12,7 +13,16 @@ div.placeContentWrap{
     position: relative;
     border-radius: 16px;
   }
-  img.scrollContentSum::after {
+  .imagesWrapper {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 260px;
+    max-height: 374px;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .imagesWrapper::after {
     content: "";
     position: absolute;
     top: 0;
@@ -20,8 +30,9 @@ div.placeContentWrap{
     width: 100%;
     height: 100%;
     border-radius: 16px;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) -3%, rgba(0, 0, 0, 0.2) 100%);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) -3%, rgba(0, 0, 0, 0.4) 100%);
   }
+  
   h3{
     position: absolute;    
     color:#D29B65;
@@ -39,8 +50,11 @@ div.PlaceH2Wrap{
     font-size: 20px;
     font-weight: 600;
   }
-  img{
+  img.scrollContentLike{
     height:18px;
+    right: 0px;
+    top: 0px;
+    position: relative;
     cursor: pointer;
     transition: 0.2s;
   }
@@ -109,6 +123,14 @@ div.whiteArea{
     height:210px;
     border-radius: 16px;
     background-color: #dcdcdc;
+    position: relative;
+    border: 1px solid #D29B65;
+    h3{
+      width:32px;
+      position: absolute;
+      left: calc(50% - 16px);
+      top:calc(50% - 16px);
+    }
   }
   div.PlaceMapBtn{
     width: calc(100% - 32px);

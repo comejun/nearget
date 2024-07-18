@@ -51,39 +51,45 @@ div.PricebyPlaceContainer{
     }
   }
 }
-div.scrollContent{
-  img.scrollContentSum{
-    width: 310px;
-    height: auto;
-    height: 248px;
-    object-fit: cover;
-    position: relative;
-    border-radius: 16px;
-  }
-  img.scrollContentLike{
-    position: absolute;
-    top:16px;
-    right: 16px;
-    width: 21px;
-    //content: url(../../../public/assets/imgs/icon/ic_like_wh.png);
-    transition: 0.2s;
-    cursor: pointer;
-  }
-  img.scrollContentLike:hover{
-    //content: url(../../../public/assets/imgs/icon/ic_like_ac.png);
-  }
-  
-  img.scrollContentSum::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 16px;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) -3%, rgba(0, 0, 0, 0.2) 100%);
-  }
+.scrollContent {
+  position: relative;
 }
+
+.imageWrapper {
+  position: relative;
+  width: 310px;
+  height: 248px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.imageWrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) -3%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+.scrollContentSum {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scrollContentLike {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 21px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+
 div.itemTitle{
   width: 100%;
   position: absolute;
@@ -124,8 +130,17 @@ div.scrollTextLi{
     font-size: 12px;
     color:#D29B65;
     cursor: pointer;
+    width:44px;
+    text-align: right;
   }
 }
+
+div.itemTitle h3, div.itemTitle h4, div.itemTitle span, div.scrollTextLi p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 // InfinityContent
 div.InfinityContentWrap{
   width: 100%;
