@@ -45,7 +45,6 @@ public class DBSchedular {
     //    @Scheduled(cron = "0 0 0 * * *")
     @Scheduled(fixedDelay = 1000 * 60 * 60)
     public void scheduleRestaurant() {
-/*
     // 오류 발생 전까지 saveAllRestaurant page 0부터 1씩 증가하며 실행
     for (long i = 0; i < 51; i++) {
         restaurantService.saveAllRestaurant(i);
@@ -56,9 +55,9 @@ public class DBSchedular {
         Thread.sleep(1000 * 60 * 5);
     } catch (InterruptedException e) {
         e.printStackTrace();
-    }*/
-//        saveRestaurantsDataOptimized();
-//        scheduleDistrict();
+    }
+        saveRestaurantsDataOptimized();
+        scheduleDistrict();
     }
     public void scheduleDistrict() {
         for (int i = 0; i < DistrictEnum.values().length; i++) {
