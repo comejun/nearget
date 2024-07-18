@@ -11,21 +11,17 @@ export const getRestaurants = async (restaurantId) => {
 };
 
 // 오늘의 음식점 조회 요청
-export const getTodayRestaurant = async (myLocation) => {
+export const getTodayRestaurant = async (myLocation,category) => {
     const LocationData = [myLocation.lat, myLocation.lng];
-    console.log(LocationData)
 
-    const response = await axios.post(`${host}/today`,LocationData);
-    console.log(response.data);
+    const response = await axios.post(`${host}/today/${category}`,LocationData);
     return response.data;
 };
 
 // 가격별 음식점 조회 요청
-export const getPriceRestaurant = async (myLocation) => {
+export const getPriceRestaurant = async (myLocation,category) => {
     const LocationData = [myLocation.lat, myLocation.lng];
-    console.log(LocationData)
 
-    const response = await axios.post(`${host}/price`,LocationData);
-    console.log(response.data);
+    const response = await axios.post(`${host}/price/${category}`,LocationData);
     return response.data;
 };

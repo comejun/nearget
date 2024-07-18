@@ -9,7 +9,7 @@ public interface RestaurantDataService {
     RestaurantDTO getRestaurant(Long restaurantId);
 
     // 오늘의 음식점 조회
-    List<RestaurantDTO> getTodayRestaurants(Double lat, Double lng);
+    List<RestaurantDTO> getTodayRestaurants(Double lat, Double lng, String category);
     // 가격순 음식점 조회
-    List<RestaurantDTO> getPriceRestaurants(Double lat, Double lng);
+    List<RestaurantDTO> getPriceRestaurants(Double lat, Double lng, String category);
 }
