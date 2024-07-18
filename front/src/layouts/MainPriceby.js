@@ -1,17 +1,19 @@
 import React, {useEffect, useState} from "react";
 import {getPriceRestaurant} from "../api/RestaurantAPI";
 import PlaceCard from "../components/common/PlaceCard";
+import {useSelector} from "react-redux";
 
 export default function MainPriceby({likeList, myLocation}) {
 
     const [priceBy, setPriceBy] = useState([])
+    const category = useSelector((state) => state.categorySlice.category);
+
 
     // 오늘의 음식점 가져오기
     useEffect(() => {
         const fetchPriceBy = async () => {
-            const priceGet = await getPriceRestaurant(myLocation);
+            const priceGet = await getPriceRestaurant(myLocation,category);
             setPriceBy(priceGet);
-            console.log(priceGet);
         };
         fetchPriceBy();
     }, []);

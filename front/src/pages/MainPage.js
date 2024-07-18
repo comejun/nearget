@@ -8,7 +8,6 @@ import MainPriceby from "../layouts/MainPriceby";
 import InfinityContent from "../layouts/InfinityContent";
 import useCustomMap from "../hooks/useCustomMap";
 import LoadingPage from "../components/common/LoadingPage";
-import {getTodayRestaurant} from "../api/RestaurantAPI";
 import {getLikeList} from "../api/memberAPI";
 
 const MainPage = () => {
@@ -17,13 +16,14 @@ const MainPage = () => {
     const {myLocation} = useCustomMap();
     const [nowMyLocation, setNowMyLocation] = useState()
     const loginState = useSelector((state) => state.loginSlice);
+
     const [likeList, setLikeList] = useState()
     // 처음 현위치 받아오면
     useEffect(() => {
         if (myLocation.isLoaded && myLocation.get) {
             setNowMyLocation(myLocation);
         }
-    }, [myLocation.isLoaded]);
+    }, [myLocation.isLoaded,likeList]);
 
     // 로그인시 좋아요 리스트 가져오기
     useEffect(() => {

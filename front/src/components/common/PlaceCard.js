@@ -39,7 +39,6 @@ const PlaceCard = ({likeList, restaurant}) => {
         setIsLike(likeList ? likeList.some((like) => like === restaurant.strId) : false);
     }, []);
 
-    console.log(isLike)
 
     const clickedLikeBtn = (strId) => {
         if (loginState.email) {

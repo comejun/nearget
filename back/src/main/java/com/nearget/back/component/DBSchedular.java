@@ -4,6 +4,7 @@ import com.nearget.back.domain.*;
 import com.nearget.back.repository.RestaurantsDataRepository;
 import com.nearget.back.repository.RestaurantsRepository;
 import com.nearget.back.service.DistrictService;
+import com.nearget.back.service.RestaurantDataService;
 import com.nearget.back.service.RestaurantService;
 import com.nearget.back.service.SmallDistrictService;
 import lombok.RequiredArgsConstructor;
@@ -35,12 +36,14 @@ public class DBSchedular {
     private final SmallDistrictService smallDistrictService;
     private final RestaurantsRepository restaurantsRepository;
     private final RestaurantsDataRepository restaurantsDataRepository;
+    private final RestaurantDataService restaurantDataService;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     private ForkJoinPool customThreadPool = new ForkJoinPool(10); // 클래스 레벨로 이동
 
+    /*
     // 매일 0시 0분 0초에 실행
     //    @Scheduled(cron = "0 0 0 * * *")
     @Scheduled(fixedDelay = 1000 * 60 * 60)
@@ -81,7 +84,7 @@ public class DBSchedular {
             pageRequest = pageRequest.next();
         } while (!restaurants.isEmpty());
     }
-
+*/
     @Transactional(propagation = Propagation.REQUIRES_NEW) // 각 페이지 처리마다 별도의 트랜잭션 시작
     public void processAndSaveRestaurantsPage(List<Restaurant> restaurants) {
         List<RestaurantsData> restaurantsData = customThreadPool.submit(() ->
@@ -99,69 +102,32 @@ public class DBSchedular {
         restaurantsDataRepository.saveAll(restaurantsData);
     }
 
-
-/*
-    // RestaurantsData에 RestaurantImage가 비어있는 경우 RestaurantImage를 추가하는 함수
-    @Scheduled(fixedDelay = 1000 * 60 * 60)
-    public void addRestaurantImage() {
-        int pageSize = 50; // 적절한 페이지 크기 설정
-        int page = 0;
-        Pageable pageable = PageRequest.of(page, pageSize);
-        List<RestaurantsData> pageData;
-
-
-        do {
-            pageData = restaurantsDataRepository.findAll(pageable).getContent();
-            List<CompletableFuture<Void>> futures = pageData.stream()
-                    .filter(restaurantData -> restaurantData.getRestaurantImage() == null || restaurantData.getRestaurantImage().isEmpty())
-                    .map(restaurantData -> CompletableFuture.supplyAsync(() -> {
-                        try {
-                            // 랜덤 딜레이 추가
-                            int delay = (int) (Math.random() * 1000);
-                            Thread.sleep(delay); // 요청 간격 조절
-                            return getRestaurantImageAsync(restaurantData.getRestaurantAddress().split(" ")[2] + " " + restaurantData.getRestaurantName()).join();
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                            return null;
-                        }
-                    }).thenAccept(restaurantImage -> {
-                        synchronized (restaurantData) {
-                            restaurantData.changeRestaurantImage(restaurantImage);
-                        }
-                    }))
-                    .collect(Collectors.toList());
-
-            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
-            restaurantsDataRepository.saveAll(pageData);
-            pageable = pageable.next();
-        } while (!pageData.isEmpty());
-    }*/
-
-
-   /* // Jsoup을 이용하여 식당 이미지를 크롤링하여 반환하는 함수
-    public CompletableFuture<String> getRestaurantImageAsync(String searchText) {
-        return CompletableFuture.supplyAsync(() -> {
+    public static Double distanceValue = 0.009;
+    // 작업이 끝난후 2초 마다 실행
+   /* @Scheduled(fixedDelay = 1000)
+    public void addImage(){
+        Double lat = 37.55498771600092;
+        Double lng = 126.93601217931102;
+        List<RestaurantsData> restaurantsDataList = restaurantsDataRepository.findByLatBetweenAndLngBetweenAndRestaurantImage(lat-distanceValue, lat+distanceValue, lng-distanceValue, lng+distanceValue);
+        if(restaurantsDataList.size() == 0){
+            distanceValue += 0.009;
+        }
+        for(RestaurantsData restaurantsData : restaurantsDataList){
+           restaurantDataService.getRestaurant(restaurantsData.getId());
+            // 2000부터 5000사이 랜덤값
+            int randomValue = (int) (Math.random() * 3000) + 2000;
+            // 랜덤 시간 딜레이
             try {
-                String url = "https://m.search.naver.com/search.naver?sm=mtb_sly.hst&where=m&ssc=tab.m.all&oquery=&tqi=ipfL%2FdqVbxVss55cmVossssstjG-030495&query=" + searchText;
-                log.info(searchText);
-                Document doc = Jsoup.connect(url)
-                        .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3")
-                        .referrer("http://www.google.com")
-                        .get();
-                // Assuming the image URL is in an <img> tag within a specific class or ID
-
-                Elements elements = doc.select("#_autoPlayable > img");
-                if (!elements.isEmpty()) {
-                    return elements.get(0).attr("src");
-                } else {
-                    return "없음";
-                }
-            } catch (Exception e) {
+                Thread.sleep(randomValue);
+            } catch (InterruptedException e) {
                 e.printStackTrace();
-                return "오류";
             }
-        });
+           return;
+        }
+
     }*/
+
+
 
 
     /*@Scheduled(fixedDelay = 1000 * 60 * 60)
