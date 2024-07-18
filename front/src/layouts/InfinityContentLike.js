@@ -1,63 +1,44 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import {useSelector} from "react-redux";
+import React, {useEffect, useState} from "react";
+import useCustomMap from "../hooks/useCustomMap";
+import {getLikeListDetail} from "../api/memberAPI";
+import MiniPlaceCard from "../components/common/MiniPlaceCard";
+import PlaceCard from "../components/common/PlaceCard";
 
 export default function InfinityContentLike() {
+
+  const loginState = useSelector((state) => state.loginSlice);
+  const [nowMyLocation, setNowMyLocation] = useState()
+  const {myLocation} = useCustomMap();
+  const [likeList, setLikeList] = useState()
+
+  // 처음 현위치 받아오면
+  useEffect(() => {
+    if (myLocation.isLoaded && myLocation.get) {
+      setNowMyLocation(myLocation);
+    }
+  }, [myLocation.isLoaded,likeList]);
+
+  useEffect(() => {
+    if(loginState&&nowMyLocation){
+      const fetchTLikeList = async () => {
+        const likeListGet = await getLikeListDetail(loginState.email,nowMyLocation);
+        setLikeList(likeListGet);
+        console.log(likeListGet);
+      };
+      fetchTLikeList();
+    }
+  }, [loginState,nowMyLocation]);
+
   return (
     <div className="InfinityContentWrap">
       <div className="InfinityContent">
         <ul>
-          <li>
-            <img className="InfinityContentSum" src={process.env.PUBLIC_URL + "/assets/imgs/sample2.png"} />
-            <img className="scrollContentLike" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_wh.png"} />
-            <div className="infinityItemTitle">
-              <div>
-                <h4>양식</h4>
-                <span>
-                  0.14<span>Km</span>
-                </span>
-              </div>
-            </div>
-            <h3>바베큐집</h3>
-          </li>
-          <li>
-            <img className="InfinityContentSum" src={process.env.PUBLIC_URL + "/assets/imgs/sample.png"} />
-            <img className="scrollContentLike" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_wh.png"} />
-            <div className="infinityItemTitle">
-              <div>
-                <h4>양식</h4>
-                <span>
-                  0.14<span>Km</span>
-                </span>
-              </div>
-            </div>
-            <h3>라칸티나</h3>
-          </li>
-          <li>
-            <img className="InfinityContentSum" src={process.env.PUBLIC_URL + "/assets/imgs/sample3.png"} />
-            <img className="scrollContentLike" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_wh.png"} />
-            <div className="infinityItemTitle">
-              <div>
-                <h4>양식</h4>
-                <span>
-                  0.14<span>Km</span>
-                </span>
-              </div>
-            </div>
-            <h3>바베큐집</h3>
-          </li>
-          <li>
-            <img className="InfinityContentSum" src={process.env.PUBLIC_URL + "/assets/imgs/sample.png"} />
-            <img className="scrollContentLike" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_wh.png"} />
-            <div className="infinityItemTitle">
-              <div>
-                <h4>양식</h4>
-                <span>
-                  0.14<span>Km</span>
-                </span>
-              </div>
-            </div>
-            <h3>바베큐집</h3>
-          </li>
+          {likeList && likeList.map((restaurant, index) => (
+              <li key={restaurant.strId}> {/* restaurant.id가 고유 식별자라고 가정 */}
+                <MiniPlaceCard likeList={likeList} restaurant={restaurant}/>
+              </li>
+          ))}
         </ul>
       </div>
     </div>

@@ -1,5 +1,6 @@
 package com.nearget.back.service;
 
+import com.nearget.back.domain.Category;
 import com.nearget.back.domain.RestaurantsData;
 import com.nearget.back.dto.RestaurantDTO;
 import com.nearget.back.dto.RestaurantMenuDto;
@@ -66,13 +67,11 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
             restaurantsDataList = restaurantsDataRepository.findTop5ByLatBetweenAndLngBetween(lat1, lat2, lng1, lng2);
         }
         else{
-            restaurantsDataList = restaurantsDataRepository.findTop5ByLatBetweenAndLngBetween(lat1, lat2, lng1, lng2);
+            Category category1= Category.FASTFOOD;
+            log.info("category1 : {}", category1);
+            restaurantsDataList = restaurantsDataRepository.findTop5ByLatBetweenAndLngBetweenAndCategory(lat1, lat2, lng1, lng2, category);
+
         }
-
-
-
-
-
 
         // restaurantsDataList를 List<RestaurantDTO>로 변환
         List<RestaurantDTO> restaurantDTOList = new ArrayList<>();
@@ -99,7 +98,18 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
         Double lng2 = lng + 0.018;
 
         // 가격순 음식점 조회
-        List<RestaurantsData> restaurantsDataList = restaurantsDataRepository.findByLatBetweenAndLngBetweenOrderByMenu(lat1, lat2, lng1, lng2);
+        List<RestaurantsData> restaurantsDataList = new ArrayList<>();
+
+        if(category.equals("ALL")){
+            // 가격별 음식점 전체 조회
+            restaurantsDataList = restaurantsDataRepository.findByLatBetweenAndLngBetweenOrderByMenu(lat1, lat2, lng1, lng2);
+        }
+        else{
+            restaurantsDataList = restaurantsDataRepository.findByLatBetweenAndLngBetweenAndCategoryOrderByMenu(lat1, lat2, lng1, lng2, category);
+            // menulist가 1개 이상인 음식점만 필터링
+            restaurantsDataList.removeIf(restaurantsData -> restaurantsData.getMenuList().size() < 1);
+        }
+
         // restaurantsDataList를 List<RestaurantDTO>로 변환
         List<RestaurantDTO> restaurantDTOList = new ArrayList<>();
         for (RestaurantsData restaurantsData : restaurantsDataList) {

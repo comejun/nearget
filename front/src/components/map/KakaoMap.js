@@ -201,9 +201,6 @@ const KakaoMap = () => {
             }}
         >
 
-
-
-
         </div>)
 }
 export default KakaoMap

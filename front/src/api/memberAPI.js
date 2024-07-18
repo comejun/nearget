@@ -48,6 +48,13 @@ export const getLikeList = async (email) => {
   }
 };
 
+// 좋아요 가게 리스트 자세히 가져오기
+export const getLikeListDetail = async (email,myLocation) => {
+  const LocationData = [myLocation.lat, myLocation.lng];
+    const response = await jwtAxios.post(`${host}/${email}/likedetail`,LocationData);
+    return response.data;
+};
+
 // 좋아요 가게 추가/삭제
 export const modifyLikeList = async (email, restaurantId) => {
   console.log(email, restaurantId);

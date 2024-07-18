@@ -33,9 +33,9 @@ public class RestaurantController {
     // 가격순 음식점 조회
     @PostMapping("/price/{category}")
     public List<RestaurantDTO> getPriceRestaurants(@RequestBody Double[]latlng, @PathVariable("category") String category) {
-        log.info("************ RestaurantController - getTodayRestaurants - category : {}", category);
+        log.info("************ RestaurantController - getPriceRestaurants - category : {}", category);
         List<RestaurantDTO> restaurantDTOList = restaurantDataService.getPriceRestaurants(latlng[0], latlng[1], category);
-        log.info("************ RestaurantController - getPriceRestaurants -restaurantDTOList : {}", restaurantDTOList);
+//        log.info("************ RestaurantController - getPriceRestaurants -restaurantDTOList : {}", restaurantDTOList);
         return restaurantDTOList;
     }
 }

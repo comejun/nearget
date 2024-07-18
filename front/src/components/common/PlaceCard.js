@@ -1,4 +1,8 @@
 import useCustomMove from "../../hooks/useCustomMove";
+import {useSelector} from "react-redux";
+import React, {useEffect, useState} from "react";
+import {getTodayRestaurant} from "../../api/RestaurantAPI";
+import {modifyLikeList} from "../../api/memberAPI";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getTodayRestaurant } from "../../api/RestaurantAPI";
@@ -49,40 +53,37 @@ const PlaceCard = ({ likeList, restaurant }) => {
     }
   };
 
-  return (
-    <div className="scrollContent">
-      <div className="imageWrapper" onClick={() => moveToPlace(restaurant.strId)}>
-        <img className="scrollContentSum" src={restaurant.image} alt="restaurant" />
-      </div>
-      {/* <img onClick={() => moveToPlace(restaurant.strId)} className="scrollContentSum" src={restaurant.image} /> */}
-      {loginState.email ? (
-        <img
-          onClick={() => clickedLikeBtn(restaurant.strId)}
-          className="scrollContentLike"
-          src={process.env.PUBLIC_URL + (isLike ? "/assets/imgs/icon/ic_like_ac.png" : "/assets/imgs/icon/ic_like_wh.png")}
-          alt="like"
-        />
-      ) : (
-        <></>
-      )}
-      <div className="itemTitle">
-        <div>
-          <h3>{restaurant.name}</h3>
-          <span>
-            {/*정수로 출력*/}
-            {parseInt(restaurant.distance)}
-            <span>M</span>
-          </span>
+    return (
+        <div className="scrollContent">
+            <img onClick={() => moveToPlace(restaurant.strId)} className="scrollContentSum" src={restaurant.image}/>
+            {loginState.email ? (
+                <img onClick={()=>clickedLikeBtn(restaurant.strId)} className="scrollContentLike"
+                     src={process.env.PUBLIC_URL + (isLike ? "/assets/imgs/icon/ic_like_ac.png" : "/assets/imgs/icon/ic_like_wh.png")}
+                     alt="like"/>
+            ) : (
+                <></>
+            )}
+            <div className="itemTitle">
+                <div>
+                    <h3>{restaurant.name}</h3>
+                    <span>
+                        {/*정수로 출력*/}
+                        {parseInt(restaurant.distance) > 1000?
+                            // 소숫점 두자리까지만 출력
+                            (parseInt(restaurant.distance) / 1000).toFixed(2)
+                            : parseInt(restaurant.distance)}
+                        {parseInt(restaurant.distance) > 1000 ? <span>KM</span> : <span>M</span>}
+                  </span>
+                </div>
+                <div>
+                    <h4>{getCategoryValue(restaurant.category)}</h4>
+                    <span>
+                    <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_sm.png"} alt="like"/>
+                    <span>{restaurant.likeCount}</span>
+                  </span>
+                </div>
+            </div>
         </div>
-        <div>
-          <h4>{getCategoryValue(restaurant.category)}</h4>
-          <span>
-            <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_sm.png"} alt="like" />
-            <span>{restaurant.likeCount}</span>
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-};
-export default PlaceCard;
+    )
+}
+export default PlaceCard
