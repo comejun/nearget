@@ -50,7 +50,7 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
     }
 
     @Override
-    public List<RestaurantDTO> getTodayRestaurants(Double lat, Double lng) {
+    public List<RestaurantDTO> getTodayRestaurants(Double lat, Double lng, String category) {
 
 
         // lat lng을 기준으로 1km 좌표값 계산
@@ -59,8 +59,21 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
         Double lng1 = lng - 0.009;
         Double lng2 = lng + 0.009;
 
-        // 오늘의 음식점 조회
-        List<RestaurantsData> restaurantsDataList = restaurantsDataRepository.findTop5ByLatBetweenAndLngBetween(lat1, lat2, lng1, lng2);
+        List<RestaurantsData>restaurantsDataList = new ArrayList<>();
+
+        if(category.equals("ALL")){
+            // 오늘의 음식점 전체 조회
+            restaurantsDataList = restaurantsDataRepository.findTop5ByLatBetweenAndLngBetween(lat1, lat2, lng1, lng2);
+        }
+        else{
+            restaurantsDataList = restaurantsDataRepository.findTop5ByLatBetweenAndLngBetween(lat1, lat2, lng1, lng2);
+        }
+
+
+
+
+
+
         // restaurantsDataList를 List<RestaurantDTO>로 변환
         List<RestaurantDTO> restaurantDTOList = new ArrayList<>();
         for (RestaurantsData restaurantsData : restaurantsDataList) {
@@ -77,7 +90,7 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
     }
 
     @Override
-    public List<RestaurantDTO> getPriceRestaurants(Double lat, Double lng) {
+    public List<RestaurantDTO> getPriceRestaurants(Double lat, Double lng, String category) {
 
         // lat lng을 기준으로 2km 좌표값 계산
         Double lat1 = lat - 0.018;
@@ -109,6 +122,10 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
         }
         // 가격 낮은순으로 정렬
         restaurantDTOList.sort((o1, o2) -> o1.getAvgPrice().compareTo(o2.getAvgPrice()));
+        // 10개까지만 반환
+        if (restaurantDTOList.size() > 10) {
+            return restaurantDTOList.subList(0, 10);
+        }
         return restaurantDTOList;
     }
 
@@ -144,10 +161,12 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
                 return restaurantDTO;
             }
             String restaurantName = element.select("#_title > a > span.GHAhO").text();
-            restaurantDTO.changeName(restaurantName);
+            if(!restaurantName.equals("") || !restaurantName.isEmpty()){
+                restaurantDTO.changeName(restaurantName);
+            }
 
             if(element.select(("#_autoPlayable > img")).first() == null){
-                restaurantDTO.changeImage("이미지없음");
+                restaurantDTO.changeImage("없음");
             }
             else {
 

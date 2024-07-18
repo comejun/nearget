@@ -24,16 +24,17 @@ public class RestaurantController {
     }
 
     // 오늘의 음식점 조회
-    @PostMapping("/today")
-    public List<RestaurantDTO> getTodayRestaurants(@RequestBody Double[]latlng) {
-        return restaurantDataService.getTodayRestaurants(latlng[0], latlng[1]);
+    @PostMapping("/today/{category}")
+    public List<RestaurantDTO> getTodayRestaurants(@RequestBody Double[]latlng, @PathVariable("category") String category) {
+        log.info("************ RestaurantController - getTodayRestaurants - category : {}", category);
+        return restaurantDataService.getTodayRestaurants(latlng[0], latlng[1], category);
     }
 
     // 가격순 음식점 조회
-    @PostMapping("/price")
-    public List<RestaurantDTO> getPriceRestaurants(@RequestBody Double[]latlng) {
-        log.info("************ RestaurantController - getPriceRestaurants ***************************");
-        List<RestaurantDTO> restaurantDTOList = restaurantDataService.getPriceRestaurants(latlng[0], latlng[1]);
+    @PostMapping("/price/{category}")
+    public List<RestaurantDTO> getPriceRestaurants(@RequestBody Double[]latlng, @PathVariable("category") String category) {
+        log.info("************ RestaurantController - getTodayRestaurants - category : {}", category);
+        List<RestaurantDTO> restaurantDTOList = restaurantDataService.getPriceRestaurants(latlng[0], latlng[1], category);
         log.info("************ RestaurantController - getPriceRestaurants -restaurantDTOList : {}", restaurantDTOList);
         return restaurantDTOList;
     }
