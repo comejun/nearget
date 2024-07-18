@@ -121,30 +121,40 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
                 restaurantDTO.changeImage(imgSrc);
             }
 
-            // 마지막 하나 전의 div 태그 선택
-            Elements menu = element.select("div.place_section_content");
+           /* Elements menu = element.select("div.place_section_content");
             log.info("menu : {}", menu);
-            Element menuElement = menu.select("ul").first();
-            log.info("menuElement : {}", menuElement);
-            Elements liElements = menuElement.select("li");
-            List<RestaurantMenuDto> menuList = new ArrayList<>();
-            for (Element menuItem : liElements) {
-                log.info("menuItem : {}", menuItem);
-                // li 태그 안에 place_bluelink 클래스 가지고 있는 a태그 선택
-                String itemName = menuItem.select( "span").text();
-                if (itemName.equals("") || itemName.isEmpty() || itemName.equals("사진")){
-                    itemName = menuItem.select("a.place_bluelink").first().text();
-                }
-                String itemPrice = menuItem.select("em").text();
-                // itemPrice에서 숫자 외의 문자 제거
-                itemPrice = itemPrice.replaceAll("[^0-9]", "");
-                int price = Integer.parseInt(itemPrice);
+            Elements menuElement = menu.select("ul");
+*/
+            List<RestaurantMenuDto> menuList = null;
 
-                RestaurantMenuDto restaurantMenuDto = new RestaurantMenuDto(itemName, price);
-                menuList.add(restaurantMenuDto);
+            try {
+//            jnwQZ t1osG Jp8E6
+                Element menuElement = element.select("ul.jnwQZ, ul.t1osG, ul.Jp8E6.a0hWz").first();
+
+                log.info("menuElement : {}", menuElement);
+                Elements liElements = menuElement.select("li");
+                menuList = new ArrayList<>();
+                for (Element menuItem : liElements) {
+                    log.info("menuItem : {}", menuItem);
+                    // li 태그 안에 place_bluelink 클래스 가지고 있는 a태그 선택
+                    String itemName = menuItem.select( "span").text();
+                    if (itemName.equals("") || itemName.isEmpty() || itemName.equals("사진")){
+                        itemName = menuItem.select("a.place_bluelink").first().text();
+                    }
+                    String itemPrice = menuItem.select("em").text();
+                    // itemPrice에서 숫자 외의 문자 제거
+                    itemPrice = itemPrice.replaceAll("[^0-9]", "");
+                    int price = Integer.parseInt(itemPrice);
+
+                    RestaurantMenuDto restaurantMenuDto = new RestaurantMenuDto(itemName, price);
+                    menuList.add(restaurantMenuDto);
+                    restaurantDTO.changeMenuList(menuList);
+
+                }
+            } catch (Exception e) {
+                log.info("menu is null");
             }
 
-            restaurantDTO.changeMenuList(menuList);
 
 
             if (element.select("div.place_section_content > div > div.O8qbU.nbXkr > div > span").first() == null){
