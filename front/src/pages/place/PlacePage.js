@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { getKakaoLoginLink } from "../../api/kakaoAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
 import InfinityContent from "../../layouts/InfinityContent";
@@ -8,17 +7,17 @@ import { getRestaurants } from "../../api/RestaurantAPI";
 import LoadingPage from "../../components/common/LoadingPage";
 import { getLikeList, modifyLikeList } from "../../api/memberAPI";
 import { useSelector } from "react-redux";
+import UseCustomMove from "../../hooks/useCustomMove";
 
 const { kakao } = window;
 
 const PlacePage = () => {
-  const kakaoLoginLink = getKakaoLoginLink();
   const loginState = useSelector((state) => state.loginSlice);
   const { restaurantId } = useParams();
+  const { moveToGet } = UseCustomMove();
   const [restaurantData, setRestaurantData] = useState();
   const [isLike, setIsLike] = useState();
   const [likeList, setLikeList] = useState();
-
   const getCategoryValue = (category) => {
     if (category === "WESTERN") {
       return "양식";
@@ -112,7 +111,7 @@ const PlacePage = () => {
         <>
           <div className="placeContentWrap">
             <div className="imagesWrapper">
-              {restaurantData.image === "없음" || restaurantData.image === "이미지없음" ? <img src={process.env.PUBLIC_URL + "/assets/imgs/sample.png"} /> : <img src={restaurantData.image} />}
+              {restaurantData.image === "없음" || restaurantData.image === "이미지없음" ? <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/NoImg.png"} /> : <img src={restaurantData.image} />}
             </div>
             <h3>{getCategoryValue(restaurantData.category)}</h3>
           </div>
@@ -205,7 +204,7 @@ const PlacePage = () => {
           ) : (
             <div className="bottomBtnWrap">
               <div className="bottomBtnContent">
-                <button>Get</button>
+                <button onClick={() => moveToGet(restaurantData.strId)}>Get</button>
               </div>
             </div>
           )}
