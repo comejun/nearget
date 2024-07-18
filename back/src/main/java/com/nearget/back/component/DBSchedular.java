@@ -52,7 +52,7 @@ public class DBSchedular {
 
     // 2분 뒤에 실행
     try {
-        Thread.sleep(1000 * 60 * 5);
+        Thread.sleep(1000 * 60 * 10);
     } catch (InterruptedException e) {
         e.printStackTrace();
     }
