@@ -27,13 +27,14 @@ public class RestaurantsGroup {
     @JoinColumn(name = "email")
     private Member member; // 회원
 
-    @ElementCollection
+    @OneToMany
     @Builder.Default
-    private List<Restaurant> restaurantList = new ArrayList<>(); // 식당 리스트
+    private List<RestaurantsData> restaurantList = new ArrayList<>();
+
 
     // ** 식당 리스트에 추가 ** //
-    public void addRestaurant(Restaurant restaurant) {
-        this.restaurantList.add(restaurant);
+    public void addRestaurant(RestaurantsData restaurantsData) {
+        this.restaurantList.add(restaurantsData);
     }
 
     // ** 식당 그룹 수정 ** //

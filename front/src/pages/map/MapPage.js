@@ -21,7 +21,7 @@ const MapPage = () => {
     <BasicLayout>
       <HeaderMap />
       <div className="MapContainer">
-          <KakaoMap />
+        <KakaoMap />
       </div>
       <BottomNav />
     </BasicLayout>

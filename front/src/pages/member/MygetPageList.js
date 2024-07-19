@@ -4,7 +4,7 @@ import BottomNav from "../../layouts/BottomNav";
 import InfinityContentGet from "../../layouts/InfinityContentGet";
 import UseCustomMove from "../../hooks/useCustomMove";
 
-const MyGetPage = () => {
+const MyGetListPage = () => {
   const { moveToAdd } = UseCustomMove();
 
   return (
@@ -20,4 +20,4 @@ const MyGetPage = () => {
     </BasicLayout>
   );
 };
-export default MyGetPage;
+export default MyGetListPage;

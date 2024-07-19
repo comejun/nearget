@@ -34,8 +34,11 @@ const UseCustomMove = () => {
   const moveToMylike = () => {
     navigate("/member/mylike");
   };
-  const moveToMyget = () => {
+  const moveToMygetList = () => {
     navigate("/member/myget");
+  };
+  const moveTomygetGroup = (groupId) => {
+    navigate(`/member/myget/${groupId}`);
   };
 
   return {
@@ -49,7 +52,8 @@ const UseCustomMove = () => {
     moveToProfile,
     moveToProfileEdit,
     moveToMylike,
-    moveToMyget,
+    moveToMygetList,
+    moveTomygetGroup,
   };
 };
 export default UseCustomMove;

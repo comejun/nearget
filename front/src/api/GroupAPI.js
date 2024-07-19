@@ -1,7 +1,7 @@
 import { API_SERVER_HOST } from "../staticData";
 import axios from "axios";
 
-export const host = `${API_SERVER_HOST}/api/place`;
+export const host = `${API_SERVER_HOST}/api/group`;
 
 // 등록 요청
 export const postAdd = async (RestaurantsGroup) => {
@@ -9,5 +9,29 @@ export const postAdd = async (RestaurantsGroup) => {
   const response = await axios.post(`${host}/add`, RestaurantsGroup, header);
   return response.data;
 };
+
+// 그룹안에 음식점 등록 요청
+export const addGroupData = async (addData) => {
+    const response = await axios.post(`${host}/groups/adddata`, addData);
+    return response.data;
+};
+
+// 그룹 목록 조회 요청
+export const getGroupsList = async (email) => {
+  const response = await axios.get(`${host}/groups?email=${email}`);
+  return response.data;
+};
+
+// 그룹 조회 요청
+export const getGroup = async (groupId) => {
+    const response = await axios.get(`${host}/group/${groupId}`);
+    return response.data;
+    };
+
+// 그룹 안의  리스트 조회 요청
+export const getGroupList = async (groupId) => {
+    const response = await axios.get(`${host}/group/${groupId}/list`);
+    return response.data;
+    };
 
 
