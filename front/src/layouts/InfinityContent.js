@@ -3,7 +3,7 @@ import useCustomMap from "../hooks/useCustomMap";
 import {useSelector} from "react-redux";
 import {getNeatListDetail} from "../api/RestaurantAPI";
 import MiniPlaceCard from "../components/common/MiniPlaceCard";
-import {getLikeList} from "../api/memberAPI";
+import {getLikeList, getLikeListDetail} from "../api/memberAPI";
 
 
 export default function InfinityContent() {
@@ -14,6 +14,7 @@ export default function InfinityContent() {
   const [nowMyLocation, setNowMyLocation] = useState()
   const {myLocation} = useCustomMap();
   const [nearByList, setNearByList] = useState()
+
 
   // 처음 현위치 받아오면
   useEffect(() => {
@@ -34,14 +35,15 @@ export default function InfinityContent() {
 
   // 로그인시 좋아요 리스트 가져오기
   useEffect(() => {
-    if(loginState.email){
+    if(loginState&&nowMyLocation){
       const fetchTLikeList = async () => {
-        const likeListGet = await getLikeList(loginState.email);
+        const likeListGet = await getLikeListDetail(loginState.email,nowMyLocation);
         setLikeList(likeListGet);
+        console.log(likeListGet);
       };
       fetchTLikeList();
     }
-  }, [loginState.email]);
+  }, [loginState,nowMyLocation]);
 
 
   return (

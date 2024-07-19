@@ -34,6 +34,7 @@ const MiniPlaceCard = ({restaurant, likeList}) => {
             return "분식";
         }
     }
+
     const clickedLikeBtn = (strId) => {
         if (loginState.email) {
             const fetchLikeList = async () => {
@@ -45,8 +46,11 @@ const MiniPlaceCard = ({restaurant, likeList}) => {
     }
 
     useEffect(() => {
-        setIsLike(likeList ? likeList.some((like) => like === restaurant.strId) : false);
-    }, []);
+        if(likeList){
+            setIsLike(likeList ? likeList.some((like) => like.strId === restaurant.strId) : false);
+            console.log(likeList ? likeList.some((like) => like.strId === restaurant.strId) : false)
+        }
+    }, [likeList]);
 
     return (
         <div>

@@ -101,7 +101,7 @@ public class DBSchedular {
 
         restaurantsDataRepository.saveAll(restaurantsData);
     }
-
+/*
     public static Double distanceValue = 0.009;
     // 작업이 끝난후 2초 마다 실행
     @Scheduled(fixedDelay = 1000)
@@ -125,7 +125,7 @@ public class DBSchedular {
            return;
         }
 
-    }
+    }*/
 
 
 
