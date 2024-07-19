@@ -12,7 +12,7 @@ import { logout } from "../../slices/loginSlice";
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const kakaoLoginLink = getKakaoLoginLink();
-  const { moveToProfileEdit, moveToMylike, moveToMyget, moveToMain } = UseCustomMove();
+  const { moveToProfileEdit, moveToMylike, moveToMygetList, moveToMain } = UseCustomMove();
   // 현재 로그인 된 회원의 이메일 가져오기
   const userEmail = useSelector((state) => state.loginSlice.email);
 
@@ -57,7 +57,7 @@ const ProfilePage = () => {
         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/h2_MyLike.png"} />
         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_aro.png"} />
       </div>
-      <div onClick={moveToMyget} className="ProfileListWrap">
+      <div onClick={moveToMygetList} className="ProfileListWrap">
         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/h2_MyGet.png"} />
         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_aro.png"} />
       </div>

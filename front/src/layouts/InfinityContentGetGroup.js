@@ -1,24 +1,60 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import useCustomMove from "../hooks/useCustomMove";
 
-export default function InfinityContentGetGroup() {
+export default function InfinityContentGetGroup({restaurantsList}) {
+
+  const {moveToPlace} = useCustomMove();
+  const getCategoryValue = (category) => {
+    if (category === "WESTERN") {
+      return "양식";
+    }
+    if (category === "CAFE") {
+      return "카페";
+    }
+    if (category === "KOREAN") {
+      return "한식";
+    }
+    if (category === "CHINESE") {
+      return "중식";
+    }
+    if (category === "JAPANESE") {
+      return "일식";
+    }
+    if (category === "FASTFOOD") {
+      return "패스트푸드";
+    }
+    if (category === "PUB") {
+      return "술집";
+    }
+    if (category === "STREET") {
+      return "분식";
+    }
+  }
+
+
+
   return (
     <div className="InfinityContentWrap">
       <div className="InfinityContent">
         <ul>
-          <li>
-            <img className="InfinityContentSum" src={process.env.PUBLIC_URL + "/assets/imgs/sample2.png"} />
-            <img className="GetDeleteBtn" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_del.png"} />
-            <div className="infinityItemTitle">
-              <div>
-                <h4>양식</h4>
-                <span>
-                  0.14<span>Km</span>
-                </span>
-              </div>
-            </div>
-            <h3>바베큐집</h3>
-          </li>
+
+          {restaurantsList.map((restaurant) => (
+
+              <li>
+                <img onClick={() => moveToPlace(restaurant.strId)} className="InfinityContentSum"
+                     src={restaurant.image}/>
+                {/*<img className="InfinityContentSum" src={process.env.PUBLIC_URL + "/assets/imgs/sample2.png"}/>*/}
+                <img className="GetDeleteBtn" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_del.png"}/>
+                <div className="infinityItemTitle">
+                  <div>
+                    <h4>{getCategoryValue(restaurant.category)}</h4>
+                  </div>
+                </div>
+                <h3>{restaurant.name}</h3>
+              </li>
+          ))}
+
         </ul>
       </div>
     </div>
