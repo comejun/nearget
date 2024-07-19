@@ -13,7 +13,7 @@ const initState = {
 };
 
 const AddPage = () => {
-  const { moveToMyget } = UseCustomMove();
+  const { moveToMygetList } = UseCustomMove();
   const userEmail = useSelector((state) => state.loginSlice.email);
 
   // 그룹 저장값 state
@@ -72,7 +72,7 @@ const AddPage = () => {
     postAdd(formData).then((data) => {
       console.log("postAdd result : ", data);
       alert("저장완료");
-      moveToMyget();
+      moveToMygetList();
     });
   };
 

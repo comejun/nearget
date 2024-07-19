@@ -1,6 +1,7 @@
 package com.nearget.back.dto;
 
 import com.nearget.back.domain.Restaurant;
+import com.nearget.back.domain.RestaurantsData;
 import com.nearget.back.domain.RestaurantsGroup;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,7 @@ public class RestaurantsGroupDTO {
     private String groupName;
     private String thImg;
     private String memberEmail;
-    private List<Restaurant> restaurantList;
+    private List<RestaurantsData> restaurantList;
 
     public static RestaurantsGroupDTO convert(RestaurantsGroup restaurantsGroup){
         RestaurantsGroupDTO restaurantsGroupDTO = RestaurantsGroupDTO.builder()
