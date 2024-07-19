@@ -53,8 +53,8 @@ const MiniPlaceCard = ({ restaurant, likeList }) => {
 
   return (
     <div>
-      <div className="InfinityContentSumDiv">
-        <img onClick={() => moveToPlace(restaurant.strId)} className="InfinityContentSum" src={restaurant.image} />
+      <div onClick={() => moveToPlace(restaurant.strId)} className="InfinityContentSumDiv">
+        <img  className="InfinityContentSum" src={restaurant.image} />
       </div>
       {loginState.email ? (
         <img
