@@ -48,17 +48,17 @@ public class DBSchedular {
     @Scheduled(fixedDelay = 1000 * 60 * 60)
     public void scheduleRestaurant() {
     // 오류 발생 전까지 saveAllRestaurant page 0부터 1씩 증가하며 실행
-    for (long i = 0; i < 51; i++) {
+    /*for (long i = 0; i < 51; i++) {
         restaurantService.saveAllRestaurant(i);
     }
     // 2분 뒤에 실행
-    /*try {
+    try {
         Thread.sleep(1000 * 60 * 10);
     } catch (InterruptedException e) {
         e.printStackTrace();
-    }
+    }*/
         saveRestaurantsDataOptimized();
-        scheduleDistrict();*/
+        scheduleDistrict();
     }
     public void scheduleDistrict() {
         for (int i = 0; i < DistrictEnum.values().length; i++) {
