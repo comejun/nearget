@@ -35,7 +35,7 @@ export default function InfinityContent() {
 
   // 로그인시 좋아요 리스트 가져오기
   useEffect(() => {
-    if(loginState&&nowMyLocation){
+    if(loginState.email&&nowMyLocation){
       const fetchTLikeList = async () => {
         const likeListGet = await getLikeListDetail(loginState.email,nowMyLocation);
         setLikeList(likeListGet);

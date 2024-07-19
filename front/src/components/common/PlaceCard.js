@@ -78,7 +78,7 @@ const PlaceCard = ({likeList, restaurant}) => {
                     <h4>{getCategoryValue(restaurant.category)}</h4>
                     <span>
                     <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_sm.png"} alt="like"/>
-                    <span>{restaurant.likeCount}</span>
+                    <span>{isLike?restaurant.likeCount+1:restaurant.likeCount}</span>
                   </span>
                 </div>
             </div>
