@@ -26,6 +26,9 @@ public interface RestaurantsDataRepository extends JpaRepository<RestaurantsData
     @Query(value = "SELECT * FROM restaurants_data r WHERE r.lat BETWEEN ?1 AND ?2 AND r.lng BETWEEN ?3 AND ?4 AND r.restaurant_image NOT IN ('없음','') AND r.category = ?5", nativeQuery = true)
     List<RestaurantsData> findByLatBetweenAndLngBetweenAndCategoryOrderByMenu(Double lat1, Double lat2, Double lng1, Double lng2, String category);
 
+    @Query(value = "SELECT * FROM restaurants_data r WHERE r.lat BETWEEN ?1 AND ?2 AND r.lng BETWEEN ?3 AND ?4 AND r.restaurant_image NOT IN ('없음','')", nativeQuery = true)
+    List<RestaurantsData> findByLatBetweenAndLngBetween(Double lat1, Double lat2, Double lng1, Double lng2);
+
     // lat, lng를 기준으로 1km 이내의 restaurantImage가  ""인음식점 조회
     @Query(value = "SELECT * FROM restaurants_data WHERE lat BETWEEN ?1 AND ?2 AND lng BETWEEN ?3 AND ?4 AND restaurant_image = ''", nativeQuery = true)
     List<RestaurantsData> findByLatBetweenAndLngBetweenAndRestaurantImage(Double lat1, Double lat2, Double lng1, Double lng2);

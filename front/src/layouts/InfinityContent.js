@@ -1,63 +1,60 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import useCustomMap from "../hooks/useCustomMap";
+import {useSelector} from "react-redux";
+import {getNeatListDetail} from "../api/RestaurantAPI";
+import MiniPlaceCard from "../components/common/MiniPlaceCard";
+import {getLikeList, getLikeListDetail} from "../api/memberAPI";
+
 
 export default function InfinityContent() {
+
+  const [likeList, setLikeList] = useState()
+  const loginState = useSelector((state) => state.loginSlice);
+  const category = useSelector((state) => state.categorySlice.category);
+  const [nowMyLocation, setNowMyLocation] = useState()
+  const {myLocation} = useCustomMap();
+  const [nearByList, setNearByList] = useState()
+
+
+  // 처음 현위치 받아오면
+  useEffect(() => {
+    if (myLocation.isLoaded && myLocation.get) {
+      setNowMyLocation(myLocation);
+    }
+  }, [myLocation.isLoaded,nearByList]);
+
+  useEffect(() => {
+    if(category&&nowMyLocation){
+      const fetchNeatDetailList = async () => {
+        const nearListGet = await getNeatListDetail(nowMyLocation,category);
+        setNearByList(nearListGet);
+      };
+      fetchNeatDetailList();
+    }
+  }, [category,nowMyLocation]);
+
+  // 로그인시 좋아요 리스트 가져오기
+  useEffect(() => {
+    if(loginState&&nowMyLocation){
+      const fetchTLikeList = async () => {
+        const likeListGet = await getLikeListDetail(loginState.email,nowMyLocation);
+        setLikeList(likeListGet);
+        console.log(likeListGet);
+      };
+      fetchTLikeList();
+    }
+  }, [loginState,nowMyLocation]);
+
+
   return (
     <div className="InfinityContentWrap">
       <div className="InfinityContent">
         <ul>
-          <li>
-            <img className="InfinityContentSum" src={process.env.PUBLIC_URL + "/assets/imgs/sample2.png"} />
-            <img className="scrollContentLike" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_wh.png"} />
-            <div className="infinityItemTitle">
-              <div>
-                <h4>양식</h4>
-                <span>
-                  0.14<span>Km</span>
-                </span>
-              </div>
-            </div>
-            <h3>바베큐집</h3>
-          </li>
-          <li>
-            <img className="InfinityContentSum" src={process.env.PUBLIC_URL + "/assets/imgs/sample.png"} />
-            <img className="scrollContentLike" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_wh.png"} />
-            <div className="infinityItemTitle">
-              <div>
-                <h4>양식</h4>
-                <span>
-                  0.14<span>Km</span>
-                </span>
-              </div>
-            </div>
-            <h3>라칸티나</h3>
-          </li>
-          <li>
-            <img className="InfinityContentSum" src={process.env.PUBLIC_URL + "/assets/imgs/sample3.png"} />
-            <img className="scrollContentLike" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_wh.png"} />
-            <div className="infinityItemTitle">
-              <div>
-                <h4>양식</h4>
-                <span>
-                  0.14<span>Km</span>
-                </span>
-              </div>
-            </div>
-            <h3>바베큐집</h3>
-          </li>
-          <li>
-            <img className="InfinityContentSum" src={process.env.PUBLIC_URL + "/assets/imgs/sample.png"} />
-            <img className="scrollContentLike" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_like_wh.png"} />
-            <div className="infinityItemTitle">
-              <div>
-                <h4>양식</h4>
-                <span>
-                  0.14<span>Km</span>
-                </span>
-              </div>
-            </div>
-            <h3>바베큐집</h3>
-          </li>
+          {nearByList && nearByList.map((restaurant, index) => (
+              <li key={restaurant.strId}> {/* restaurant.id가 고유 식별자라고 가정 */}
+                <MiniPlaceCard likeList={likeList} restaurant={restaurant}/>
+              </li>
+          ))}
         </ul>
       </div>
     </div>

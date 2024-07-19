@@ -139,6 +139,48 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
         return restaurantDTOList;
     }
 
+    @Override
+    public List<RestaurantDTO> getDistanceRestaurants(Double lat, Double lng, String category) {
+
+            // lat lng을 기준으로 2km 좌표값 계산
+            Double lat1 = lat - 0.018;
+            Double lat2 = lat + 0.018;
+            Double lng1 = lng - 0.018;
+            Double lng2 = lng + 0.018;
+
+            // 거리순 음식점 조회
+            List<RestaurantsData> restaurantsDataList = new ArrayList<>();
+
+            if(category.equals("ALL")){
+                // 거리순 음식점 전체 조회
+                restaurantsDataList = restaurantsDataRepository.findByLatBetweenAndLngBetween(lat1, lat2, lng1, lng2);
+            }
+            else{
+                restaurantsDataList = restaurantsDataRepository.findByLatBetweenAndLngBetweenAndCategoryOrderByMenu(lat1, lat2, lng1, lng2, category);
+            }
+
+            // restaurantsDataList를 List<RestaurantDTO>로 변환
+            List<RestaurantDTO> restaurantDTOList = new ArrayList<>();
+            for (RestaurantsData restaurantsData : restaurantsDataList) {
+                RestaurantDTO restaurantDTO = restaurantsData.toDTO();
+                // 현위치 기준으로 음식점까지의 거리를 M단위로 변환 후 RestaurantDTO 객체에 저장
+                double distance = calculateDistanceInMeters(lat, lng, restaurantDTO.getLat(), restaurantDTO.getLng());
+                // member_like_restaurant_list 테이블에서 해당 음식점의 좋아요 개수 조회
+                int likeCount = memberRepository.countByRestaurantId(restaurantDTO.getId());
+                restaurantDTO.changeLikeCount(likeCount);
+                restaurantDTO.changeDistance(distance);
+                restaurantDTOList.add(restaurantDTO);
+            }
+            // 거리 가까운순으로 정렬
+            restaurantDTOList.sort((o1, o2) -> o1.getDistance().compareTo(o2.getDistance()));
+            // 50개까지만 반환
+            if (restaurantDTOList.size() > 50) {
+                return restaurantDTOList.subList(0, 50);
+            }
+            return restaurantDTOList;
+
+    }
+
     public static double calculateDistanceInMeters(double lat1, double lng1, double lat2, double lng2) {
         final int R = 6371000; // 지구의 반지름(m)
         double latDistance = Math.toRadians(lat2 - lat1);

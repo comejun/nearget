@@ -38,4 +38,12 @@ public class RestaurantController {
 //        log.info("************ RestaurantController - getPriceRestaurants -restaurantDTOList : {}", restaurantDTOList);
         return restaurantDTOList;
     }
+
+    // 거리순 음식점 조회
+    @PostMapping("/distance/{category}")
+    public List<RestaurantDTO> getDistanceRestaurants(@RequestBody Double[]latlng, @PathVariable("category") String category) {
+        log.info("************ RestaurantController - getDistanceRestaurants - category : {}", category);
+        List<RestaurantDTO> distanceRestaurants = restaurantDataService.getDistanceRestaurants(latlng[0], latlng[1], category);
+        return distanceRestaurants;
+    }
 }

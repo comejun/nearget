@@ -54,7 +54,8 @@ const PlaceCard = ({likeList, restaurant}) => {
         <div className="scrollContent">
             <div className="imageWrapper" onClick={() => moveToPlace(restaurant.strId)}>
                 <img className="scrollContentSum" src={restaurant.image} alt="restaurant" />
-            </div>            {loginState.email ? (
+            </div>
+            {loginState.email ? (
                 <img onClick={()=>clickedLikeBtn(restaurant.strId)} className="scrollContentLike"
                      src={process.env.PUBLIC_URL + (isLike ? "/assets/imgs/icon/ic_like_ac.png" : "/assets/imgs/icon/ic_like_wh.png")}
                      alt="like"/>

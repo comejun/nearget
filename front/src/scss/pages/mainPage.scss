@@ -135,7 +135,8 @@ div.scrollTextLi{
   }
 }
 
-div.itemTitle h3, div.itemTitle h4, div.itemTitle span, div.scrollTextLi p {
+div.itemTitle h3, div.itemTitle h4,
+div.scrollTextLi p {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -158,22 +159,40 @@ div.InfinityContent{
       width: calc(50% - 8px);
       margin-bottom: 16px;
       position: relative;
-      img.InfinityContentSum{
+      div.InfinityContentSumDiv{
         width: 100%;
-        max-height: 124px;
+        height: 124px;
         border-radius: 8px;
         object-fit: cover;
+        cursor: pointer;
       }
-      img.InfinityContentSum::after {
+      div.InfinityContentSumDiv::after{
         content: "";
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
+        height: 124px;
         border-radius: 8px;
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0) -3%, rgba(0, 0, 0, 0.2) 100%);
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) -3%, rgba(0, 0, 0, 0.3) 100%);
       }
+      img.InfinityContentSum{
+        width: 100%;
+        height: 124px;
+        border-radius: 8px;
+        object-fit: cover;
+        cursor: pointer;
+      }
+      // img.InfinityContentSum::after {
+      //   content: "";
+      //   position: absolute;
+      //   top: 0;
+      //   left: 0;
+      //   width: 100%;
+      //   height: 100%;
+      //   border-radius: 8px;
+      //   background: linear-gradient(180deg, rgba(0, 0, 0, 0) -3%, rgba(0, 0, 0, 0.2) 100%);
+      // }
       img.scrollContentLike{
         position: absolute;
         top:16px;

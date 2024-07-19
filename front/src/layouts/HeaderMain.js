@@ -34,7 +34,10 @@ export default function HeaderMain() {
 
   // 검색 버튼
   const searchFromList = () => {
+    console.log("검색버튼 클릭");
+    console.log(searchText);
     dispatch(filterRestaurantsLocationList(searchText));
+    console.log(filterRestaurantsLocationList);
   };
 
   return (
@@ -56,7 +59,19 @@ export default function HeaderMain() {
           <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_back.png"} alt="searchIcon" height="36px" />
         </div>
         <div className="SearchInputContent">
-          <input type="text" name="search" maxLength="20" placeholder="검색어를 입력해주세요." value={searchText} onChange={(e) => setSearchText(e.target.value)} />
+          <input
+            type="text"
+            name="search"
+            maxLength="20"
+            placeholder="검색어를 입력해주세요."
+            value={searchText}
+            onChange={handleInput}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                searchFromList();
+              }
+            }}
+          />
 
           <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_search_sm.svg"} onClick={searchFromList} />
         </div>
