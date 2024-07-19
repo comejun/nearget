@@ -43,10 +43,9 @@ public class DBSchedular {
 
     private ForkJoinPool customThreadPool = new ForkJoinPool(10); // 클래스 레벨로 이동
 
-    /*
     // 매일 0시 0분 0초에 실행
     //    @Scheduled(cron = "0 0 0 * * *")
-    @Scheduled(fixedDelay = 1000 * 60 * 60)
+   /* @Scheduled(fixedDelay = 1000 * 60 * 60)
     public void scheduleRestaurant() {
     // 오류 발생 전까지 saveAllRestaurant page 0부터 1씩 증가하며 실행
     for (long i = 0; i < 51; i++) {
@@ -69,7 +68,7 @@ public class DBSchedular {
         for (int i = 0; i < SmallDistrictEnum.values().length; i++) {
             smallDistrictService.saveSmallDistrict(SmallDistrictEnum.values()[i]);
         }
-    }
+    }*/
 
 
     public void saveRestaurantsDataOptimized() {
@@ -84,7 +83,6 @@ public class DBSchedular {
             pageRequest = pageRequest.next();
         } while (!restaurants.isEmpty());
     }
-*/
     @Transactional(propagation = Propagation.REQUIRES_NEW) // 각 페이지 처리마다 별도의 트랜잭션 시작
     public void processAndSaveRestaurantsPage(List<Restaurant> restaurants) {
         List<RestaurantsData> restaurantsData = customThreadPool.submit(() ->

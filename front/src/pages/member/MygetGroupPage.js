@@ -6,13 +6,13 @@ import BottomNav from "../../layouts/BottomNav";
 import InfinityContentGetGroup from "../../layouts/InfinityContentGetGroup";
 import { API_SERVER_HOST } from "../../staticData";
 import LoadingPage from "../../components/common/LoadingPage";
-import {getGroup, getGroupList} from "../../api/GroupAPI";
+import { getGroup, getGroupList } from "../../api/GroupAPI";
 import useCustomMove from "../../hooks/useCustomMove";
 
 const imghost = `${API_SERVER_HOST}/api/image`;
 
 const MyGetGroupPage = () => {
-    const {moveToMain} = useCustomMove();
+  const { moveToMain, moveTomygetGroupEdit } = useCustomMove();
   const { groupId } = useParams();
   const [group, setGroup] = useState(null);
     const [groupList, setGroupList] = useState()
@@ -24,12 +24,12 @@ const MyGetGroupPage = () => {
 
   // 그룹 정보 조회
   useEffect(() => {
-      const fetchGroupData = async () => {
-          const groupData = await getGroup(groupId);
-          setGroup(groupData);
-          console.log(groupData);
-      };
-      fetchGroupData();
+    const fetchGroupData = async () => {
+      const groupData = await getGroup(groupId);
+      setGroup(groupData);
+      console.log(groupData);
+    };
+    fetchGroupData();
   }, [groupId]);
 
   // 그룹안 내용 조회
@@ -58,7 +58,7 @@ const MyGetGroupPage = () => {
         <img className="GroupSum" src={`${imghost}/view/th_${group.thImg}`} />
         <h2 className="GroupTitle">{group.groupName}</h2>
         <div className="GetEditWrap">
-          <img className="GetEditBtn" src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_edit.png"} />
+          <img onClick={() => moveTomygetGroupEdit(group.groupId)} className="GetEditBtn" src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_edit.png"} />
         </div>
       </div>
       <div className="MainH2Wrap">
@@ -70,8 +70,7 @@ const MyGetGroupPage = () => {
             <InfinityContentGetGroup refreshPage={refreshPage} groupId={groupId} restaurantsList={groupList} />
         ):<></>}
       <div className="textBtnWrap">
-        <img onClick={moveToMain}
-            src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_AddMore.png"} />
+        <img onClick={moveToMain} src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_AddMore.png"} />
       </div>
       <div className="bottom_margin"></div>
       <BottomNav />

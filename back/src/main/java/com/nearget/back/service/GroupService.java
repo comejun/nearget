@@ -21,7 +21,7 @@ public interface GroupService {
     void add(RestaurantsGroupDTO restaurantsGroupDTO);
 
     // 수정
-    void modify(RestaurantsGroupDTO restaurantsGroupDTO);
+    void edit(RestaurantsGroupDTO restaurantsGroupDTO);
 
     // 삭제
     void delete(Long groupId);

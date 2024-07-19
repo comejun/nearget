@@ -4,7 +4,6 @@ import com.nearget.back.dto.RestaurantDTO;
 import com.nearget.back.dto.RestaurantsGroupDTO;
 import com.nearget.back.service.GroupService;
 import com.nearget.back.service.RestaurantDataService;
-import com.nearget.back.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,6 +20,7 @@ import java.util.Map;
 public class GroupController {
     private final GroupService groupService;
     private final RestaurantDataService restaurantDataService;
+
     // 그룹 조회(그룹ID)
     @GetMapping("/group/{groupId}")
     public RestaurantsGroupDTO getGroupById(@PathVariable Long groupId){
@@ -52,7 +52,17 @@ public class GroupController {
     }
 
     // 그룹 수정
-
+    @PostMapping("/edit")
+    public ResponseEntity<?> edit(RestaurantsGroupDTO restaurantsGroupDTO){
+        log.info("**** POST / edit {} ****", restaurantsGroupDTO);
+        try {
+            groupService.edit(restaurantsGroupDTO);
+            return ResponseEntity.ok("Group edited successfully");
+        } catch (Exception e) {
+            log.error("Error editing group", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing group");
+        }
+    }
 
     // 그룹 삭제
     @DeleteMapping("/delete/{groupId}")
@@ -86,7 +96,4 @@ public class GroupController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding restaurant to group");
         }
     }
-
-
-
 }

@@ -77,7 +77,7 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override // 수정
-    public void modify(RestaurantsGroupDTO restaurantsGroupDTO) {
+    public void edit(RestaurantsGroupDTO restaurantsGroupDTO) {
         log.info("ResServiceImpl --> modify" + restaurantsGroupDTO);
         RestaurantsGroup restaurantsGroup = restaurantsGroupRepository.findById(restaurantsGroupDTO.getGroupId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 그룹이 존재하지 않습니다."));

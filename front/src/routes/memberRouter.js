@@ -7,6 +7,7 @@ const Edit = lazy(() => import("../pages/member/ProfileEditPage"));
 const KakaoRedirect = lazy(() => import("../pages/member/KakaoRedirectPage"));
 const MyGet = lazy(() => import("../pages/member/MygetPageList"));
 const MyGetGroup = lazy(() => import("../pages/member/MygetGroupPage"));
+const MyGetGroupEdit = lazy(() => import("../pages/member/MyGetGroupEditPage"));
 const MyLike = lazy(() => import("../pages/member/MylikePage"));
 
 const memberRouter = () => {
@@ -64,6 +65,14 @@ const memberRouter = () => {
       element: (
         <Suspense fallback={<LoadingPage />}>
           <MyGetGroup />
+        </Suspense>
+      ),
+    },
+    {
+      path: "myget/edit/:groupId",
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <MyGetGroupEdit />
         </Suspense>
       ),
     },
