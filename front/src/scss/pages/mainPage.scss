@@ -164,6 +164,7 @@ div.InfinityContent{
         max-height: 124px;
         border-radius: 8px;
         object-fit: cover;
+        cursor: pointer;
       }
       img.InfinityContentSum::after {
         content: "";

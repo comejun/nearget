@@ -7,47 +7,42 @@ import { getRestaurants } from "../../api/RestaurantAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
 import UseCustomMove from "../../hooks/useCustomMove";
+import jwtAxios from "../../util/jwtUtil";
 
 export const host = `${API_SERVER_HOST}/api/place`;
 
 const GetPage = () => {
   const loginState = useSelector((state) => state.loginSlice);
-  const { moveToAdd } = UseCustomMove();
-  // 현재 로그인 된 회원의 이메일 가져오기
+  const { moveToAdd, moveToMyget } = UseCustomMove();
   const userEmail = useSelector((state) => state.loginSlice.email);
   const { restaurantId } = useParams();
-  const [restaurantData, setRestaurantData] = useState(null); // 초기값을 null로 설정
+  const [restaurantData, setRestaurantData] = useState(null);
+  const [groups, setGroups] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState("");
+
   const getCategoryValue = (category) => {
-    if (category === "WESTERN") {
-      return "양식";
-    }
-    if (category === "CAFE") {
-      return "카페";
-    }
-    if (category === "KOREAN") {
-      return "한식";
-    }
-    if (category === "CHINESE") {
-      return "중식";
-    }
-    if (category === "JAPANESE") {
-      return "일식";
-    }
-    if (category === "FASTFOOD") {
-      return "패스트푸드";
-    }
-    if (category === "PUB") {
-      return "술집";
-    }
-    if (category === "STREET") {
-      return "분식";
+    switch (category) {
+      case "WESTERN":
+        return "양식";
+      case "CAFE":
+        return "카페";
+      case "KOREAN":
+        return "한식";
+      case "CHINESE":
+        return "중식";
+      case "JAPANESE":
+        return "일식";
+      case "FASTFOOD":
+        return "패스트푸드";
+      case "PUB":
+        return "술집";
+      case "STREET":
+        return "분식";
+      default:
+        return "";
     }
   };
 
-  // 그룹 데이터를 저장할 상태
-  const [groups, setGroups] = useState([]);
-
-  // 그룹 목록 불러오는 함수
   const fetchGroups = () => {
     axios
       .get(`${host}/groups?email=${userEmail}`)
@@ -82,6 +77,26 @@ const GetPage = () => {
     console.log(groups);
   }, [groups]);
 
+  const handleSave = async (e) => {
+    e.preventDefault();
+
+    if (!selectedGroup) {
+      alert("그룹을 선택해주세요.");
+      return;
+    }
+
+    try {
+      const response = await jwtAxios.post(`${host}/groups/${selectedGroup}/restaurants`, {
+        restaurantId: restaurantData.id,
+      });
+      alert("식당이 그룹에 추가되었습니다.");
+      moveToMyget();
+    } catch (error) {
+      console.error("Error adding restaurant to group:", error);
+      alert("식당을 그룹에 추가하는 중 오류가 발생했습니다.");
+    }
+  };
+
   return (
     <BasicLayout>
       <HeaderBack imgSrc="/assets/imgs/icon/h1_GetPlace.png" />
@@ -94,10 +109,10 @@ const GetPage = () => {
         <h2 className="GetPageMargin">{restaurantData ? restaurantData.name : "Loading..."}</h2>
         <h3>{restaurantData ? getCategoryValue(restaurantData.category) : "Loading..."}</h3>
       </div>
-      <form>
+      <form onSubmit={handleSave}>
         <div className="MyModifyInput">
           <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/h2_GetGroup.png"} />
-          <select name="nickname">
+          <select name="nickname" onChange={(e) => setSelectedGroup(e.target.value)}>
             <option value="" selected disabled hidden>
               그룹을 선택해주세요.
             </option>
@@ -112,7 +127,7 @@ const GetPage = () => {
 
         <div className="bottomBtnWrap">
           <div className="bottomBtnContent">
-            <button>Save</button>
+            <button type="submit">Save</button>
           </div>
         </div>
       </form>

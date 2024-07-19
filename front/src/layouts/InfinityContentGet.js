@@ -8,7 +8,7 @@ export const host = `${API_SERVER_HOST}/api/place`;
 const imghost = `${API_SERVER_HOST}/api/image`;
 
 export default function InfinityContentGet() {
-  const { moveToAdd } = UseCustomMove();
+  const { moveToAdd, moveTomygetGroup } = UseCustomMove();
 
   // 현재 로그인 된 회원의 이메일 가져오기
   const userEmail = useSelector((state) => state.loginSlice.email);
@@ -64,7 +64,7 @@ export default function InfinityContentGet() {
         <ul>
           {groups.map((group) => (
             <li key={group.groupId}>
-              <img className="InfinityContentSum" src={`${imghost}/view/th_${group.thImg}`} />
+              <img onClick={() => moveTomygetGroup(group.groupId)} className="InfinityContentSum" src={`${imghost}/view/th_${group.thImg}`} />
               <img className="GetDeleteBtn" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_del.png"} onClick={() => deleteGroup(group.groupId)} />
               <h2 className="GetGroupTitle">{group.groupName}</h2>
             </li>

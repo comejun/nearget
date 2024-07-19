@@ -6,6 +6,8 @@ import com.nearget.back.service.RestaurantDataService;
 import com.nearget.back.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +21,11 @@ public class GroupController {
     private final RestaurantService restaurantService;
     private final RestaurantDataService restaurantDataService;
     // 그룹 조회(그룹ID)
+    @GetMapping("/group/{groupId}")
+    public RestaurantsGroupDTO getGroupById(@PathVariable Long groupId){
+        log.info("**** GET / group by id {} ****", groupId);
+        return restaurantService.getGroupById(groupId);
+    }
 
     // 그룹 조회(생성자EMAIL)
     @GetMapping("/groups")
@@ -46,6 +53,30 @@ public class GroupController {
         return Map.of("RESULT", "SUCCESS");
     }
 
+    // 그룹에 식당 추가
+    @PostMapping("/groups/{groupId}/restaurants")
+    public ResponseEntity<?> addRestaurantToGroup(@PathVariable Long groupId, @RequestBody Map<String, Long> payload) {
+        Long restaurantId = payload.get("restaurantId");
+        log.info(String.valueOf(restaurantId));
+        log.info(String.valueOf(groupId));
+        try {
+            restaurantService.addPlace(restaurantId, groupId);
+            return ResponseEntity.ok("Restaurant added to group");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding restaurant to group");
+        }
+    }
+
+    @DeleteMapping("/groups/{groupId}/restaurants")
+    public ResponseEntity<?> deleteRestaurantToGroup(@PathVariable Long groupId, @RequestBody Map<String, Long> payload) {
+        Long restaurantId = payload.get("restaurantId");
+        try {
+            restaurantService.deletePlace(restaurantId, groupId);
+            return ResponseEntity.ok("Restaurant added to group");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding restaurant to group");
+        }
+    }
 
 
 

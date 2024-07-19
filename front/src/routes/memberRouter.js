@@ -60,7 +60,7 @@ const memberRouter = () => {
       ),
     },
     {
-      path: "mygetgroup",
+      path: "myget/:groupId",
       element: (
         <Suspense fallback={<LoadingPage />}>
           <MyGetGroup />

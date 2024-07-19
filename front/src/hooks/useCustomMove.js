@@ -37,6 +37,9 @@ const UseCustomMove = () => {
   const moveToMyget = () => {
     navigate("/member/myget");
   };
+  const moveTomygetGroup = (groupId) => {
+    navigate(`/member/myget/${groupId}`);
+  };
 
   return {
     moveToMain,
@@ -50,6 +53,7 @@ const UseCustomMove = () => {
     moveToProfileEdit,
     moveToMylike,
     moveToMyget,
+    moveTomygetGroup,
   };
 };
 export default UseCustomMove;
