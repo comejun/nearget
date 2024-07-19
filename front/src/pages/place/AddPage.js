@@ -85,7 +85,7 @@ const AddPage = () => {
           <img className="GroupSum" src={imgSrc ? imgSrc : process.env.PUBLIC_URL + "/assets/imgs/icon/EditImgBack.png"} />
           <label htmlFor="fileInput">
             <h3 className="GroupTitleEdit">Edit</h3>
-            <input id="fileInput" type="file" onChange={handleFileChange} style={{ display: "none" }} />
+            <input id="fileInput" type="file" accept="image/*" onChange={handleFileChange} style={{ display: "none" }} />
           </label>
         </div>
         <div className="MyModifyInput">
