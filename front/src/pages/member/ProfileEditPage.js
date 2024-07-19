@@ -95,7 +95,7 @@ const ProfileEditPage = () => {
         <div className="MyModifyImg" style={member.profileImg !== "" ? { backgroundImage: `url(${imgSrc})` } : null}>
           <label htmlFor="fileInput">
             Edit
-            <input id="fileInput" type="file" onChange={handleFileChange} style={{ display: "none" }} />
+            <input id="fileInput" type="file" accept="image/*" onChange={handleFileChange} style={{ display: "none" }} />
           </label>
         </div>
         <div className="MyModifyInput">
