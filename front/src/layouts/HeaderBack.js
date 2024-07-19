@@ -3,11 +3,10 @@ import { useNavigate } from "react-router-dom";
 import UseCustomMove from "../hooks/useCustomMove";
 
 export default function HeaderBack({ imgSrc }) {
-  const navigate = useNavigate();
   const { moveToMain } = UseCustomMove();
 
   const goBackOrToMain = () => {
-    navigate(-1);
+    moveToMain();
   };
 
   return (
