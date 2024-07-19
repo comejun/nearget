@@ -16,7 +16,7 @@ const PlacePage = () => {
   const { restaurantId } = useParams();
   const { moveToGet } = UseCustomMove();
   const [restaurantData, setRestaurantData] = useState();
-  const [isLike, setIsLike] = useState();
+  const [refresh, setRefresh] = useState(false);
   const [likeList, setLikeList] = useState();
   const getCategoryValue = (category) => {
     if (category === "WESTERN") {
@@ -54,36 +54,27 @@ const PlacePage = () => {
       window.open(kakaoMapUrl, "_blank");
     }
   };
+
   const fetchLikeList = async () => {
+    console.log("좋아요 리스트 가져오기");
     const likeListGet = await getLikeList(loginState.email);
     setLikeList(likeListGet);
-    console.log("좋아요 리스트 가져오기");
-    console.log(likeListGet);
   };
+
   // 로그인시 좋아요 리스트 가져오기
   useEffect(() => {
     if (loginState.email) {
-
       fetchLikeList();
     }
-  }, [loginState.email]);
-
-    useEffect(() => {
-        if(restaurantData){
-          console.log("좋아요 확인");
-          const isitLike = likeList ? likeList.some((like) => like == restaurantData.strId) : false;
-            setIsLike(isitLike);
-            console.log(isitLike);
-        }
-    }, [likeList,restaurantData]);
+  }, [loginState.email,refresh]);
 
   useEffect(() => {
     const fetchRestaurant = async () => {
       const restaurant = await getRestaurants(restaurantId);
       setRestaurantData(restaurant);
     };
-
     fetchRestaurant();
+
   }, [restaurantId]);
 
   useEffect(() => {
@@ -103,11 +94,21 @@ const PlacePage = () => {
       const fetchchangeLike = async () => {
         await modifyLikeList(loginState.email, strId);
         console.log("좋아요 변경");
+        setRefresh(!refresh);
       };
       await fetchchangeLike();
-      await fetchLikeList();
     }
   };
+
+  const getLikeIconSrc = (likeList) =>{
+    if(restaurantData){
+      console.log("좋아요 확인");
+      const isLike = likeList ? likeList.some((like) => like === restaurantData.strId) : false;
+      console.log(isLike);
+      const basePath = process.env.PUBLIC_URL + "/assets/imgs/icon/";
+      return isLike ? basePath + "ic_like_ac.png" : basePath + "ic_like_bk.png";
+    }
+  }
 
   return (
     <BasicLayout>
@@ -129,7 +130,7 @@ const PlacePage = () => {
                 <img
                   onClick={() => clickedLikeBtn(restaurantData.strId)}
                   className="scrollContentLike"
-                  src={process.env.PUBLIC_URL + (isLike ? "/assets/imgs/icon/ic_like_ac.png" : "/assets/imgs/icon/ic_like_bk.png")}
+                  src={getLikeIconSrc(likeList)}
                   alt="like"
                 />
               ) : null)}

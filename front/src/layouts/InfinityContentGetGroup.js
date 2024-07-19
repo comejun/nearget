@@ -1,8 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
 import useCustomMove from "../hooks/useCustomMove";
+import {deleteGroupList} from "../api/GroupAPI";
 
-export default function InfinityContentGetGroup({restaurantsList}) {
+export default function InfinityContentGetGroup({refreshPage, groupId,restaurantsList}) {
 
   const {moveToPlace} = useCustomMove();
   const getCategoryValue = (category) => {
@@ -32,7 +31,10 @@ export default function InfinityContentGetGroup({restaurantsList}) {
     }
   }
 
-
+  const clikedDeleteBtn = async (groupId, restaurantId) => {
+    await deleteGroupList(groupId, restaurantId);
+    refreshPage();
+  }
 
   return (
     <div className="InfinityContentWrap">
@@ -41,11 +43,12 @@ export default function InfinityContentGetGroup({restaurantsList}) {
 
           {restaurantsList.map((restaurant) => (
 
-              <li>
+              <li key={restaurant.strId}>
                 <img onClick={() => moveToPlace(restaurant.strId)} className="InfinityContentSum"
                      src={restaurant.image}/>
                 {/*<img className="InfinityContentSum" src={process.env.PUBLIC_URL + "/assets/imgs/sample2.png"}/>*/}
-                <img className="GetDeleteBtn" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_del.png"}/>
+                <img onClick={()=>clikedDeleteBtn(groupId, restaurant.strId)}
+                    className="GetDeleteBtn" src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_del.png"}/>
                 <div className="infinityItemTitle">
                   <div>
                     <h4>{getCategoryValue(restaurant.category)}</h4>

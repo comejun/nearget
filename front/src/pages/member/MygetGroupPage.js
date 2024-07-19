@@ -16,6 +16,11 @@ const MyGetGroupPage = () => {
   const { groupId } = useParams();
   const [group, setGroup] = useState(null);
     const [groupList, setGroupList] = useState()
+    const [refresh, setRefresh] = useState(false)
+
+    const refreshPage = () => {
+        setRefresh(!refresh)
+    }
 
   // 그룹 정보 조회
   useEffect(() => {
@@ -35,7 +40,7 @@ const MyGetGroupPage = () => {
             console.log(groupList);
         };
         fetchGroupList();
-    }, [groupId]);
+    }, [groupId,refresh]);
 
   if (!group) {
     return (
@@ -62,7 +67,7 @@ const MyGetGroupPage = () => {
 
 {/*groupList가 존재하고 길이가 0보다크다면*/}
         {groupList && groupList.length > 0 ? (
-            <InfinityContentGetGroup restaurantsList={groupList} />
+            <InfinityContentGetGroup refreshPage={refreshPage} groupId={groupId} restaurantsList={groupList} />
         ):<></>}
       <div className="textBtnWrap">
         <img onClick={moveToMain}

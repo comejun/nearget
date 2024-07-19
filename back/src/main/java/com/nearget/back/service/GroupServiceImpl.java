@@ -108,17 +108,16 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override // 그룹에 삭제
-    public void deletePlace(Long id, Long groupId) {
+    public void deletePlace(Long restaurantId, Long groupId) {
         // id에 해당하는 Restaurant 조회
-        Restaurant restaurant = restaurantsRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid restaurant ID: " + id));
-
+        RestaurantsData restaurant = restaurantsDataRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid restaurant ID: " + restaurantId));
         // groupId에 해당하는 RestaurantsGroup 조회
         RestaurantsGroup group = restaurantsGroupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid group ID: " + groupId));
 
         // RestaurantsGroup에서 Restaurant 삭제
-        group.getRestaurantList().remove(restaurant);
+        group.removeRestaurant(restaurant);
 
         // RestaurantsGroup 저장
         restaurantsGroupRepository.save(group);

@@ -75,9 +75,10 @@ public class GroupController {
         }
     }
 
-    @DeleteMapping("/groups/{groupId}/restaurants")
-    public ResponseEntity<?> deleteRestaurantToGroup(@PathVariable Long groupId, @RequestBody Map<String, Long> payload) {
-        Long restaurantId = payload.get("restaurantId");
+
+    // 그룹에서 식당 삭제
+    @DeleteMapping("/group/{groupId}/list/{restaurantId}")
+    public ResponseEntity<?> deleteRestaurantToGroup(@PathVariable Long groupId, @PathVariable Long restaurantId) {
         try {
             groupService.deletePlace(restaurantId, groupId);
             return ResponseEntity.ok("Restaurant added to group");
