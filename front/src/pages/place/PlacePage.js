@@ -54,23 +54,26 @@ const PlacePage = () => {
       window.open(kakaoMapUrl, "_blank");
     }
   };
-
+  const fetchLikeList = async () => {
+    const likeListGet = await getLikeList(loginState.email);
+    setLikeList(likeListGet);
+    console.log("좋아요 리스트 가져오기");
+    console.log(likeListGet);
+  };
   // 로그인시 좋아요 리스트 가져오기
   useEffect(() => {
     if (loginState.email) {
-      const fetchTLikeList = async () => {
-        const likeListGet = await getLikeList(loginState.email);
-        setLikeList(likeListGet);
-      };
-      fetchTLikeList();
+
+      fetchLikeList();
     }
   }, [loginState.email]);
 
     useEffect(() => {
-
         if(restaurantData){
-            setIsLike(likeList ? likeList.some((like) => like === restaurantData.strId) : false);
-
+          console.log("좋아요 확인");
+          const isitLike = likeList ? likeList.some((like) => like == restaurantData.strId) : false;
+            setIsLike(isitLike);
+            console.log(isitLike);
         }
     }, [likeList,restaurantData]);
 
@@ -78,7 +81,6 @@ const PlacePage = () => {
     const fetchRestaurant = async () => {
       const restaurant = await getRestaurants(restaurantId);
       setRestaurantData(restaurant);
-      console.log("restaurant : ", restaurant);
     };
 
     fetchRestaurant();
@@ -96,13 +98,14 @@ const PlacePage = () => {
     }
   }, [restaurantData]);
 
-  const clickedLikeBtn = (strId) => {
+  const clickedLikeBtn = async (strId) => {
     if (loginState.email) {
-      const fetchLikeList = async () => {
+      const fetchchangeLike = async () => {
         await modifyLikeList(loginState.email, strId);
+        console.log("좋아요 변경");
       };
-      fetchLikeList();
-      setIsLike(!isLike);
+      await fetchchangeLike();
+      await fetchLikeList();
     }
   };
 
