@@ -44,12 +44,12 @@ const MiniPlaceCard = ({ restaurant, likeList }) => {
     }
   };
 
-  useEffect(() => {
-    if (likeList) {
-      setIsLike(likeList ? likeList.some((like) => like.strId === restaurant.strId) : false);
-      console.log(likeList ? likeList.some((like) => like.strId === restaurant.strId) : false);
-    }
-  }, [likeList]);
+    useEffect(() => {
+        if(likeList){
+            setIsLike(likeList ? likeList.some((like) => like.strId === restaurant.strId) : false);
+            // console.log(likeList ? likeList.some((like) => like.strId === restaurant.strId) : false)
+        }
+    }, [likeList]);
 
   return (
     <div>

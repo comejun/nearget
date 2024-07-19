@@ -30,5 +30,5 @@ public interface GroupService {
     void addPlace(Long groupId, Long restaurantId);
 
     // 그룹에 리스트 삭제
-    void deletePlace(Long id, Long groupId);
+    void deletePlace(Long restaurantId, Long groupId);
 }

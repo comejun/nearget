@@ -46,3 +46,11 @@ export const getGroupList = async (groupId) => {
   const response = await axios.get(`${host}/group/${groupId}/list`);
   return response.data;
 };
+
+// 그룹 안의 리스트 삭제 요청
+export const deleteGroupList = async (groupId, restaurantId) => {
+    const response = await axios.delete(`${host}/group/${groupId}/list/${restaurantId}`);
+    return response.data;
+    };
+
+

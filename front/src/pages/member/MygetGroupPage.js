@@ -15,7 +15,12 @@ const MyGetGroupPage = () => {
   const { moveToMain, moveTomygetGroupEdit } = useCustomMove();
   const { groupId } = useParams();
   const [group, setGroup] = useState(null);
-  const [groupList, setGroupList] = useState();
+    const [groupList, setGroupList] = useState()
+    const [refresh, setRefresh] = useState(false)
+
+    const refreshPage = () => {
+        setRefresh(!refresh)
+    }
 
   // 그룹 정보 조회
   useEffect(() => {
@@ -28,14 +33,14 @@ const MyGetGroupPage = () => {
   }, [groupId]);
 
   // 그룹안 내용 조회
-  useEffect(() => {
-    const fetchGroupList = async () => {
-      const groupList = await getGroupList(groupId);
-      setGroupList(groupList);
-      console.log(groupList);
-    };
-    fetchGroupList();
-  }, [groupId]);
+    useEffect(() => {
+        const fetchGroupList = async () => {
+            const groupList = await getGroupList(groupId);
+            setGroupList(groupList);
+            console.log(groupList);
+        };
+        fetchGroupList();
+    }, [groupId,refresh]);
 
   if (!group) {
     return (
@@ -60,8 +65,10 @@ const MyGetGroupPage = () => {
         <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/h2_PlaceList.png"} />
       </div>
 
-      {/*groupList가 존재하고 길이가 0보다크다면*/}
-      {groupList && groupList.length > 0 ? <InfinityContentGetGroup restaurantsList={groupList} /> : <></>}
+{/*groupList가 존재하고 길이가 0보다크다면*/}
+        {groupList && groupList.length > 0 ? (
+            <InfinityContentGetGroup refreshPage={refreshPage} groupId={groupId} restaurantsList={groupList} />
+        ):<></>}
       <div className="textBtnWrap">
         <img onClick={moveToMain} src={process.env.PUBLIC_URL + "/assets/imgs/icon/btn_AddMore.png"} />
       </div>

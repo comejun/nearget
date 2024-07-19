@@ -37,6 +37,11 @@ public class RestaurantsGroup {
         this.restaurantList.add(restaurantsData);
     }
 
+    // 식당 리스트에서 삭제
+    public void removeRestaurant(RestaurantsData restaurantsData) {
+        this.restaurantList.remove(restaurantsData);
+    }
+
     // ** 식당 그룹 수정 ** //
     public void changeGroupName(String groupName){this.groupName = groupName;}
     public void changeThImg(String thImg){this.thImg = thImg;}
