@@ -8,7 +8,7 @@ import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
 import UseCustomMove from "../../hooks/useCustomMove";
 import jwtAxios from "../../util/jwtUtil";
-import {addGroupData, getGroupsList} from "../../api/GroupAPI";
+import { addGroupData, getGroupsList } from "../../api/GroupAPI";
 
 export const host = `${API_SERVER_HOST}/api/place`;
 
@@ -20,7 +20,7 @@ const GetPage = () => {
   const [restaurantData, setRestaurantData] = useState(null);
   const [groups, setGroups] = useState([]);
   // const [selectedGroup, setSelectedGroup] = useState("");
-  const [addData, setAddData] = useState({})
+  const [addData, setAddData] = useState({});
 
   const getCategoryValue = (category) => {
     switch (category) {
@@ -47,9 +47,9 @@ const GetPage = () => {
 
   // 그룹 목록 조회
   const fetchGroups = async () => {
-    const groups = await getGroupsList(userEmail)
+    const groups = await getGroupsList(userEmail);
     console.log(groups);
-    if(!groups || groups.length === 0){
+    if (!groups || groups.length === 0) {
       alert("저장된 그룹이 없어 그룹 생성으로 이동합니다.");
       moveToAdd();
     } else {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getKakaoLoginLink } from "../../api/kakaoAPI";
@@ -10,6 +10,9 @@ import useMemberProfile from "../../hooks/useMemberProfile";
 import { logout } from "../../slices/loginSlice";
 
 const ProfilePage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const dispatch = useDispatch();
   const kakaoLoginLink = getKakaoLoginLink();
   const { moveToProfileEdit, moveToMylike, moveToMygetList, moveToMain } = UseCustomMove();

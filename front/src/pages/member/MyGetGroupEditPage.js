@@ -12,6 +12,9 @@ import { API_SERVER_HOST } from "../../staticData";
 const imghost = `${API_SERVER_HOST}/api/image`;
 
 const MyGetGroupEditPage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const { moveTomygetGroup } = useCustomMove();
   const { groupId } = useParams();
   const userEmail = useSelector((state) => state.loginSlice.email);

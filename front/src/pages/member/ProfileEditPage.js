@@ -10,6 +10,9 @@ import useCharacterCheck from "../../hooks/useCharacterCheck";
 import UseCustomMove from "../../hooks/useCustomMove";
 
 const ProfileEditPage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const { moveToProfile } = UseCustomMove();
   const { execLogout, moveToPath } = useCustomLogin();
   // 현재 로그인 된 회원의 이메일 가져오기
