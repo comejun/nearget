@@ -75,8 +75,19 @@ const ProfileEditPage = () => {
 
   // 닉네임 변경 핸들러
   const handleNicknameChange = (e) => {
-    const inputLength = e.target.value.length;
+    let value = e.target.value;
+
+    // 특정 특수문자가 포함되어 있는지 확인
+    if (/[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/g.test(value)) {
+      alert("특수문자는 입력할 수 없습니다.");
+
+      // 특수문자 제거
+      value = value.replace(/[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/g, "");
+    }
+
+    const inputLength = value.length;
     if (inputLength <= 20) {
+      e.target.value = value; // 이벤트 객체의 value 속성 업데이트
       handleChange(e); // 원래의 handleChange 함수 호출
       setNicknameLength(inputLength); // 글자 수 상태 업데이트
     }

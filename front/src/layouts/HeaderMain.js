@@ -23,12 +23,22 @@ export default function HeaderMain() {
     // }
   };
 
-  // 검색창 길이제한
+  // 검색창 길이제한 // 특수문자 입력방지
   const handleInput = (e) => {
-    if (e.target.value.length > e.target.maxLength) {
+    let value = e.target.value;
+
+    // 특정 특수문자가 포함되어 있는지 확인
+    if (/[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/g.test(value)) {
+      alert("특수문자는 입력할 수 없습니다.");
+
+      // 특수문자 제거
+      value = value.replace(/[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/g, "");
+    }
+
+    if (value.length > e.target.maxLength) {
       alert("입력한 텍스트가 너무 깁니다. 20자 이내로 입력해주세요.");
     } else {
-      setSearchText(e.target.value);
+      setSearchText(value);
     }
   };
 

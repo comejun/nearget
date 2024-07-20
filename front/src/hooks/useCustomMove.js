@@ -2,47 +2,25 @@ import { useNavigate } from "react-router-dom";
 
 const UseCustomMove = () => {
   const navigate = useNavigate();
-  const moveToMain = () => {
-    navigate("/");
+
+  const customNavigate = (path) => {
+    navigate(path);
+    window.scrollTo(0, 0);
   };
-  const moveToLogin = () => {
-    navigate("/member/login");
-  };
-  const moveToMap = () => {
-    navigate("/map");
-  };
-  //Place
-  const moveToPlace = (restaurantId) => {
-    navigate(`/place/${restaurantId}`);
-  };
-  const moveToGet = (restaurantId) => {
-    navigate(`/place/get/${restaurantId}`);
-  };
-  const moveToAdd = () => {
-    navigate("/place/add");
-  };
-  const moveToEdit = () => {
-    navigate("/place/Edit");
-  };
-  //Profile
-  const moveToProfile = () => {
-    navigate("/member/profile");
-  };
-  const moveToProfileEdit = () => {
-    navigate("/member/Edit");
-  };
-  const moveToMylike = () => {
-    navigate("/member/mylike");
-  };
-  const moveToMygetList = () => {
-    navigate("/member/myget");
-  };
-  const moveTomygetGroup = (groupId) => {
-    navigate(`/member/myget/${groupId}`);
-  };
-  const moveTomygetGroupEdit = (groupId) => {
-    navigate(`/member/myget/edit/${groupId}`);
-  };
+
+  const moveToMain = () => customNavigate("/");
+  const moveToLogin = () => customNavigate("/member/login");
+  const moveToMap = () => customNavigate("/map");
+  const moveToPlace = (restaurantId) => customNavigate(`/place/${restaurantId}`);
+  const moveToGet = (restaurantId) => customNavigate(`/place/get/${restaurantId}`);
+  const moveToAdd = () => customNavigate("/place/add");
+  const moveToEdit = () => customNavigate("/place/Edit");
+  const moveToProfile = () => customNavigate("/member/profile");
+  const moveToProfileEdit = () => customNavigate("/member/Edit");
+  const moveToMylike = () => customNavigate("/member/mylike");
+  const moveToMygetList = () => customNavigate("/member/myget");
+  const moveTomygetGroup = (groupId) => customNavigate(`/member/myget/${groupId}`);
+  const moveTomygetGroupEdit = (groupId) => customNavigate(`/member/myget/edit/${groupId}`);
 
   return {
     moveToMain,
@@ -60,4 +38,5 @@ const UseCustomMove = () => {
     moveTomygetGroupEdit,
   };
 };
+
 export default UseCustomMove;

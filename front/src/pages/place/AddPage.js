@@ -31,9 +31,19 @@ const AddPage = () => {
   const [groupNameLength, setGroupNameLength] = useState(0);
 
   const handleChangeGroup = (e) => {
-    const inputLength = e.target.value.length;
+    let value = e.target.value;
+
+    // 특정 특수문자가 포함되어 있는지 확인
+    if (/[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/g.test(value)) {
+      alert("특수문자는 입력할 수 없습니다.");
+
+      // 특수문자 제거
+      value = value.replace(/[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/g, "");
+    }
+
+    const inputLength = value.length;
     if (inputLength <= 20) {
-      handleChange(e); // 원래의 handleChange 함수 호출
+      handleChange(value); // 원래의 handleChange 함수 호출
       setGroupNameLength(inputLength); // 글자 수 상태 업데이트
     }
   };
