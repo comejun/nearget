@@ -20,7 +20,7 @@ export default function InfinityContentLike() {
   }, [myLocation.isLoaded,likeList]);
 
   useEffect(() => {
-    if(loginState&&nowMyLocation){
+    if(loginState.email&&nowMyLocation){
       const fetchTLikeList = async () => {
         const likeListGet = await getLikeListDetail(loginState.email,nowMyLocation);
         setLikeList(likeListGet);

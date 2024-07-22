@@ -77,7 +77,8 @@ const PlacePage = () => {
       setRestaurantData(restaurant);
     };
     fetchRestaurant();
-  }, [restaurantId]);
+
+  }, [restaurantId,refresh]);
 
   useEffect(() => {
     if (restaurantData) {

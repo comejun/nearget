@@ -9,9 +9,16 @@ export default function InfinityContent() {
   const [likeList, setLikeList] = useState();
   const loginState = useSelector((state) => state.loginSlice);
   const category = useSelector((state) => state.categorySlice.category);
-  const [nowMyLocation, setNowMyLocation] = useState();
-  const { myLocation } = useCustomMap();
-  const [nearByList, setNearByList] = useState();
+  const [nowMyLocation, setNowMyLocation] = useState()
+  const {myLocation} = useCustomMap();
+  const [nearByList, setNearByList] = useState()
+
+  const searchText = useSelector((state) => state.searchSlice.searchText);
+
+  useEffect(() => {
+    console.log(searchText);
+  }, [searchText]);
+
 
   // 처음 현위치 받아오면
   useEffect(() => {
@@ -23,20 +30,25 @@ export default function InfinityContent() {
   useEffect(() => {
     if (category && nowMyLocation) {
       const fetchNeatDetailList = async () => {
-        const nearListGet = await getNeatListDetail(nowMyLocation, category);
+        let nearListGet = await getNeatListDetail(nowMyLocation,category);
+        if(!(searchText===""||searchText===undefined||searchText===null)){
+          nearListGet = nearListGet.filter((restaurant) => {
+                return restaurant.name.includes(searchText);
+            });
+        }
         setNearByList(nearListGet);
       };
+
       fetchNeatDetailList();
     }
-  }, [category, nowMyLocation]);
+  }, [category,nowMyLocation,searchText]);
 
   // 로그인시 좋아요 리스트 가져오기
   useEffect(() => {
-    if (loginState.email && nowMyLocation) {
+    if(loginState.email&&nowMyLocation){
       const fetchTLikeList = async () => {
         const likeListGet = await getLikeListDetail(loginState.email, nowMyLocation);
         setLikeList(likeListGet);
-        console.log(likeListGet);
       };
       fetchTLikeList();
     }
