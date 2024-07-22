@@ -14,34 +14,59 @@ export default function HeaderMain() {
 
     const toggleSearch = () => {
         setIsSearchOpen(!isSearchOpen);
-        const element = document.getElementById("SearchTopScroll");
+        // const element = document.getElementById("SearchTopScroll");
         dispatch(setSearchText(""));
         setStateSearchText("");
 
-        // 위치로 스크롤
-        if (element) {
-            window.scrollTo({
-                top: element.offsetTop,
-                behavior: "smooth",
-            });
-        }
-    };
+    // // 위치로 스크롤
+    // if (element) {
+    //   window.scrollTo({
+    //     top: element.offsetTop,
+    //     behavior: "smooth",
+    //   });
+    // }
+  };
 
-    // 검색창 길이제한
-    const handleInput = (e) => {
-        if (e.target.value.length > e.target.maxLength) {
-            alert("입력한 텍스트가 너무 깁니다. 20자 이내로 입력해주세요.");
-        } else {
-            setStateSearchText(e.target.value);
-        }
-    };
+  // 검색창 길이제한 // 특수문자 입력방지
+  const handleInput = (e) => {
+    let value = e.target.value;
 
-    // 검색 버튼
-    const searchFromList = () => {
-        console.log("검색버튼 클릭");
-        dispatch(setSearchText(stateSearchText));
+    // 특정 특수문자가 포함되어 있는지 확인
+    if (/[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/g.test(value)) {
+      alert("특수문자는 입력할 수 없습니다.");
 
-    };
+      // 특수문자 제거
+      value = value.replace(/[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/g, "");
+    }
+
+    if (value.length > e.target.maxLength) {
+      alert("입력한 텍스트가 너무 깁니다. 20자 이내로 입력해주세요.");
+    } else {
+        setStateSearchText(e.target.value);
+    }
+  };
+
+  // 검색 버튼
+  const searchFromList = () => {
+    console.log("검색버튼 클릭");
+    const todayGetContainer = document.querySelector("div.TodayGetContainer");
+    const pricebyPlaceContainer = document.querySelector("div.PricebyPlaceContainer");
+
+    if (todayGetContainer) {
+      todayGetContainer.scrollLeft = 0;
+    }
+
+    if (pricebyPlaceContainer) {
+      pricebyPlaceContainer.scrollLeft = 0;
+    }
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+      console.log("검색버튼 클릭");
+      dispatch(setSearchText(stateSearchText));
+  };
 
     return (
         <header>

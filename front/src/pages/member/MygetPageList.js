@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
 import BottomNav from "../../layouts/BottomNav";
@@ -5,6 +6,9 @@ import InfinityContentGet from "../../layouts/InfinityContentGet";
 import UseCustomMove from "../../hooks/useCustomMove";
 
 const MyGetListPage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const { moveToAdd } = UseCustomMove();
 
   return (

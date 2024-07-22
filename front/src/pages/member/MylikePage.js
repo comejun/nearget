@@ -1,9 +1,13 @@
+import React, { useEffect } from "react";
 import { getKakaoLoginLink } from "../../api/kakaoAPI";
 import BasicLayout from "../../layouts/BasicLayout";
 import HeaderBack from "../../layouts/HeaderBack";
 import BottomNav from "../../layouts/BottomNav";
 import InfinityContentLike from "../../layouts/InfinityContentLike";
 const MylikePage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const kakaoLoginLink = getKakaoLoginLink();
 
   return (

@@ -18,6 +18,9 @@ const PlacePage = () => {
   const [restaurantData, setRestaurantData] = useState();
   const [refresh, setRefresh] = useState(false);
   const [likeList, setLikeList] = useState();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const getCategoryValue = (category) => {
     if (category === "WESTERN") {
       return "양식";
@@ -66,7 +69,7 @@ const PlacePage = () => {
     if (loginState.email) {
       fetchLikeList();
     }
-  }, [loginState.email,refresh]);
+  }, [loginState.email, refresh]);
 
   useEffect(() => {
     const fetchRestaurant = async () => {
@@ -100,15 +103,15 @@ const PlacePage = () => {
     }
   };
 
-  const getLikeIconSrc = (likeList) =>{
-    if(restaurantData){
+  const getLikeIconSrc = (likeList) => {
+    if (restaurantData) {
       console.log("좋아요 확인");
       const isLike = likeList ? likeList.some((like) => like === restaurantData.strId) : false;
       console.log(isLike);
       const basePath = process.env.PUBLIC_URL + "/assets/imgs/icon/";
       return isLike ? basePath + "ic_like_ac.png" : basePath + "ic_like_bk.png";
     }
-  }
+  };
 
   return (
     <BasicLayout>
@@ -126,14 +129,7 @@ const PlacePage = () => {
           <div className="PlaceH2Wrap">
             <h2>{restaurantData.name}</h2>
             {restaurantData.image !== "없음" &&
-              (loginState.email ? (
-                <img
-                  onClick={() => clickedLikeBtn(restaurantData.strId)}
-                  className="scrollContentLike"
-                  src={getLikeIconSrc(likeList)}
-                  alt="like"
-                />
-              ) : null)}
+              (loginState.email ? <img onClick={() => clickedLikeBtn(restaurantData.strId)} className="scrollContentLike" src={getLikeIconSrc(likeList)} alt="like" /> : null)}
           </div>
           {restaurantData.image === "없음" ? (
             <></>
