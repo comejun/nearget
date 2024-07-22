@@ -9,7 +9,5 @@ public interface RestaurantService {
 
     void saveAllRestaurant(Long page);
 
-    List<RestaurantDTO> getRestaurantsByCategoryAndBounds(String category, Object bounds);
-
 
 }

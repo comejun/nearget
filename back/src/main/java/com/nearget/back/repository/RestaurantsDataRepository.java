@@ -2,6 +2,7 @@ package com.nearget.back.repository;
 
 import com.nearget.back.domain.Category;
 import com.nearget.back.domain.DistrictCountResult;
+import com.nearget.back.domain.Restaurant;
 import com.nearget.back.domain.RestaurantsData;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,6 +35,17 @@ public interface RestaurantsDataRepository extends JpaRepository<RestaurantsData
 
 
     // ********** DB 스케쥴러 위한 쿼리문 종료 *********
+
+    // 지도 최소 확대 단위 위한 쿼리문
+
+    // swLat, swLng, neLat, neLng를 주어진 경계로 하는  restaurantImage가 "없음"이아닌 식당을 조회하는 쿼리
+    @Query("SELECT r FROM RestaurantsData r WHERE r.lat BETWEEN :swLat AND :neLat AND r.lng BETWEEN :swLng AND :neLng AND r.restaurantImage NOT IN ('없음')")
+    List<RestaurantsData> findByLngBetweenAndLatBetween(double swLng, double neLng, double swLat, double neLat);
+
+    // swLat, swLng, neLat, neLng를 주어진 경계로 하는  restaurantImage가 "없음"이아닌 식당을 카테고리로 조회하는 쿼리
+    @Query("SELECT r FROM RestaurantsData r WHERE r.lat BETWEEN :swLat AND :neLat AND r.lng BETWEEN :swLng AND :neLng AND r.restaurantImage NOT IN ('없음') AND r.category = :category")
+    List<RestaurantsData> findByLngBetweenAndLatBetweenAndCategory(double swLng, double neLng, double swLat, double neLat, Category category);
+
 
     // lat, lng를 기준으로 1km 이내의 restaurantImage가 "없음"또는 ""가 아닌 랜덤 음식점 5개 조회
     @Query(value = "SELECT * FROM restaurants_data WHERE lat BETWEEN ?1 AND ?2 AND lng BETWEEN ?3 AND ?4 AND restaurant_image NOT IN ('없음','') ORDER BY RAND() LIMIT 5", nativeQuery = true)
