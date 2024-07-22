@@ -4,6 +4,8 @@ import com.nearget.back.domain.Category;
 import com.nearget.back.domain.DistrictCountResult;
 import com.nearget.back.domain.Restaurant;
 import com.nearget.back.domain.RestaurantsData;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -55,6 +57,8 @@ public interface RestaurantsDataRepository extends JpaRepository<RestaurantsData
     @Query(value = "SELECT * FROM restaurants_data WHERE lat BETWEEN ?1 AND ?2 AND lng BETWEEN ?3 AND ?4 AND restaurant_image NOT IN ('없음','') AND category = ?5 ORDER BY RAND() LIMIT 5", nativeQuery = true)
     List<RestaurantsData> findTop5ByLatBetweenAndLngBetweenAndCategory(Double lat1, Double lat2, Double lng1, Double lng2, String category);
 
+
+
     // JPQL로 lat, lng를 기준으로 2km 이내의 restaurantImage가 "없음"또는 ""가 아니고 menuList가 1개 이상인 음식점 조회
     @EntityGraph(attributePaths = {"menuList"})
     @Query("SELECT r FROM RestaurantsData r WHERE r.lat BETWEEN :lat1 AND :lat2 AND r.lng BETWEEN :lng1 AND :lng2 AND r.restaurantImage NOT IN ('없음','') AND SIZE(r.menuList) > 0")
@@ -62,6 +66,20 @@ public interface RestaurantsDataRepository extends JpaRepository<RestaurantsData
 
     @Query(value = "SELECT * FROM restaurants_data r WHERE r.lat BETWEEN ?1 AND ?2 AND r.lng BETWEEN ?3 AND ?4 AND r.restaurant_image NOT IN ('없음','') AND r.category = ?5", nativeQuery = true)
     List<RestaurantsData> findByLatBetweenAndLngBetweenAndCategoryOrderByMenu(Double lat1, Double lat2, Double lng1, Double lng2, String category);
+
+// 거리순 음식점 조회
+    @Query(value = "SELECT *, ST_Distance_Sphere(point(r.lng, r.lat), point(:lng, :lat)) as distance FROM restaurants_data r WHERE r.restaurant_image NOT IN ('없음','') ORDER BY distance ASC",
+            countQuery = "SELECT count(*) FROM restaurants_data WHERE restaurant_image NOT IN ('없음','')",
+            nativeQuery = true)
+    Page<RestaurantsData> findRestaurantsNearby(@Param("lat") double lat, @Param("lng") double lng, Pageable pageable);
+
+    // 카테고리별 거리순 음식점 조회
+    @Query(value = "SELECT *, ST_Distance_Sphere(point(r.lng, r.lat), point(:lng, :lat)) as distance FROM restaurants_data r WHERE r.restaurant_image NOT IN ('없음','') AND r.category = :category ORDER BY distance ASC",
+            countQuery = "SELECT count(*) FROM restaurants_data WHERE restaurant_image NOT IN ('없음','') AND category = :category",
+            nativeQuery = true)
+    Page<RestaurantsData> findRestaurantsNearbyByCategory(@Param("lat") double lat, @Param("lng") double lng, @Param("category") String category, Pageable pageable);
+
+
 
     @Query(value = "SELECT * FROM restaurants_data r WHERE r.lat BETWEEN ?1 AND ?2 AND r.lng BETWEEN ?3 AND ?4 AND r.restaurant_image NOT IN ('없음','')", nativeQuery = true)
     List<RestaurantsData> findByLatBetweenAndLngBetween(Double lat1, Double lat2, Double lng1, Double lng2);

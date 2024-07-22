@@ -27,9 +27,12 @@ export const getPriceRestaurant = async (myLocation,category) => {
 };
 
 // 거리별 음식점 조회 요청
-export const getNeatListDetail = async (myLocation,category) => {
+export const getNeatListDetail = async (myLocation,category,pageParam) => {
+    const {page,size} = pageParam;
     const LocationData = [myLocation.lat, myLocation.lng];
 
-    const response = await axios.post(`${host}/distance/${category}`,LocationData);
+    const response = await axios.post(`${host}/distance/${category}`,LocationData,{
+        params: { page, size },
+    });
     return response.data;
 };
