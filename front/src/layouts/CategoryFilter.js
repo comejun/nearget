@@ -15,16 +15,28 @@ export default function CategoryFilter() {
   const handleCategoryFilter = (e) => {
     // setCategoty 로 카테고리 변경하기
     dispatch(setCategory(e.target.dataset.value));
+
+    // div.TodayGetContainer와 div.PricebyPlaceContainer의 스크롤 위치를 0으로 설정
+    const todayGetContainer = document.querySelector("div.TodayGetContainer");
+    const pricebyPlaceContainer = document.querySelector("div.PricebyPlaceContainer");
+
+    if (todayGetContainer) {
+      todayGetContainer.scrollLeft = 0;
+    }
+
+    if (pricebyPlaceContainer) {
+      pricebyPlaceContainer.scrollLeft = 0;
+    }
   };
 
   return (
     <div className="filterWrap">
       <div className="filterContainer">
         <ul>
-           <li onClick={handleCategoryFilter} data-value={"ALL"} className={categoryFilter.category === "ALL" ? "activeFilter" : ""}>
+          <li onClick={handleCategoryFilter} data-value={"ALL"} className={categoryFilter.category === "ALL" ? "activeFilter" : ""}>
             전체
           </li>
-           {Object.entries(categories).length > 0 &&
+          {Object.entries(categories).length > 0 &&
             Object.entries(categories).map(([key, value], index) => (
               <React.Fragment key={index}>
                 <li onClick={handleCategoryFilter} data-value={key} className={categoryFilter.category === key ? "activeFilter" : ""}>

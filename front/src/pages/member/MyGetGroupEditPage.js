@@ -12,6 +12,9 @@ import { API_SERVER_HOST } from "../../staticData";
 const imghost = `${API_SERVER_HOST}/api/image`;
 
 const MyGetGroupEditPage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const { moveTomygetGroup } = useCustomMove();
   const { groupId } = useParams();
   const userEmail = useSelector((state) => state.loginSlice.email);
@@ -47,9 +50,19 @@ const MyGetGroupEditPage = () => {
 
   // 그룹명 길이 업데이트
   const handleChangeGroup = (e) => {
-    const inputLength = e.target.value.length;
+    let value = e.target.value;
+
+    // 특정 특수문자가 포함되어 있는지 확인
+    if (/[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/g.test(value)) {
+      alert("특수문자는 입력할 수 없습니다.");
+
+      // 특수문자 제거
+      value = value.replace(/[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/g, "");
+    }
+
+    const inputLength = value.length;
     if (inputLength <= 20) {
-      setGroup((prevGroup) => ({ ...prevGroup, groupName: e.target.value }));
+      setGroup((prevGroup) => ({ ...prevGroup, groupName: value }));
       setGroupNameLength(inputLength);
     }
   };

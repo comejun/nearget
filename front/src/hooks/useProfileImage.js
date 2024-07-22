@@ -15,10 +15,19 @@ const useProfileImage = (printInItImage, originalImage) => {
     const file = e.target.files[0];
     console.log("배경변경");
     console.log(file);
+
     if (file) {
-      setImgSrc(URL.createObjectURL(file));
+      const fileName = file.name;
+      const fileExtension = fileName.split(".").pop().toLowerCase();
+
+      if (fileExtension !== "jpg" && fileExtension !== "png" && fileExtension !== "jpeg") {
+        alert("이미지 파일만 업로드 가능합니다. (jpg, png)");
+        e.target.value = ""; // 입력 필드 초기화
+      } else {
+        setImgSrc(URL.createObjectURL(file));
+        setFile(file);
+      }
     }
-    setFile(file);
   };
 
   const saveFile = async () => {

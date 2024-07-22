@@ -12,23 +12,33 @@ export default function HeaderMain() {
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
     setSearchText(""); // 텍스트 지우기
-    const element = document.getElementById("SearchTopScroll");
+    // const element = document.getElementById("SearchTopScroll");
 
-    // 위치로 스크롤
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop,
-        behavior: "smooth",
-      });
-    }
+    // // 위치로 스크롤
+    // if (element) {
+    //   window.scrollTo({
+    //     top: element.offsetTop,
+    //     behavior: "smooth",
+    //   });
+    // }
   };
 
-  // 검색창 길이제한
+  // 검색창 길이제한 // 특수문자 입력방지
   const handleInput = (e) => {
-    if (e.target.value.length > e.target.maxLength) {
+    let value = e.target.value;
+
+    // 특정 특수문자가 포함되어 있는지 확인
+    if (/[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/g.test(value)) {
+      alert("특수문자는 입력할 수 없습니다.");
+
+      // 특수문자 제거
+      value = value.replace(/[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/g, "");
+    }
+
+    if (value.length > e.target.maxLength) {
       alert("입력한 텍스트가 너무 깁니다. 20자 이내로 입력해주세요.");
     } else {
-      setSearchText(e.target.value);
+      setSearchText(value);
     }
   };
 
@@ -38,6 +48,21 @@ export default function HeaderMain() {
     console.log(searchText);
     dispatch(filterRestaurantsLocationList(searchText));
     console.log(filterRestaurantsLocationList);
+    const todayGetContainer = document.querySelector("div.TodayGetContainer");
+    const pricebyPlaceContainer = document.querySelector("div.PricebyPlaceContainer");
+
+    if (todayGetContainer) {
+      todayGetContainer.scrollLeft = 0;
+    }
+
+    if (pricebyPlaceContainer) {
+      pricebyPlaceContainer.scrollLeft = 0;
+    }
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
   };
 
   return (
