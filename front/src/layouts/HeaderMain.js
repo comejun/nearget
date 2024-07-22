@@ -1,82 +1,87 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, {useState} from "react";
+import {Link} from "react-router-dom";
 import CategoryFilter from "./CategoryFilter";
-import { useDispatch } from "react-redux";
-import { filterRestaurantsLocationList } from "../slices/categorySlice";
+import {useDispatch, useSelector} from "react-redux";
+import {filterRestaurantsLocationList} from "../slices/categorySlice";
+import {setSearchText} from "../slices/searchSlice";
 
 export default function HeaderMain() {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const dispatch = useDispatch();
-  const [searchText, setSearchText] = useState("");
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const dispatch = useDispatch();
 
-  const toggleSearch = () => {
-    setIsSearchOpen(!isSearchOpen);
-    setSearchText(""); // 텍스트 지우기
-    const element = document.getElementById("SearchTopScroll");
+    const {searchText} = useSelector((state) => state.searchSlice.searchText);
+    const [stateSearchText, setStateSearchText] = useState()
 
-    // 위치로 스크롤
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop,
-        behavior: "smooth",
-      });
-    }
-  };
+    const toggleSearch = () => {
+        setIsSearchOpen(!isSearchOpen);
+        const element = document.getElementById("SearchTopScroll");
+        dispatch(setSearchText(""));
+        setStateSearchText("");
 
-  // 검색창 길이제한
-  const handleInput = (e) => {
-    if (e.target.value.length > e.target.maxLength) {
-      alert("입력한 텍스트가 너무 깁니다. 20자 이내로 입력해주세요.");
-    } else {
-      setSearchText(e.target.value);
-    }
-  };
+        // 위치로 스크롤
+        if (element) {
+            window.scrollTo({
+                top: element.offsetTop,
+                behavior: "smooth",
+            });
+        }
+    };
 
-  // 검색 버튼
-  const searchFromList = () => {
-    console.log("검색버튼 클릭");
-    console.log(searchText);
-    dispatch(filterRestaurantsLocationList(searchText));
-    console.log(filterRestaurantsLocationList);
-  };
+    // 검색창 길이제한
+    const handleInput = (e) => {
+        if (e.target.value.length > e.target.maxLength) {
+            alert("입력한 텍스트가 너무 깁니다. 20자 이내로 입력해주세요.");
+        } else {
+            setStateSearchText(e.target.value);
+        }
+    };
 
-  return (
-    <header>
-      <div className="MainheaderWrap" style={{ display: isSearchOpen ? "none" : "flex" }}>
-        {/* 메인페이지 헤더 */}
-        <div className="headerLogoContent">
-          <Link to="/">
-            <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/Nearget_logo.png"} alt="logo" height="18px" />
-          </Link>
-        </div>
-        <div className="headerSearchContent" onClick={toggleSearch}>
-          <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_search.png"} alt="searchIcon" height="36px" />
-        </div>
-      </div>
+    // 검색 버튼
+    const searchFromList = () => {
+        console.log("검색버튼 클릭");
+        dispatch(setSearchText(stateSearchText));
 
-      <div className="MainSearchWrap" style={{ display: isSearchOpen ? "flex" : "none" }}>
-        <div className="SearchCloseContent" onClick={toggleSearch}>
-          <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_back.png"} alt="searchIcon" height="36px" />
-        </div>
-        <div className="SearchInputContent">
-          <input
-            type="text"
-            name="search"
-            maxLength="20"
-            placeholder="검색어를 입력해주세요."
-            value={searchText}
-            onChange={handleInput}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                searchFromList();
-              }
-            }}
-          />
+    };
 
-          <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_search_sm.svg"} onClick={searchFromList} />
-        </div>
-      </div>
-      <CategoryFilter />
-    </header>
-  );
+    return (
+        <header>
+            <div className="MainheaderWrap" style={{display: isSearchOpen ? "none" : "flex"}}>
+                {/* 메인페이지 헤더 */}
+                <div className="headerLogoContent">
+                    <Link to="/">
+                        <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/Nearget_logo.png"} alt="logo"
+                             height="18px"/>
+                    </Link>
+                </div>
+                <div className="headerSearchContent" onClick={toggleSearch}>
+                    <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_search.png"} alt="searchIcon"
+                         height="36px"/>
+                </div>
+            </div>
+
+            <div className="MainSearchWrap" style={{display: isSearchOpen ? "flex" : "none"}}>
+                <div className="SearchCloseContent" onClick={toggleSearch}>
+                    <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_back.png"} alt="searchIcon" height="36px"/>
+                </div>
+                <div className="SearchInputContent">
+                    <input
+                        type="text"
+                        name="search"
+                        maxLength="20"
+                        placeholder="검색어를 입력해주세요."
+                        value={searchText}
+                        onChange={handleInput}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                searchFromList();
+                            }
+                        }}
+                    />
+
+                    <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_search_sm.svg"} onClick={searchFromList}/>
+                </div>
+            </div>
+            <CategoryFilter/>
+        </header>
+    );
 }
