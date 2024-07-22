@@ -20,6 +20,8 @@ const MainPage = () => {
   const loginState = useSelector((state) => state.loginSlice);
 
   const [likeList, setLikeList] = useState();
+
+
   // 처음 현위치 받아오면
   useEffect(() => {
     if (myLocation.isLoaded && myLocation.get) {
@@ -29,6 +31,7 @@ const MainPage = () => {
 
   // 로그인시 좋아요 리스트 가져오기
   useEffect(() => {
+
     if (loginState.email) {
       const fetchTLikeList = async () => {
         const likeListGet = await getLikeList(loginState.email);

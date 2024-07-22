@@ -12,20 +12,28 @@ export default function HeaderMain() {
     const {searchText} = useSelector((state) => state.searchSlice.searchText);
     const [stateSearchText, setStateSearchText] = useState()
 
+    const clickedLogo = () => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+        });
+    }
+
     const toggleSearch = () => {
         setIsSearchOpen(!isSearchOpen);
-        // const element = document.getElementById("SearchTopScroll");
+        const element = document.getElementById("SearchTopScroll");
         dispatch(setSearchText(""));
         setStateSearchText("");
 
-    // // 위치로 스크롤
-    // if (element) {
-    //   window.scrollTo({
-    //     top: element.offsetTop,
-    //     behavior: "smooth",
-    //   });
-    // }
-  };
+        // 위치로 스크롤
+        if (element) {
+            window.scrollTo({
+                top: element.offsetTop,
+                behavior: "smooth",
+            });
+        }
+    };
 
   // 검색창 길이제한 // 특수문자 입력방지
   const handleInput = (e) => {
@@ -59,11 +67,6 @@ export default function HeaderMain() {
     if (pricebyPlaceContainer) {
       pricebyPlaceContainer.scrollLeft = 0;
     }
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth",
-    });
       console.log("검색버튼 클릭");
       dispatch(setSearchText(stateSearchText));
   };
@@ -74,7 +77,7 @@ export default function HeaderMain() {
                 {/* 메인페이지 헤더 */}
                 <div className="headerLogoContent">
                     <Link to="/">
-                        <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/Nearget_logo.png"} alt="logo"
+                        <img onClick={clickedLogo} src={process.env.PUBLIC_URL + "/assets/imgs/icon/Nearget_logo.png"} alt="logo"
                              height="18px"/>
                     </Link>
                 </div>
