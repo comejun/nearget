@@ -33,13 +33,11 @@ export default function InfinityContent() {
     if(category&&nowMyLocation){
       const fetchNeatDetailList = async () => {
         let nearListGet = await getNeatListDetail(nowMyLocation,category);
-        console.log(nearListGet);
         if(!(searchText===""||searchText===undefined||searchText===null)){
           nearListGet = nearListGet.filter((restaurant) => {
                 return restaurant.name.includes(searchText);
             });
         }
-        console.log(nearListGet);
         setNearByList(nearListGet);
       };
 
@@ -53,7 +51,6 @@ export default function InfinityContent() {
       const fetchTLikeList = async () => {
         const likeListGet = await getLikeListDetail(loginState.email,nowMyLocation);
         setLikeList(likeListGet);
-        console.log(likeListGet);
       };
       fetchTLikeList();
     }
