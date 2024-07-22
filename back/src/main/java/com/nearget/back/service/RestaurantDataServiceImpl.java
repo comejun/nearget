@@ -246,6 +246,7 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
         for (RestaurantsData restaurant : restaurantList) {
             RestaurantDTO restaurantDTO = RestaurantDTO.builder()
                     .id(restaurant.getId())
+                    .strId(restaurant.getId().toString())
                     .name(restaurant.getRestaurantName())
                     .address(restaurant.getRestaurantAddress())
                     .category(restaurant.getCategory())
