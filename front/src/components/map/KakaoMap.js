@@ -141,6 +141,8 @@ const KakaoMap = () => {
                     }
                 ]
             }))
+
+            mapChanged()
         }
     }, [map]);
 
@@ -150,7 +152,7 @@ const KakaoMap = () => {
         const bounds = map.getBounds();
 
         // 지도 확대 수준이 5이상일 경우 bounds값을 제외한 level값만 저장 기존 mapBoundLevel의 level과 level값이 같을 경우 저장하지 않음
-        if(level > 4){
+        if(level > 6){
             setMapLevel(level)
         }
         else{
