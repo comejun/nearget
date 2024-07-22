@@ -53,8 +53,6 @@ public class MapController {
                 objectList.add(restaurantDTO);
             }
         }
-
-        log.info("objectList : {}", objectList);
         return objectList;
     }
 }

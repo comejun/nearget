@@ -5,8 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,5 +25,8 @@ public class SmallDistrict {
 
     private Double lng;
 
-    private Long count;
+    @ElementCollection
+    @Builder.Default
+    private List<SmallDistrictCategoryCount> smallDistrictCategoryCountList = new ArrayList<>();
+
 }

@@ -1,14 +1,39 @@
 package com.nearget.back.repository;
 
 import com.nearget.back.domain.Category;
+import com.nearget.back.domain.DistrictCountResult;
 import com.nearget.back.domain.RestaurantsData;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface RestaurantsDataRepository extends JpaRepository<RestaurantsData, Long> {
+
+    // DB 스케쥴러 위한 쿼리문
+
+    // 구단위 클러스터를 위한 자체 데이터 저장을 위한 쿼리문
+    // Id가 300 으로 시작하는 restaurantImage가 "없음"이아닌 음식점 갯수 조회
+    @Query("SELECT count(r) FROM RestaurantsData r WHERE CAST(r.id AS string) LIKE :restaurantId% AND r.restaurantImage NOT IN ('없음')")
+    Long countByRestaurantIdWithImageStartingWith(Long restaurantId);
+
+    // Id가 300 으로 시작하는 restaurantImage가 "없음"이아닌 음식점 갯수 카테고리별 조회
+    @Query("SELECT count(r) FROM RestaurantsData r WHERE CAST(r.id AS string) LIKE :restaurantId% AND r.restaurantImage NOT IN ('없음') AND r.category = :category")
+    Long countByRestaurantIdWithImageStartingWithAndCategory(Long restaurantId, Category category);
+
+    // 동단위 클러스터를 위한 자체 데이터 저장을 위한 쿼리문
+    // adrress가 주어진 주소를 포함하는 restaurantImage가 "없음"이아닌 식당을 개수를 구하는 쿼리
+    @Query("SELECT count(r) FROM RestaurantsData r WHERE r.restaurantAddress LIKE %:address% AND r.restaurantImage NOT IN ('없음')")
+    Long countByAddressContaining(@Param("address") String address);
+
+    // 카테고리로 모든 소구역의 restaurantImage가 "없음"이아닌  식당 개수를 조회하는 쿼리
+    @Query("SELECT count(r) FROM RestaurantsData r WHERE r.restaurantAddress LIKE %:address% AND r.restaurantImage NOT IN ('없음') AND r.category = :category")
+    Long countRestaurantsByCategoryForAllSmallDistricts(@Param("address") String address, @Param("category") Category category);
+
+
+    // ********** DB 스케쥴러 위한 쿼리문 종료 *********
 
     // lat, lng를 기준으로 1km 이내의 restaurantImage가 "없음"또는 ""가 아닌 랜덤 음식점 5개 조회
     @Query(value = "SELECT * FROM restaurants_data WHERE lat BETWEEN ?1 AND ?2 AND lng BETWEEN ?3 AND ?4 AND restaurant_image NOT IN ('없음','') ORDER BY RAND() LIMIT 5", nativeQuery = true)
