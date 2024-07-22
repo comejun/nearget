@@ -58,7 +58,7 @@ public class DBSchedular {
         e.printStackTrace();
     }*/
 //        saveRestaurantsDataOptimized();
-        scheduleDistrict();
+//        scheduleDistrict();
     }
     public void scheduleDistrict() {
         for (int i = 0; i < DistrictEnum.values().length; i++) {
