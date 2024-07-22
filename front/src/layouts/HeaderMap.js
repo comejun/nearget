@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {Link} from "react-router-dom";
 import CategoryFilter from "./CategoryFilter";
 import { useDispatch } from "react-redux";
 import { clickedMyLocationBtn } from "../slices/mapSlice";
@@ -40,20 +41,25 @@ export default function HeaderMap() {
       <div className="MainheaderWrap">
         {/* 메인페이지 헤더 */}
         <div className="headerSearchInput">
-          <input
-            type="text"
-            name="search"
-            maxLength="20"
-            placeholder="검색어를 입력해주세요."
-            value={searchText}
-            onChange={handleInput}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                searchFromList();
-              }
-            }}
-          />
-          <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_search_sm.svg"} />
+                            <Link to="/">
+                                <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/Nearget_logo.png"} alt="logo"
+                                     height="18px" style={{ marginTop: '9px' }}/>
+                            </Link>
+            <input
+              type="text"
+              name="search"
+              maxLength="20"
+              placeholder="검색어를 입력해주세요."
+              style={{ display: 'none' }}
+              value={searchText}
+              onChange={handleInput}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  searchFromList();
+                }
+              }}
+            />
+          <img src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_search_sm.svg"} style={{ display: 'none' }} />
         </div>
         <div className="headerLocationContent">
           <img onClick={handleMyLocationBtn} src={process.env.PUBLIC_URL + "/assets/imgs/icon/ic_location.png"} alt="searchIcon" height="36px" />
