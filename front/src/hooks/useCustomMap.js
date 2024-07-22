@@ -138,7 +138,7 @@ const UseCustomMap = () => {
 
                     // res 배열 길이 가져오기
                     // 반올림 해서 정수로 만들기
-                    const imgSize = Math.round(20+ (60 / sort.length * (sort.indexOf(location) + 1)));
+                    const imgSize = Math.round(20+ (30 / sort.length * (sort.indexOf(location) + 1)));
 
                     const content = '<div>' +
                         '<img' +
