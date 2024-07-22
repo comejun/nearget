@@ -57,7 +57,7 @@ public class DBSchedular {
     } catch (InterruptedException e) {
         e.printStackTrace();
     }*/
-        saveRestaurantsDataOptimized();
+//        saveRestaurantsDataOptimized();
         scheduleDistrict();
     }
     public void scheduleDistrict() {
