@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.nearget.back.domain.Category;
 import com.nearget.back.domain.Restaurant;
 import com.nearget.back.domain.RestaurantsData;
+import com.nearget.back.dto.PageRequestDTO;
 import com.nearget.back.dto.RestaurantDTO;
 import com.nearget.back.dto.RestaurantMenuDto;
 import com.nearget.back.repository.MemberRepository;
@@ -14,6 +15,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -143,8 +146,8 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
     }
 
     @Override
-    public List<RestaurantDTO> getDistanceRestaurants(Double lat, Double lng, String category) {
-
+    public List<RestaurantDTO> getDistanceRestaurants(Double lat, Double lng, String category, PageRequestDTO pageRequestDTO) {
+/*
             // lat lng을 기준으로 2km 좌표값 계산
             Double lat1 = lat - 0.018;
             Double lat2 = lat + 0.018;
@@ -179,7 +182,36 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
             // 50개까지만 반환
             if (restaurantDTOList.size() > 50) {
                 return restaurantDTOList.subList(0, 50);
-            }
+            }*/
+
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize());
+
+        List<RestaurantsData> restaurantsDataList = new ArrayList<>();
+
+        if(category.equals("ALL")){
+            // 거리순 음식점 전체 조회
+            restaurantsDataList = restaurantsDataRepository.findRestaurantsNearby(lat, lng, pageable).getContent();
+
+        }
+        else{
+            restaurantsDataList = restaurantsDataRepository.findRestaurantsNearbyByCategory(lat, lng, category, pageable).getContent();
+        }
+
+        // restaurantsDataList를 List<RestaurantDTO>로 변환
+        List<RestaurantDTO> restaurantDTOList = new ArrayList<>();
+        for (RestaurantsData restaurantsData : restaurantsDataList) {
+            RestaurantDTO restaurantDTO = restaurantsData.toDTO();
+            // 현위치 기준으로 음식점까지의 거리를 M단위로 변환 후 RestaurantDTO 객체에 저장
+            double distance = calculateDistanceInMeters(lat, lng, restaurantDTO.getLat(), restaurantDTO.getLng());
+            // member_like_restaurant_list 테이블에서 해당 음식점의 좋아요 개수 조회
+            int likeCount = memberRepository.countByRestaurantId(restaurantDTO.getId());
+            restaurantDTO.changeLikeCount(likeCount);
+            restaurantDTO.changeDistance(distance);
+            restaurantDTOList.add(restaurantDTO);
+        }
+
             return restaurantDTOList;
 
     }

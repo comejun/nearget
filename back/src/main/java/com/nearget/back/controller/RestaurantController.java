@@ -1,5 +1,6 @@
 package com.nearget.back.controller;
 
+import com.nearget.back.dto.PageRequestDTO;
 import com.nearget.back.dto.RestaurantDTO;
 import com.nearget.back.service.RestaurantDataService;
 import lombok.RequiredArgsConstructor;
@@ -41,9 +42,11 @@ public class RestaurantController {
 
     // 거리순 음식점 조회
     @PostMapping("/distance/{category}")
-    public List<RestaurantDTO> getDistanceRestaurants(@RequestBody Double[]latlng, @PathVariable("category") String category) {
-        log.info("************ RestaurantController - getDistanceRestaurants - category : {}", category);
-        List<RestaurantDTO> distanceRestaurants = restaurantDataService.getDistanceRestaurants(latlng[0], latlng[1], category);
+    public List<RestaurantDTO> getDistanceRestaurants(@RequestBody Double[]latlng, @PathVariable("category") String category, PageRequestDTO pageRequestDTO) {
+        log.info("************ 페이지 네이션 RestaurantController - getDistanceRestaurants - category : {}", category);
+        log.info("************ 페이지 네이션 RestaurantController - getDistanceRestaurants - pageRequestDTO : {}", pageRequestDTO);
+        List<RestaurantDTO> distanceRestaurants = restaurantDataService.getDistanceRestaurants(latlng[0], latlng[1], category, pageRequestDTO);
+        log.info("************ 페이지 네이션 RestaurantController - getDistanceRestaurants - distanceRestaurants : {}", distanceRestaurants);
         return distanceRestaurants;
     }
 }
