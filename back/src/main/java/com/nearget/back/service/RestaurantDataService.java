@@ -15,4 +15,8 @@ public interface RestaurantDataService {
 
     // 거리순 음식점 조회
     List<RestaurantDTO> getDistanceRestaurants(Double lat, Double lng, String category);
+
+    // 지도 클릭시 음식점 조회용 함수
+    List<RestaurantDTO> getRestaurantsByCategoryAndBounds(String category, Object bounds);
+
 }

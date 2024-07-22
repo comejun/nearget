@@ -4,6 +4,7 @@ import com.nearget.back.dto.DistrictDTO;
 import com.nearget.back.dto.MapDataDTO;
 import com.nearget.back.dto.RestaurantDTO;
 import com.nearget.back.service.DistrictService;
+import com.nearget.back.service.RestaurantDataService;
 import com.nearget.back.service.RestaurantService;
 import com.nearget.back.service.SmallDistrictService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 public class MapController {
 
     private final RestaurantService restaurantService;
+    private final RestaurantDataService restaurantDataService;
     private final DistrictService districtService;
     private final SmallDistrictService smallDistrictService;
 
@@ -47,14 +49,12 @@ public class MapController {
         }
 
         if(mapDataDTO.getLevel() <=4){
-            List<RestaurantDTO> restaurantDTOList = restaurantService.getRestaurantsByCategoryAndBounds(mapDataDTO.getCategory(),mapDataDTO.getBounds());
+            List<RestaurantDTO> restaurantDTOList = restaurantDataService.getRestaurantsByCategoryAndBounds(mapDataDTO.getCategory(),mapDataDTO.getBounds());
             // restaurantDTOList를 List<Object>로 변환
             for(RestaurantDTO restaurantDTO : restaurantDTOList){
                 objectList.add(restaurantDTO);
             }
         }
-
-        log.info("objectList : {}", objectList);
         return objectList;
     }
 }

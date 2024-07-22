@@ -1,6 +1,8 @@
 package com.nearget.back.service;
 
+import com.google.gson.Gson;
 import com.nearget.back.domain.Category;
+import com.nearget.back.domain.Restaurant;
 import com.nearget.back.domain.RestaurantsData;
 import com.nearget.back.dto.RestaurantDTO;
 import com.nearget.back.dto.RestaurantMenuDto;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -179,6 +182,81 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
             }
             return restaurantDTOList;
 
+    }
+
+    @Override
+    public List<RestaurantDTO> getRestaurantsByCategoryAndBounds(String category, Object bounds) {
+
+        // bounds의 안의 데이터 추출
+        Gson gson = new Gson();
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        // If obj is a String that represents a JSON
+        if (bounds instanceof String) {
+            log.info("1번");
+            map = gson.fromJson((String) bounds, LinkedHashMap.class);
+        }
+        else {
+            // If obj is not a String but needs to be treated as a JSON-like structure
+            log.info("2번");
+            String json = gson.toJson(bounds);
+            map = gson.fromJson(json, LinkedHashMap.class);
+        }
+
+        log.info("map : {}", map);
+        double swLng = (double) map.get("ha");
+        double swLat = (double) map.get("qa");
+        double neLng = (double) map.get("oa");
+        double neLat = (double) map.get("pa");
+
+        log.info("swLng : {}", swLng);
+        log.info("swLat : {}", swLat);
+        log.info("neLng : {}", neLng);
+        log.info("neLat : {}", neLat);
+
+        log.info("************ DistrictServiceImpl - countRestaurantsByCategory -category : {}", category);
+
+        List<RestaurantDTO> restaurantDTOList = new ArrayList<>();
+
+        if (category.equals("ALL")) {
+
+            List<RestaurantsData> restaurantList = restaurantsDataRepository.findByLngBetweenAndLatBetween(swLng, neLng, swLat, neLat);
+            // restaurantList를 List<RestaurantDTO>로 변환
+            for (RestaurantsData restaurant : restaurantList) {
+                RestaurantDTO restaurantDTO = RestaurantDTO.builder()
+                        .id(restaurant.getId())
+                        .strId(restaurant.getId().toString())
+                        .name(restaurant.getRestaurantName())
+                        .address(restaurant.getRestaurantAddress())
+                        .category(restaurant.getCategory())
+                        .lat(restaurant.getLat())
+                        .lng(restaurant.getLng())
+                        .build();
+                restaurantDTOList.add(restaurantDTO);
+            }
+
+            return restaurantDTOList;
+
+
+        }
+
+        Category categoryEntity = Category.of(category);
+
+        List<RestaurantsData> restaurantList = restaurantsDataRepository.findByLngBetweenAndLatBetweenAndCategory(swLng, neLng, swLat, neLat, categoryEntity);
+        // restaurantList를 List<RestaurantDTO>로 변환
+        for (RestaurantsData restaurant : restaurantList) {
+            RestaurantDTO restaurantDTO = RestaurantDTO.builder()
+                    .id(restaurant.getId())
+                    .strId(restaurant.getId().toString())
+                    .name(restaurant.getRestaurantName())
+                    .address(restaurant.getRestaurantAddress())
+                    .category(restaurant.getCategory())
+                    .lat(restaurant.getLat())
+                    .lng(restaurant.getLng())
+                    .build();
+            restaurantDTOList.add(restaurantDTO);
+        }
+
+        return restaurantDTOList;
     }
 
     public static double calculateDistanceInMeters(double lat1, double lng1, double lat2, double lng2) {

@@ -2,6 +2,7 @@ package com.nearget.back.service;
 
 import com.nearget.back.domain.*;
 import com.nearget.back.dto.DistrictDTO;
+import com.nearget.back.repository.RestaurantsDataRepository;
 import com.nearget.back.repository.RestaurantsRepository;
 import com.nearget.back.repository.SmallDistrictRepository;
 import lombok.AllArgsConstructor;
@@ -19,17 +20,34 @@ import java.util.List;
 public class SmallDistrictServiceImpl implements SmallDistrictService{
 
     private final SmallDistrictRepository smallDistrictRepository;
-    private final RestaurantsRepository restaurantsRepository;
+    private final RestaurantsDataRepository restaurantsDataRepository;
 
     @Override
     public void saveSmallDistrict(SmallDistrictEnum smallDistrict) {
+
+        SmallDistrictCategoryCount smallDistrictCategoryCount = SmallDistrictCategoryCount.builder()
+                .category(null)
+                .count(restaurantsDataRepository.countByAddressContaining(smallDistrict.getName()))
+                .build();
 
         SmallDistrict smallDistrictEntity = SmallDistrict.builder()
                 .smallDistrict(smallDistrict.getName())
                 .lat(smallDistrict.getLat())
                 .lng(smallDistrict.getLng())
-                .count(restaurantsRepository.countByAddressContaining(smallDistrict.getName()))
                 .build();
+
+        smallDistrictEntity.getSmallDistrictCategoryCountList().add(smallDistrictCategoryCount);
+
+        for (Category category : Category.values()) {
+
+            SmallDistrictCategoryCount smallDistrictCategoryCountCategory = SmallDistrictCategoryCount.builder()
+                    .category(category)
+                    .count(restaurantsDataRepository.countRestaurantsByCategoryForAllSmallDistricts(smallDistrict.getName(), category))
+                    .build();
+
+            smallDistrictEntity.getSmallDistrictCategoryCountList().add(smallDistrictCategoryCountCategory);
+
+        }
 
         smallDistrictRepository.save(smallDistrictEntity);
     }
@@ -46,7 +64,7 @@ public class SmallDistrictServiceImpl implements SmallDistrictService{
             for (int i = 0; i < SmallDistrictEnum.values().length; i++) {
                 DistrictDTO districtDTO = DistrictDTO.builder()
                         .districtName(SmallDistrictEnum.values()[i].getName())
-                        .count(smallDistrictRepository.findBySmallDistrict(SmallDistrictEnum.values()[i].getName()).getCount())
+                        .count(smallDistrictRepository.findBySmallDistrict(SmallDistrictEnum.values()[i].getName()).getSmallDistrictCategoryCountList().get(0).getCount())
                         .lat(SmallDistrictEnum.values()[i].getLat())
                         .lng(SmallDistrictEnum.values()[i].getLng())
                         .build();
@@ -58,14 +76,14 @@ public class SmallDistrictServiceImpl implements SmallDistrictService{
         Category categoryEntity = Category.of(category);
         log.info("************ DistrictServiceImpl - countRestaurantsByCategory -categoryEntity : {}", categoryEntity);
 
-        List<DistrictCountResult> results = restaurantsRepository.countRestaurantsByCategoryForAllSmallDistricts(categoryEntity);
-
-        for (DistrictCountResult result : results) {
+        for (int i = 0; i < SmallDistrictEnum.values().length; i++) {
             DistrictDTO districtDTO = DistrictDTO.builder()
-                    .districtName(result.getName())
-                    .count(result.getCount())
-                    .lat(result.getLat())
-                    .lng(result.getLng())
+                    .districtName(SmallDistrictEnum.values()[i].getName())
+                    .count(smallDistrictRepository.findBySmallDistrict(SmallDistrictEnum.values()[i].getName()).getSmallDistrictCategoryCountList().stream()
+                            .filter(districtCategoryCount -> districtCategoryCount.getCategory() != null && districtCategoryCount.getCategory().equals(categoryEntity))
+                            .findFirst().get().getCount())
+                    .lat(SmallDistrictEnum.values()[i].getLat())
+                    .lng(SmallDistrictEnum.values()[i].getLng())
                     .build();
             districtDTOList.add(districtDTO);
         }
