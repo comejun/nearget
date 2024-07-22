@@ -9,6 +9,6 @@ public interface SmallDistrictService {
 
     void saveSmallDistrict(SmallDistrictEnum smallDistrict);
 
-    List<DistrictDTO> countRestaurantsByCategory(String category);
+    List<DistrictDTO> countRestaurantsByCategory(String category,Object bounds);
 
 }

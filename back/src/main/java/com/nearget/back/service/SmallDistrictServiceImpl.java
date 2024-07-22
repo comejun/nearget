@@ -1,5 +1,6 @@
 package com.nearget.back.service;
 
+import com.google.gson.Gson;
 import com.nearget.back.domain.*;
 import com.nearget.back.dto.DistrictDTO;
 import com.nearget.back.repository.RestaurantsDataRepository;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
@@ -54,38 +57,34 @@ public class SmallDistrictServiceImpl implements SmallDistrictService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<DistrictDTO> countRestaurantsByCategory(String category) {
+    public List<DistrictDTO> countRestaurantsByCategory(String category, Object bounds) {
+        Gson gson = new Gson();
+        LinkedHashMap<String, Double> map = bounds instanceof String ?
+                gson.fromJson((String) bounds, LinkedHashMap.class) :
+                gson.fromJson(gson.toJson(bounds), LinkedHashMap.class);
 
-        log.info("************ DistrictServiceImpl - countRestaurantsByCategory -category : {}", category);
+        double swLng = map.get("ha");
+        double swLat = map.get("qa");
+        double neLng = map.get("oa");
+        double neLat = map.get("pa");
 
+        List<SmallDistrict> smallDistrictList = smallDistrictRepository.findAllByLngBetweenAndLatBetween(swLng, neLng, swLat, neLat);
         List<DistrictDTO> districtDTOList = new ArrayList<>();
 
-        if (category.equals("ALL")) {
-            for (int i = 0; i < SmallDistrictEnum.values().length; i++) {
-                DistrictDTO districtDTO = DistrictDTO.builder()
-                        .districtName(SmallDistrictEnum.values()[i].getName())
-                        .count(smallDistrictRepository.findBySmallDistrict(SmallDistrictEnum.values()[i].getName()).getSmallDistrictCategoryCountList().get(0).getCount())
-                        .lat(SmallDistrictEnum.values()[i].getLat())
-                        .lng(SmallDistrictEnum.values()[i].getLng())
-                        .build();
-                districtDTOList.add(districtDTO);
-            }
-            return districtDTOList;
-        }
+        for (SmallDistrict smallDistrict : smallDistrictList) {
+            long count = smallDistrict.getSmallDistrictCategoryCountList().stream()
+                    .filter(districtCategoryCount -> category.equals("ALL") ? districtCategoryCount.getCategory() == null :
+                            districtCategoryCount.getCategory() != null && districtCategoryCount.getCategory().equals(Category.of(category)))
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchElementException("No category count found"))
+                    .getCount();
 
-        Category categoryEntity = Category.of(category);
-        log.info("************ DistrictServiceImpl - countRestaurantsByCategory -categoryEntity : {}", categoryEntity);
-
-        for (int i = 0; i < SmallDistrictEnum.values().length; i++) {
-            DistrictDTO districtDTO = DistrictDTO.builder()
-                    .districtName(SmallDistrictEnum.values()[i].getName())
-                    .count(smallDistrictRepository.findBySmallDistrict(SmallDistrictEnum.values()[i].getName()).getSmallDistrictCategoryCountList().stream()
-                            .filter(districtCategoryCount -> districtCategoryCount.getCategory() != null && districtCategoryCount.getCategory().equals(categoryEntity))
-                            .findFirst().get().getCount())
-                    .lat(SmallDistrictEnum.values()[i].getLat())
-                    .lng(SmallDistrictEnum.values()[i].getLng())
-                    .build();
-            districtDTOList.add(districtDTO);
+            districtDTOList.add(DistrictDTO.builder()
+                    .districtName(smallDistrict.getSmallDistrict())
+                    .count(count)
+                    .lat(smallDistrict.getLat())
+                    .lng(smallDistrict.getLng())
+                    .build());
         }
 
         return districtDTOList;

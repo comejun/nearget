@@ -19,17 +19,6 @@ const KakaoMap = () => {
             }
         }
     );
-    const [mapLevel, setMapLevel] = useState(3);
-
-    // 지도 확대 수준이 변경될 경우 bounds값을 제외한 level값만 저장
-    useEffect(() => {
-        if(mapLevel !== mapBoundLevel.level){
-            setMapBoundLevel({
-                level: mapLevel,
-                bounds: mapBoundLevel.bounds,
-            });
-        }
-    }, [mapLevel]);
 
     // 현재 카테고리와 지도 데이터 기반으로 클러스터 생성
     useEffect(() => {
@@ -141,6 +130,8 @@ const KakaoMap = () => {
                     }
                 ]
             }))
+
+            mapChanged()
         }
     }, [map]);
 
@@ -150,16 +141,11 @@ const KakaoMap = () => {
         const bounds = map.getBounds();
 
         // 지도 확대 수준이 5이상일 경우 bounds값을 제외한 level값만 저장 기존 mapBoundLevel의 level과 level값이 같을 경우 저장하지 않음
-        if(level > 4){
-            setMapLevel(level)
-        }
-        else{
             console.log("레벨과 bounds 저장")
             setMapBoundLevel({
                 level: level,
                 bounds: bounds,
             });
-        }
     };
 
     // 조건에 따른 마커 클러스터 또는 커스텀오버레이 생성 함수
