@@ -12,7 +12,7 @@ const MylikePage = () => {
 
   return (
     <BasicLayout>
-      <HeaderBack imgSrc="/assets/imgs/icon/h1_Mylike.png" />
+      <HeaderBack imgSrc="/assets/imgs/icon/h1_MyLike.png" />
       <div className="header_margin"></div>
       <InfinityContentLike />
       <div className="bottom_margin"></div>
