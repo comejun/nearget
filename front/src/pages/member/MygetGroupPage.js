@@ -55,7 +55,7 @@ const MyGetGroupPage = () => {
 
   return (
     <BasicLayout>
-      <HeaderBack imgSrc="/assets/imgs/icon/h1_Myget.png" />
+      <HeaderBack imgSrc="/assets/imgs/icon/h1_MyGet.png" />
       <div className="header_margin"></div>
       <div className="GetH1Wrap">
         <img className="GroupSum" src={`${imghost}/view/th_${group.thImg}`} />
