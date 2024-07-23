@@ -9,12 +9,14 @@ export default function HeaderBack({ imgSrc }) {
   const goBackOrToMain = () => {
 
     //place 페이지에서 뒤로가기시 이전 페이지로 이동
-    if (window.location.pathname.includes("place")) {
-        navigate(-1);
+    if (window.location.pathname === "/place/add") {
+      moveToMain();
+
     }
     //main 페이지에서 뒤로가기시 메인페이지로 이동
     else {
-      moveToMain();
+      navigate(-1);
+
     }
   };
 
