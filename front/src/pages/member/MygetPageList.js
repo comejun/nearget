@@ -13,7 +13,7 @@ const MyGetListPage = () => {
 
   return (
     <BasicLayout>
-      <HeaderBack imgSrc="/assets/imgs/icon/h1_Myget.png" />
+      <HeaderBack imgSrc="/assets/imgs/icon/h1_MyGet.png" />
       <div className="header_margin"></div>
       <InfinityContentGet />
       <div className="textBtnWrap">
