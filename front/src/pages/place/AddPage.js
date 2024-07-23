@@ -23,7 +23,7 @@ const AddPage = () => {
   const { imgSrc, handleFileChange, saveFile } = useProfileImage(null, "http:");
 
   const handleChange = (e) => {
-    restaurantsGroup[e.target.name] = e.target.value;
+    restaurantsGroup.groupName= e;
     setRestaurantsGroup({ ...restaurantsGroup });
     console.log(restaurantsGroup);
   };
