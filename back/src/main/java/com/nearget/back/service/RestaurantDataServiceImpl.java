@@ -108,12 +108,10 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
 
         if(category.equals("ALL")){
             // 가격별 음식점 전체 조회
-            restaurantsDataList = restaurantsDataRepository.findByLatBetweenAndLngBetweenOrderByMenu(lat1, lat2, lng1, lng2);
+            restaurantsDataList = restaurantsDataRepository.findByLatBetweenAndLngBetweenOrderByMenu(lat1, lat2, lng1, lng2, PageRequest.of(0, 10)).getContent();
         }
         else{
-            restaurantsDataList = restaurantsDataRepository.findByLatBetweenAndLngBetweenAndCategoryOrderByMenu(lat1, lat2, lng1, lng2, category);
-            // menulist가 1개 이상인 음식점만 필터링
-            restaurantsDataList.removeIf(restaurantsData -> restaurantsData.getMenuList().size() < 1);
+            restaurantsDataList = restaurantsDataRepository.findByLatBetweenAndLngBetweenAndCategoryOrderByMenu(lat1, lat2, lng1, lng2, PageRequest.of(0, 10), Category.of(category)).getContent();
         }
 
         // restaurantsDataList를 List<RestaurantDTO>로 변환
@@ -124,23 +122,9 @@ public class RestaurantDataServiceImpl implements RestaurantDataService {
             double distance = calculateDistanceInMeters(lat, lng, restaurantDTO.getLat(), restaurantDTO.getLng());
             // member_like_restaurant_list 테이블에서 해당 음식점의 좋아요 개수 조회
             int likeCount = memberRepository.countByRestaurantId(restaurantDTO.getId());
-
-            // menuList의 가격 평균값을 구한 후 RestaurantDTO 객체에 저장
-            Double menuPriceSum = 0.0;
-            for (RestaurantMenuDto restaurantMenuDto : restaurantDTO.getMenuList()) {
-                menuPriceSum += restaurantMenuDto.getPrice();
-            }
-            restaurantDTO.changeAvgPrice(menuPriceSum / restaurantDTO.getMenuList().size());
-            log.info("************ RestaurantDataServiceImpl - getPriceRestaurants - 이름 : {} menuPriceAvg : {}", restaurantDTO.getName(),restaurantDTO.getAvgPrice());
             restaurantDTO.changeLikeCount(likeCount);
             restaurantDTO.changeDistance(distance);
             restaurantDTOList.add(restaurantDTO);
-        }
-        // 가격 낮은순으로 정렬
-        restaurantDTOList.sort((o1, o2) -> o1.getAvgPrice().compareTo(o2.getAvgPrice()));
-        // 10개까지만 반환
-        if (restaurantDTOList.size() > 10) {
-            return restaurantDTOList.subList(0, 10);
         }
         return restaurantDTOList;
     }
