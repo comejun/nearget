@@ -3,10 +3,19 @@ import { useNavigate } from "react-router-dom";
 import UseCustomMove from "../hooks/useCustomMove";
 
 export default function HeaderBack({ imgSrc }) {
+  const navigate = useNavigate();
   const { moveToMain } = UseCustomMove();
 
   const goBackOrToMain = () => {
-    moveToMain();
+
+    //place 페이지에서 뒤로가기시 이전 페이지로 이동
+    if (window.location.pathname.includes("place")) {
+        navigate(-1);
+    }
+    //main 페이지에서 뒤로가기시 메인페이지로 이동
+    else {
+      moveToMain();
+    }
   };
 
   return (
