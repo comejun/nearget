@@ -97,10 +97,12 @@ public class DBSchedular {
 
         restaurantsDataRepository.saveAll(restaurantsData);
     }
-/*
-    public static Double distanceValue = 0.009;
+
+
+
+   /* public static Double distanceValue = 0.0009;
     // 작업이 끝난후 2초 마다 실행
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 500)
     public void addImage(){
         Double lat = 37.55498771600092;
         Double lng = 126.93601217931102;
@@ -110,8 +112,8 @@ public class DBSchedular {
         }
         for(RestaurantsData restaurantsData : restaurantsDataList){
            restaurantDataService.getRestaurant(restaurantsData.getId());
-            // 2000부터 5000사이 랜덤값
-            int randomValue = (int) (Math.random() * 3000) + 2000;
+            // 500부터 1000사이 랜덤값
+            int randomValue = (int) (Math.random() * 500) + 1000;
             // 랜덤 시간 딜레이
             try {
                 Thread.sleep(randomValue);
