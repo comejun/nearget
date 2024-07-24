@@ -104,9 +104,9 @@ export default function InfinityContent() {
     <div className="InfinityContentWrap">
       <div className="InfinityContent">
         <ul>
-          <InfiniteScroll style={
-            {display: "flex", flexWrap: "wrap", justifyContent: "space-between"}
-          } dataLength={nearByList.length} next={fetchData} hasMore={hasMore} loader={<></>}>
+          <InfiniteScroll
+              style={{display: "flex", flexWrap: "wrap", justifyContent: "space-between",overflowX: "hidden"}}
+              dataLength={nearByList.length} next={fetchData} hasMore={hasMore} loader={<></>}>
             {/* 스터디 목록을 출력 */}
             {nearByList.map((restaurant, index) => (
                 <li key={restaurant.strId}>
